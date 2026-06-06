@@ -9,7 +9,7 @@ import { Component, input, output } from '@angular/core';
   </div>`
 })
 export class CategoryTabsComponent {
-  readonly tabs = ['Todos', 'Cupons', 'Games', 'Hardware', 'Lojas'];
+  readonly tabs = ['Todos', 'Cupons', 'Games', 'Hardware'];
   readonly selected = input('Todos');
   readonly changed = output<string>();
 }

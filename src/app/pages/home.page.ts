@@ -21,6 +21,6 @@ export class HomePage {
   readonly store = signal('');
   readonly category = signal('Todos');
   readonly offers = computed(() => this.service.offers().filter(offer =>
-    (!this.store() || offer.store === this.store()) && (this.category() === 'Todos' || this.category() === 'Lojas' || offer.category === this.category())
+    (!this.store() || offer.store === this.store()) && (this.category() === 'Todos' || offer.category === this.category())
   ));
 }
