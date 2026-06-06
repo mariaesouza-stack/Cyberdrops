@@ -11,16 +11,20 @@ import { StoreFilterComponent } from '../shared/store-filter.component';
     <app-store-filter [stores]="service.stores" [selected]="store()" (changed)="store.set($event)"/>
     <app-category-tabs [selected]="category()" (changed)="category.set($event)"/>
     <div class="feed"><div class="section-title"><h2>Feed da comunidade</h2><button>Mais quentes⌄</button></div>
-      @for (offer of offers(); track offer.id) { <app-offer-card [offer]="offer"/> }
-      @empty { <div class="empty"><b>Sem drops por aqui.</b><span>Tente outro filtro.</span></div> }
+      @if (loading()) { @for (item of [1,2,3]; track item) { <div class="offer-skeleton"><i></i><span></span><b></b></div> } }
+      @else { @for (offer of offers(); track offer.id) { <app-offer-card [offer]="offer"/> }
+        @empty { <div class="empty"><b>Sem drops por aqui.</b><span>Tente outro filtro.</span></div> }
+      }
     </div>
   </section>`
 })
 export class HomePage {
   readonly service = inject(OfferService);
+  readonly loading = signal(true);
   readonly store = signal('');
   readonly category = signal('Todos');
   readonly offers = computed(() => this.service.offers().filter(offer =>
     (!this.store() || offer.store === this.store()) && (this.category() === 'Todos' || offer.category === this.category())
   ));
+  constructor() { setTimeout(() => this.loading.set(false), 550); }
 }
