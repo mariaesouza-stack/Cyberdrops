@@ -6,7 +6,7 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-header', standalone: true, imports: [RouterLink],
   template: `<header class="app-header">
-    <a class="brand" routerLink="/home"><span>CD</span>CyberDrops</a>
+    <a class="brand" routerLink="/home" aria-label="CyberDrops"><img src="assets/logo.svg" alt="CyberDrops"></a>
     <div class="header-actions">
       <a class="icon-button" routerLink="/search" aria-label="Buscar">⌕</a>
       <button class="icon-button" (click)="theme.toggle()" aria-label="Alternar tema">{{ theme.isLight() ? '☾' : '☼' }}</button>
