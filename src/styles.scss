@@ -35,23 +35,8 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3,.brand { font-family: "Plus Jakarta Sans"
 }
 
 /* Premium app shell */
-.page { padding-bottom: 112px; }
+.page { padding-bottom: 40px; }
 .app-header { height: 64px; border-bottom-color: rgba(255,255,255,.06); }
-.bottom-nav {
-  position: fixed; z-index: 30; inset: auto 0 0; height: 78px;
-  display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
-  padding: 7px max(10px, calc((100% - 760px) / 2));
-  background: rgba(12,12,13,.94); border-top: 1px solid rgba(255,255,255,.08);
-  backdrop-filter: blur(22px); box-shadow: 0 -12px 35px rgba(0,0,0,.28);
-}
-.bottom-nav a,.bottom-nav button {
-  min-width: 0; height: 62px; border: 0; background: transparent; color: #73737d;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-  font-size: 9px; font-weight: 700; transition: color .2s, transform .2s;
-}
-.bottom-nav b { font-size: 21px; line-height: 1; }.bottom-nav a.active { color: #fff; }
-.bottom-nav a:hover,.bottom-nav button:hover { color: var(--primary); transform: translateY(-2px); }
-.bottom-nav .publish-button b { width: 44px; height: 44px; display: grid; place-items: center; margin-top: -25px; border-radius: 50%; color: #fff; font-size: 27px; background: linear-gradient(135deg,var(--primary),var(--secondary)); box-shadow: 0 0 22px rgba(242,25,195,.42); }
 
 /* Home filters and compact feed */
 .store-scroll { padding-bottom: 12px; }
@@ -84,7 +69,7 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3,.brand { font-family: "Plus Jakarta Sans"
 .offer-skeleton i { grid-row: 1/3; }.offer-skeleton b { height: 40px; }.offer-skeleton span { height: 80px; } @keyframes skeleton { to { background-position: -200% 0; } }
 
 /* Product, discussion and related products */
-.product.page { padding-bottom: 112px; }.product-image { overflow: hidden; }.product-image img { transition: transform .35s; }.product-image:hover img { transform: scale(1.02); }
+.product.page { padding-bottom: 40px; }.product-image { overflow: hidden; }.product-image img { transition: transform .35s; }.product-image:hover img { transform: scale(1.02); }
 .gallery button { border-radius: 12px; transition: .2s; }.gallery button:hover { border-color: var(--primary); transform: translateY(-2px); }
 .product-info,.product-detail { padding: 16px; }.product-info .badges { margin-top: 2px; }.product-info .button.primary { margin-top: 16px; }
 .coupon-card { border: 1px solid var(--primary); box-shadow: inset 0 0 20px rgba(242,25,195,.06),0 0 18px rgba(242,25,195,.08); }
@@ -108,14 +93,9 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3,.brand { font-family: "Plus Jakarta Sans"
 .coupon-scroll small,.coupon-scroll span { color: var(--muted); font-size: 8px; }.coupon-scroll b { font-size: 14px; }.coupon-scroll button { grid-column: 2; grid-row: 1/4; border: 0; border-radius: 999px; background: rgba(242,25,195,.12); color: var(--primary); font-size: 9px; font-weight: 800; padding: 0 10px; }
 .game-carousel a { flex: 0 0 150px; display: grid; gap: 6px; }.game-carousel img { height: 190px; border-radius: 20px; object-fit: cover; transition: .25s; }.game-carousel a:hover img { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.3); }.game-carousel b { font-size: 11px; }.game-carousel span { color: var(--muted); font-size: 9px; }
 
-/* Profile and notifications */
+/* Profile */
 .profile-page>.pill-tabs { margin: 0 16px; }.profile-form { max-width: 580px; margin: 0 auto; }
-.notifications-page { display: grid; gap: 18px; }.notification-feed { display: grid; gap: 8px; }
-.notification-feed article { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 20px; background: #121212; border: 1px solid rgba(255,255,255,.07); }
-.notification-feed i { width: 9px; height: 9px; border-radius: 50%; background: #424248; }.notification-feed i.active { background: var(--primary); box-shadow: 0 0 12px var(--primary); }
-.notification-feed div { flex: 1; }.notification-feed p { margin: 4px 0; color: var(--muted); font-size: 10px; }.notification-feed small { color: #65656d; font-size: 8px; }.notification-feed button { border: 0; background: transparent; color: var(--muted); font-size: 24px; }
 
 @media (min-width: 760px) {
-  .bottom-nav { left: 50%; right: auto; width: 520px; transform: translateX(-50%); border: 1px solid rgba(255,255,255,.09); border-bottom: 0; border-radius: 22px 22px 0 0; }
   .offer-main { grid-template-columns: 210px 1fr; }.offer-image { aspect-ratio: 1.55; }.offer-body h2 { font-size: 17px; }.offer-body p { font-size: 11px; }
 }
