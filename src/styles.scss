@@ -77,6 +77,7 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3,.brand { font-family: "Plus Jakarta Sans"
 .comment-composer { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 14px; border-radius: 20px; background: #121212; border: 1px solid rgba(255,255,255,.08); }
 .comment-composer textarea { min-height: 78px; margin: 0; grid-column: 2; }.comment-composer .button { grid-column: 2; justify-self: end; min-height: 38px; padding: 0 18px; }
 .comment { border-bottom-color: rgba(255,255,255,.07); }.comment button:hover { color: #fff; border-color: rgba(255,255,255,.25); }
+.reply-form { display: flex; gap: 7px; margin-top: 10px; }.reply-form input { padding: 9px 11px; }.reply-form button { flex: 0 0 auto; }
 .related { gap: 12px; margin: 0 -16px; padding: 0 16px 6px; }
 .related article { flex: 0 0 210px; overflow: hidden; border-radius: 20px; background: #121212; border: 1px solid rgba(255,255,255,.08); }
 .related article img { height: 120px; object-fit: cover; }.related article>div { padding: 12px; display: grid; gap: 8px; }
@@ -95,6 +96,7 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3,.brand { font-family: "Plus Jakarta Sans"
 
 /* Profile */
 .profile-page>.pill-tabs { margin: 0 16px; }.profile-form { max-width: 580px; margin: 0 auto; }
+.logout-button { margin: 6px auto 24px; min-width: 180px; color: var(--primary); }.api-message { margin: 0 0 14px; padding: 11px 13px; border: 1px solid rgba(242,25,195,.24); border-radius: 14px; background: rgba(242,25,195,.07); color: var(--muted); font-size: 10px; }
 
 @media (min-width: 760px) {
   .offer-main { grid-template-columns: 210px 1fr; }.offer-image { aspect-ratio: 1.55; }.offer-body h2 { font-size: 17px; }.offer-body p { font-size: 11px; }

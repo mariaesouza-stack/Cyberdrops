@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Cyberpunk 2077: Ultimate Edition",
+    "description": "Night City nunca esteve tão barata. Inclui Phantom Liberty.",
+    "store": "Steam",
+    "category": "Games",
+    "oldPrice": 299.9,
+    "currentPrice": 98.97,
+    "discount": 67,
+    "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85",
+    "url": "https://store.steampowered.com/",
+    "coupon": { "code": "NIGHTCITY67", "description": "67% OFF na edição completa", "store": "Steam" },
+    "createdAt": "2026-06-07T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Monitor Gamer UltraWide 34” 165Hz",
+    "description": "Painel IPS, 1ms e suporte a FreeSync Premium.",
+    "store": "Kabum",
+    "category": "Hardware",
+    "oldPrice": 3299.9,
+    "currentPrice": 2499.9,
+    "discount": 24,
+    "image": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1200&q=85",
+    "url": "https://www.kabum.com.br/",
+    "coupon": null,
+    "createdAt": "2026-06-07T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Jogo misterioso grátis nesta semana",
+    "description": "Resgate agora e mantenha para sempre na sua biblioteca.",
+    "store": "Epic",
+    "category": "Cupons",
+    "oldPrice": 89.9,
+    "currentPrice": 0,
+    "discount": 100,
+    "image": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=85",
+    "url": "https://store.epicgames.com/pt-BR/free-games",
+    "coupon": { "code": "FREEWEEK", "description": "Resgate gratuito", "store": "Epic" },
+    "createdAt": "2026-06-07T00:00:00.000Z"
+  }
+]
