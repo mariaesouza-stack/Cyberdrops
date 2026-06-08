@@ -11,7 +11,7 @@ import { StoreFilterComponent } from '../shared/store-filter.component';
     @if (service.message()) { <p class="api-message">{{ service.message() }}</p> }
     <app-store-filter [stores]="service.stores" [selected]="store()" (changed)="changeStore($event)"/>
     <app-category-tabs [selected]="category()" (changed)="changeCategory($event)"/>
-    <div class="feed"><div class="section-title"><h2>Feed da comunidade</h2><button>Mais quentes⌄</button></div>
+    <div class="feed"><div class="section-title"><h2>Feed da comunidade</h2></div>
       @if (service.loading()) { @for (item of [1,2,3]; track item) { <div class="offer-skeleton"><i></i><span></span><b></b></div> } }
       @else { @for (offer of offers(); track offer.id) { <app-offer-card [offer]="offer"/> }
         @empty { <div class="empty"><b>Sem drops por aqui.</b><span>Tente outro filtro.</span></div> }
