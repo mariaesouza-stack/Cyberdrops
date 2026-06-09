@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CouponPublicationDraft } from '../models';
 import { AppIconComponent } from './app-icon.component';
@@ -14,12 +14,14 @@ import { AppIconComponent } from './app-icon.component';
     <label>Data de validade<input required type="date" name="expiresAt" [(ngModel)]="draft.expiresAt"></label>
     <label>Descrição curta<textarea required maxlength="160" name="description" [(ngModel)]="draft.description" placeholder="Informe onde o cupom pode ser utilizado"></textarea></label>
     <label>Link da loja<input required type="url" name="url" [(ngModel)]="draft.url" placeholder="https://"></label>
-    <button class="button primary wide" type="submit"><app-icon name="send" [size]="17"/>Enviar cupom</button>
+    <button class="button primary wide" type="submit"><app-icon name="send" [size]="17"/>{{ initial() ? 'Salvar e reenviar' : 'Enviar cupom' }}</button>
   </form>`
 })
 export class CreateCouponFormComponent {
   readonly submitted = output<CouponPublicationDraft>();
+  readonly initial = input<CouponPublicationDraft>();
   draft: CouponPublicationDraft = { type: 'coupon', store: '', code: '', discountKind: 'percent', discountValue: 10, expiresAt: '', description: '', url: '' };
+  constructor() { effect(() => { const initial = this.initial(); if (initial) this.draft = { ...initial }; }); }
   submit(): void {
     if (!this.draft.store.trim() || !this.draft.code.trim() || !this.draft.expiresAt || !this.draft.description.trim() || !this.draft.url.trim()) return;
     this.submitted.emit({ ...this.draft, store: this.draft.store.trim(), code: this.draft.code.trim().toUpperCase(), description: this.draft.description.trim(), url: this.draft.url.trim() });

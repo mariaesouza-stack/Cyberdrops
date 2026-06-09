@@ -23,6 +23,11 @@ const communityComments: Comment[] = [
   { id: 101, user: COMMUNITY_USERS[3], text: 'Preço digno de upgrade no setup. O histórico está excelente.', likes: 18, time: 'há 12 min' },
   { id: 102, user: COMMUNITY_USERS[5], text: 'Drop confirmado. Já entrou no meu radar de promoções.', likes: 11, time: 'há 28 min' }
 ];
+const publicationMessages: Record<string, string> = {
+  'Em análise': 'Sua publicação está sendo revisada pelos moderadores.',
+  Publicado: 'Sua publicação já está visível para a comunidade.',
+  Rejeitado: 'Esta publicação foi recusada por informações incompletas.'
+};
 
 @Injectable({ providedIn: 'root' })
 export class OfferService {
@@ -84,26 +89,48 @@ export class OfferService {
     this.persist(); this.offers.update(items => items.map(item => item.id === id ? { ...item, saved: this.interactions.saved.includes(id) } : item));
   }
   createPublication(draft: PublicationDraft, author: User): Offer {
-    const id = Date.now();
-    const createdAt = new Date().toISOString();
+    const offer = this.buildPublication(draft, author, Date.now(), new Date().toISOString(), 'Em análise');
+    this.publications = [offer, ...this.publications];
+    this.persistPublications();
+    this.offers.update(items => [offer, ...items.filter(item => item.id !== offer.id)]);
+    return offer;
+  }
+  updatePublication(id: number, draft: PublicationDraft, author: User): Offer | undefined {
+    const current = this.publications.find(item => item.id === id);
+    if (!current || current.author.id !== author.id) return undefined;
+    const updated = this.buildPublication(draft, author, id, current.createdAt, 'Em análise');
+    this.publications = this.publications.map(item => item.id === id ? updated : item);
+    this.persistPublications();
+    this.offers.update(items => items.map(item => item.id === id ? updated : item));
+    return updated;
+  }
+  deletePublication(id: number, authorId: number): boolean {
+    const exists = this.publications.some(item => item.id === id && item.author.id === authorId);
+    if (!exists) return false;
+    this.publications = this.publications.filter(item => item.id !== id);
+    this.persistPublications();
+    this.offers.update(items => items.filter(item => item.id !== id));
+    return true;
+  }
+  getUserPublications(authorId: number): Offer[] {
+    return this.offers().filter(item => item.publicationType && item.author.id === authorId);
+  }
+  private buildPublication(draft: PublicationDraft, author: User, id: number, createdAt: string, status: Offer['publicationStatus']): Offer {
     const isCoupon = draft.type === 'coupon';
     const oldPrice = isCoupon ? 0 : normalizeCurrency(draft.oldPrice);
     const price = isCoupon ? 0 : normalizeCurrency(draft.price);
     const discount = isCoupon
       ? (draft.discountKind === 'percent' ? Math.round(draft.discountValue) : 0)
       : (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
-    const offer: Offer = {
+    return {
       id, author, store: draft.store, time: 'agora', image: isCoupon ? 'assets/coupon-bot.svg' : draft.image,
       gallery: [isCoupon ? 'assets/coupon-bot.svg' : draft.image], discount, category: isCoupon ? 'Cupons' : draft.category,
       title: isCoupon ? `Cupom ${draft.store}` : draft.title, description: draft.description, oldPrice, price,
-      likes: 0, dislikes: 0, comments: [], url: draft.url, createdAt, publicationType: draft.type, publicationStatus: 'Em análise',
+      likes: 0, dislikes: 0, comments: [], url: draft.url, createdAt, publicationType: draft.type, publicationStatus: status,
+      publicationDraft: { ...draft }, moderationMessage: publicationMessages[status || 'Em análise'],
       publicationDiscountLabel: isCoupon && draft.discountKind === 'value' ? `${formatCurrency(draft.discountValue)} OFF` : undefined,
       coupon: isCoupon ? { code: draft.code, description: `${draft.description} · Válido até ${this.formatDate(draft.expiresAt)}`, store: draft.store } : undefined
     };
-    this.publications = [offer, ...this.publications];
-    localStorage.setItem(this.publicationsKey, JSON.stringify(this.publications));
-    this.offers.update(items => [offer, ...items.filter(item => item.id !== offer.id)]);
-    return offer;
   }
   openStore(offer: Offer): void { window.open(offer.url, '_blank', 'noopener,noreferrer'); }
   getById(id: number): Offer | undefined { return this.offers().find(offer => offer.id === id); }
@@ -134,8 +161,25 @@ export class OfferService {
     try { return JSON.parse(localStorage.getItem(this.storageKey) || '') as LocalInteractions; } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [] }; }
   }
   private readPublications(): Offer[] {
-    try { return JSON.parse(localStorage.getItem(this.publicationsKey) || '') as Offer[]; } catch { return []; }
+    try {
+      const saved = JSON.parse(localStorage.getItem(this.publicationsKey) || '') as Offer[];
+      return saved.map(item => ({ ...item, publicationDraft: item.publicationDraft || this.draftFromOffer(item), moderationMessage: item.moderationMessage || publicationMessages[item.publicationStatus || 'Em análise'] }));
+    } catch {
+      const author = { id: 1, name: 'NeonHunter', username: '@neonhunter', email: 'player@cyberdrops.gg', phone: '(11) 99999-2049', avatar: COMMUNITY_USERS[0].avatar };
+      const mocks = [
+        this.buildPublication({ type: 'deal', title: 'Mouse Gamer Logitech G502', store: 'Kabum', url: 'https://www.kabum.com.br/', price: 249.90, oldPrice: 429.90, category: 'Periféricos', image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=900&q=85', description: 'Mouse gamer com sensor HERO e pesos ajustáveis.' }, author, 90001, '2026-06-09T15:00:00-03:00', 'Em análise'),
+        this.buildPublication({ type: 'coupon', store: 'Kabum', code: 'CYBER10', discountKind: 'percent', discountValue: 10, expiresAt: '2026-12-31', description: 'Cupom válido em periféricos selecionados.', url: 'https://www.kabum.com.br/' }, author, 90002, '2026-06-08T14:00:00-03:00', 'Publicado'),
+        this.buildPublication({ type: 'deal', title: 'Headset Gamer RGB', store: 'Amazon', url: 'https://www.amazon.com.br/', price: 159.90, oldPrice: 229.90, category: 'Periféricos', image: 'https://images.unsplash.com/photo-1599669454699-248893623440?auto=format&fit=crop&w=900&q=85', description: 'Headset gamer RGB com som surround.' }, author, 90003, '2026-06-07T13:00:00-03:00', 'Rejeitado')
+      ];
+      localStorage.setItem(this.publicationsKey, JSON.stringify(mocks));
+      return mocks;
+    }
   }
+  private draftFromOffer(item: Offer): PublicationDraft {
+    if (item.publicationType === 'coupon') return { type: 'coupon', store: item.store, code: item.coupon?.code || '', discountKind: item.publicationDiscountLabel ? 'value' : 'percent', discountValue: item.discount, expiresAt: '', description: item.description, url: item.url };
+    return { type: 'deal', title: item.title, store: item.store, url: item.url, price: item.price, oldPrice: item.oldPrice, category: item.category, image: item.image, description: item.description };
+  }
+  private persistPublications(): void { localStorage.setItem(this.publicationsKey, JSON.stringify(this.publications)); }
   private mergePublications(offers: Offer[]): Offer[] {
     const publicationIds = new Set(this.publications.map(item => item.id));
     return [...this.publications, ...offers.filter(item => !publicationIds.has(item.id))];

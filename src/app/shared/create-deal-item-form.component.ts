@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DealPublicationDraft } from '../models';
 import { AppIconComponent } from './app-icon.component';
@@ -19,13 +19,15 @@ import { AppIconComponent } from './app-icon.component';
       } @else { <app-icon name="image-up" [size]="28"/><b>Selecione uma imagem</b><small>JPEG, PNG ou WebP de até 1 MB</small> }
     </label>@if (imageError()) { <small class="publication-upload-error">{{ imageError() }}</small> }</div>
     <label>Descrição curta<textarea required maxlength="160" name="description" [(ngModel)]="draft.description" placeholder="Destaque os principais detalhes da oferta"></textarea></label>
-    <button class="button primary wide" type="submit"><app-icon name="send" [size]="17"/>Enviar item em promoção</button>
+    <button class="button primary wide" type="submit"><app-icon name="send" [size]="17"/>{{ initial() ? 'Salvar e reenviar' : 'Enviar item em promoção' }}</button>
   </form>`
 })
 export class CreateDealItemFormComponent {
   readonly submitted = output<DealPublicationDraft>();
+  readonly initial = input<DealPublicationDraft>();
   readonly imageError = signal('');
   draft: DealPublicationDraft = { type: 'deal', title: '', store: '', url: '', price: 0, oldPrice: 0, category: 'Games', image: '', description: '' };
+  constructor() { effect(() => { const initial = this.initial(); if (initial) this.draft = { ...initial }; }); }
   selectImage(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];

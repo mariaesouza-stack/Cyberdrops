@@ -12,6 +12,7 @@ export interface Offer {
   price: number; likes: number; dislikes: number; comments: Comment[]; coupon?: Coupon;
   url: string; createdAt: string; saved?: boolean;
   publicationType?: PublicationType; publicationStatus?: PublicationStatus; publicationDiscountLabel?: string;
+  publicationDraft?: PublicationDraft; moderationMessage?: string;
 }
 export type PublicationType = 'coupon' | 'deal';
 export type PublicationStatus = 'Em análise' | 'Publicado' | 'Rejeitado';
