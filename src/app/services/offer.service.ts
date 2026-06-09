@@ -3,8 +3,8 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { COMMUNITY_USERS } from '../core/community-users';
-import { normalizeCurrency } from '../core/currency.utils';
-import { Comment, Coupon, Offer, Store, User } from '../models';
+import { formatCurrency, normalizeCurrency } from '../core/currency.utils';
+import { Comment, Coupon, Offer, PublicationDraft, Store, User } from '../models';
 
 interface ApiOffer {
   id: number; title: string; description?: string; store: string; category?: string;
@@ -29,13 +29,15 @@ export class OfferService {
   private readonly http = inject(HttpClient);
   private readonly api = `${environment.apiUrl}/offers`;
   private readonly storageKey = 'cyberdrops.interactions';
+  private readonly publicationsKey = 'cyberdrops.publications';
   private interactions = this.readInteractions();
+  private publications = this.readPublications();
 
   readonly stores: Store[] = [
     { id: 'Steam', name: 'Steam', icon: 'gamepad', color: '#66c0f4' }, { id: 'AliExpress', name: 'AliExpress', icon: 'shopping-bag', color: '#ff4747' },
     { id: 'Epic', name: 'Epic', icon: 'store', color: '#ffffff' }, { id: 'Kabum', name: 'Kabum', icon: 'cpu', color: '#ff6500' }, { id: 'Amazon', name: 'Amazon', icon: 'shopping-bag', color: '#ff9900' }
   ];
-  readonly offers = signal<Offer[]>(this.normalizeMany(fallbackOffers));
+  readonly offers = signal<Offer[]>(this.mergePublications(this.normalizeMany(fallbackOffers)));
   readonly savedOffers = computed(() => this.offers().filter(offer => offer.saved));
   readonly loading = signal(false);
   readonly message = signal('');
@@ -81,6 +83,28 @@ export class OfferService {
     this.interactions.saved = this.interactions.saved.includes(id) ? this.interactions.saved.filter(item => item !== id) : [...this.interactions.saved, id];
     this.persist(); this.offers.update(items => items.map(item => item.id === id ? { ...item, saved: this.interactions.saved.includes(id) } : item));
   }
+  createPublication(draft: PublicationDraft, author: User): Offer {
+    const id = Date.now();
+    const createdAt = new Date().toISOString();
+    const isCoupon = draft.type === 'coupon';
+    const oldPrice = isCoupon ? 0 : normalizeCurrency(draft.oldPrice);
+    const price = isCoupon ? 0 : normalizeCurrency(draft.price);
+    const discount = isCoupon
+      ? (draft.discountKind === 'percent' ? Math.round(draft.discountValue) : 0)
+      : (oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0);
+    const offer: Offer = {
+      id, author, store: draft.store, time: 'agora', image: isCoupon ? 'assets/coupon-bot.svg' : draft.image,
+      gallery: [isCoupon ? 'assets/coupon-bot.svg' : draft.image], discount, category: isCoupon ? 'Cupons' : draft.category,
+      title: isCoupon ? `Cupom ${draft.store}` : draft.title, description: draft.description, oldPrice, price,
+      likes: 0, dislikes: 0, comments: [], url: draft.url, createdAt, publicationType: draft.type, publicationStatus: 'Em análise',
+      publicationDiscountLabel: isCoupon && draft.discountKind === 'value' ? `${formatCurrency(draft.discountValue)} OFF` : undefined,
+      coupon: isCoupon ? { code: draft.code, description: `${draft.description} · Válido até ${this.formatDate(draft.expiresAt)}`, store: draft.store } : undefined
+    };
+    this.publications = [offer, ...this.publications];
+    localStorage.setItem(this.publicationsKey, JSON.stringify(this.publications));
+    this.offers.update(items => [offer, ...items.filter(item => item.id !== offer.id)]);
+    return offer;
+  }
   openStore(offer: Offer): void { window.open(offer.url, '_blank', 'noopener,noreferrer'); }
   getById(id: number): Offer | undefined { return this.offers().find(offer => offer.id === id); }
 
@@ -90,12 +114,12 @@ export class OfferService {
     catch { return this.useFallback(); } finally { this.loading.set(false); }
   }
   private applyResponse(response: ApiResponse): Offer[] {
-    const offers = this.normalizeMany(response.offers); this.offers.set(offers);
+    const offers = this.mergePublications(this.normalizeMany(response.offers)); this.offers.set(offers);
     if (response.source === 'mock') this.message.set('Não foi possível atualizar as ofertas agora. Exibindo dados salvos.');
     return offers;
   }
   private useFallback(): Offer[] {
-    const offers = this.normalizeMany(fallbackOffers); this.offers.set(offers); this.message.set('Não foi possível atualizar as ofertas agora. Exibindo dados salvos.'); return offers;
+    const offers = this.mergePublications(this.normalizeMany(fallbackOffers)); this.offers.set(offers); this.message.set('Não foi possível atualizar as ofertas agora. Exibindo dados salvos.'); return offers;
   }
   private normalizeMany(offers: ApiOffer[]): Offer[] { return offers.map(offer => this.normalize(offer)); }
   private normalize(offer: ApiOffer): Offer {
@@ -108,6 +132,17 @@ export class OfferService {
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }
   private readInteractions(): LocalInteractions {
     try { return JSON.parse(localStorage.getItem(this.storageKey) || '') as LocalInteractions; } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [] }; }
+  }
+  private readPublications(): Offer[] {
+    try { return JSON.parse(localStorage.getItem(this.publicationsKey) || '') as Offer[]; } catch { return []; }
+  }
+  private mergePublications(offers: Offer[]): Offer[] {
+    const publicationIds = new Set(this.publications.map(item => item.id));
+    return [...this.publications, ...offers.filter(item => !publicationIds.has(item.id))];
+  }
+  private formatDate(value: string): string {
+    if (!value) return 'data não informada';
+    return new Intl.DateTimeFormat('pt-BR').format(new Date(`${value}T12:00:00`));
   }
   private persist(): void { localStorage.setItem(this.storageKey, JSON.stringify(this.interactions)); }
 }

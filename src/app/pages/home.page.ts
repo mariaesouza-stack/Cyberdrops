@@ -1,12 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { OfferService } from '../services/offer.service';
+import { UserService } from '../services/user.service';
+import { PublicationDraft } from '../models';
 import { AppIconComponent } from '../shared/app-icon.component';
 import { CouponOfferCardComponent } from '../shared/coupon-offer-card.component';
 import { OfferCardComponent } from '../shared/offer-card.component';
 import { StoreFilterComponent } from '../shared/store-filter.component';
+import { CreatePublicationModalComponent } from '../shared/create-publication-modal.component';
+import { FloatingActionButtonComponent } from '../shared/floating-action-button.component';
 
 @Component({
-  standalone: true, imports: [CouponOfferCardComponent, OfferCardComponent, StoreFilterComponent, AppIconComponent],
+  standalone: true, imports: [CouponOfferCardComponent, OfferCardComponent, StoreFilterComponent, AppIconComponent, CreatePublicationModalComponent, FloatingActionButtonComponent],
   template: `<section class="page feed-page">
     <div class="hero"><div><p class="eyebrow">DROPS EM ALTA</p><h1>Boa noite, player.</h1><p>Encontramos <b>{{ offers().length }} ofertas</b> no seu radar.</p></div><div class="radar"><app-icon name="radar" [size]="34"/></div></div>
     @if (service.message()) { <p class="api-message">{{ service.message() }}</p> }
@@ -20,10 +24,16 @@ import { StoreFilterComponent } from '../shared/store-filter.component';
         @if (!visibleOffersCount()) { <div class="empty"><app-icon name="search" [size]="36"/><b>Sem drops por aqui.</b><span>Tente outro filtro.</span></div> }
       }
     </div>
+    <app-floating-action-button (pressed)="publicationOpen.set(true)"/>
+    @if (publicationOpen()) { <app-create-publication-modal (closed)="publicationOpen.set(false)" (submitted)="publish($event)"/> }
+    @if (publicationSuccess()) { <div class="publication-success" role="status"><app-icon name="check" [size]="18"/><span><b>Publicação enviada com sucesso.</b><small>Seu conteúdo está em análise e já aparece no feed.</small></span></div> }
   </section>`
 })
 export class HomePage {
   readonly service = inject(OfferService);
+  readonly user = inject(UserService);
+  readonly publicationOpen = signal(false);
+  readonly publicationSuccess = signal(false);
   readonly feedOptions = ['Todos', 'Produtos', 'Cupons'] as const;
   readonly feedType = signal<(typeof this.feedOptions)[number]>('Todos');
   readonly store = signal('');
@@ -42,4 +52,12 @@ export class HomePage {
   });
   constructor() { void this.service.getOffers(); }
   async changeStore(store: string): Promise<void> { this.store.set(store); await this.service.filterByStore(store); }
+  publish(draft: PublicationDraft): void {
+    this.service.createPublication(draft, this.user.user());
+    this.store.set('');
+    this.feedType.set('Todos');
+    this.publicationOpen.set(false);
+    this.publicationSuccess.set(true);
+    setTimeout(() => this.publicationSuccess.set(false), 3500);
+  }
 }

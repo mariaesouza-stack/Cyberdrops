@@ -19,11 +19,13 @@ import {
   LucideGamepad2,
   LucideGhost,
   LucideHeart,
+  LucideImageUp,
   LucideLogOut,
   LucideMoon,
   LucideMessageCircle,
   LucidePackageCheck,
   LucidePencil,
+  LucidePlus,
   LucideRadar,
   LucideReply,
   LucideRocket,
@@ -48,8 +50,8 @@ import {
 export type AppIconName =
   | 'arrow-left' | 'arrow-right' | 'bell' | 'bookmark' | 'bookmark-check'
   | 'badge-percent' | 'bot' | 'brain-circuit' | 'check' | 'check-check' | 'clock' | 'copy' | 'cpu' | 'external-link'
-  | 'flame' | 'gamepad' | 'ghost' | 'heart' | 'log-out' | 'moon' | 'pencil'
-  | 'message-circle' | 'package-check' | 'radar' | 'reply' | 'rocket' | 'search' | 'send' | 'share' | 'shopping-bag'
+  | 'flame' | 'gamepad' | 'ghost' | 'heart' | 'image-up' | 'log-out' | 'moon' | 'pencil'
+  | 'message-circle' | 'package-check' | 'plus' | 'radar' | 'reply' | 'rocket' | 'search' | 'send' | 'share' | 'shopping-bag'
   | 'skull' | 'store' | 'sun' | 'swords' | 'ticket-percent' | 'trending-down' | 'user' | 'venetian-mask'
   | 'wand-sparkles' | 'x' | 'zap';
 
@@ -72,11 +74,13 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   gamepad: LucideGamepad2,
   ghost: LucideGhost,
   heart: LucideHeart,
+  'image-up': LucideImageUp,
   'log-out': LucideLogOut,
   moon: LucideMoon,
   'message-circle': LucideMessageCircle,
   'package-check': LucidePackageCheck,
   pencil: LucidePencil,
+  plus: LucidePlus,
   radar: LucideRadar,
   reply: LucideReply,
   rocket: LucideRocket,

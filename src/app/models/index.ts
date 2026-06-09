@@ -11,7 +11,19 @@ export interface Offer {
   discount: number; category: string; title: string; description: string; oldPrice: number;
   price: number; likes: number; dislikes: number; comments: Comment[]; coupon?: Coupon;
   url: string; createdAt: string; saved?: boolean;
+  publicationType?: PublicationType; publicationStatus?: PublicationStatus; publicationDiscountLabel?: string;
 }
+export type PublicationType = 'coupon' | 'deal';
+export type PublicationStatus = 'Em análise' | 'Publicado' | 'Rejeitado';
+export interface CouponPublicationDraft {
+  type: 'coupon'; store: string; code: string; discountKind: 'percent' | 'value'; discountValue: number;
+  expiresAt: string; description: string; url: string;
+}
+export interface DealPublicationDraft {
+  type: 'deal'; title: string; store: string; url: string; price: number; oldPrice: number;
+  category: string; image: string; description: string;
+}
+export type PublicationDraft = CouponPublicationDraft | DealPublicationDraft;
 export interface NotificationPreference { id: string; label: string; enabled: boolean; }
 export type AppNotificationCategory = 'offers' | 'coupons' | 'favorites' | 'community' | 'system';
 export type AppNotificationAction = 'offer' | 'product' | 'coupon' | 'profile';
