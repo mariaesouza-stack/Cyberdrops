@@ -12,7 +12,7 @@ import { OfferCardComponent } from '../shared/offer-card.component';
     @if (tab() === 'edit') { <form class="profile-form"><label>Nome<input [(ngModel)]="draft.name" name="name"></label><label>Username<input [(ngModel)]="draft.username" name="username"></label><label>E-mail<input [(ngModel)]="draft.email" name="email"></label><label>Telefone<input [(ngModel)]="draft.phone" name="phone"></label><label>Senha<input [(ngModel)]="draft.password" name="password" type="password" placeholder="Altere sua senha"></label><button type="button" class="button primary wide" (click)="save()">{{ saved() ? 'Alterações salvas ✓' : 'Salvar alterações' }}</button>@if (saved()) { <p class="save-feedback" role="status">Seu perfil foi atualizado com sucesso.</p> }</form>
     } @else if (tab() === 'notifications') { <div class="notification-list">@for (item of service.notifications(); track item.id) { <button (click)="service.toggleNotification(item.id)"><span><b>{{ item.label }}</b><small>Receber alerta no aplicativo</small></span><i [class.on]="item.enabled"></i></button> }</div>
     } @else { <div class="saved-offers">@for (offer of offers.savedOffers(); track offer.id) { <app-offer-card [offer]="offer"/> } @empty { <div class="empty"><b>Nenhuma oferta salva</b><span>Salve ofertas para encontrá-las rapidamente aqui.</span></div> }</div> }
-    <button class="button secondary logout-button" (click)="logout()">Sair da conta</button>
+    <div class="logout-divider"></div><button class="button secondary logout-button" (click)="logout()">Sair da conta</button>
   </section>`
 })
 export class ProfilePage {
