@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Comment, Coupon, Offer, Store, User } from '../models';
@@ -35,6 +35,7 @@ export class OfferService {
     { id: 'Epic', name: 'Epic', icon: 'E', color: '#ffffff' }, { id: 'Kabum', name: 'Kabum', icon: 'K', color: '#ff6500' }, { id: 'Amazon', name: 'Amazon', icon: 'a', color: '#ff9900' }
   ];
   readonly offers = signal<Offer[]>(this.normalizeMany(fallbackOffers));
+  readonly savedOffers = computed(() => this.offers().filter(offer => offer.saved));
   readonly loading = signal(false);
   readonly message = signal('');
 
@@ -64,6 +65,11 @@ export class OfferService {
     const comment: Comment = { id: Date.now(), user, text, likes: 0, time: 'agora' };
     this.interactions.comments[id] = [...(this.interactions.comments[id] || []), comment]; this.persist();
     this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: [...item.comments, comment] } : item));
+  }
+  likeComment(id: number, commentId: number): void {
+    const comments = this.interactions.comments[id] || this.offers().find(item => item.id === id)?.comments || [];
+    this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment);
+    this.persist(); this.patchComments(id);
   }
   reply(id: number, commentId: number, text: string, user: User): void {
     const comments = this.interactions.comments[id] || this.offers().find(item => item.id === id)?.comments || [];
