@@ -2,13 +2,14 @@ import { Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Offer } from '../models';
 import { AppIconComponent } from './app-icon.component';
+import { DiscountLabelPipe } from './brl-format.pipe';
 
 @Component({
   selector: 'app-coupon-offer-card',
   standalone: true,
-  imports: [AppIconComponent],
+  imports: [AppIconComponent, DiscountLabelPipe],
   template: `<article class="coupon-offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
-    <header><img class="coupon-bot-avatar" src="assets/coupon-bot.svg" alt="Bot de cupons"><div><strong>{{ offer().store }}</strong><small>{{ offer().time }}</small></div><span class="coupon-discount">-{{ offer().discount }}%</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
+    <header><img class="coupon-bot-avatar" src="assets/coupon-bot.svg" alt="Bot de cupons"><div><strong>{{ offer().store }}</strong><small>{{ offer().time }}</small></div><span class="coupon-discount">{{ offer().discount | discountLabel }}</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
     <div class="coupon-offer-main"><div class="coupon-code-row"><b>{{ offer().coupon?.code }}</b><button class="coupon-copy-button" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</button></div><p>{{ offer().coupon?.description || offer().description }}</p></div>
   </article>`
 })

@@ -17,8 +17,16 @@ const fallbackImages = {
 };
 
 function numberFrom(text = '') {
-  const normalized = text.replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3})/g, '').replace(',', '.');
+  const currencyMatch = text.match(/(?:R\$|BRL)\s*([\d.]+(?:,\d{1,2})?)/i);
+  const numberMatch = text.match(/[\d.]+(?:,\d{1,2})?/);
+  const matched = currencyMatch?.[1] || numberMatch?.[0] || '';
+  const normalized = matched.replace(/\.(?=\d{3}(?:\D|$))/g, '').replace(',', '.');
   return Number.parseFloat(normalized) || 0;
+}
+
+function normalizeCurrency(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.round(number * 100) / 100 : 0;
 }
 
 function idFor(store, title) {
@@ -26,12 +34,12 @@ function idFor(store, title) {
 }
 
 function normalize({ store, title, description, category = 'Games', oldPrice, currentPrice, discount, image, url, coupon }) {
-  const price = Number(currentPrice) || 0;
-  const old = Number(oldPrice) || price;
+  const price = normalizeCurrency(currentPrice);
+  const old = normalizeCurrency(oldPrice) || price;
   const calculatedDiscount = old > price && old > 0 ? Math.round((1 - price / old) * 100) : 0;
   return {
     id: idFor(store, title), title: title.trim(), description: description?.trim() || `Oferta pública encontrada na ${store}.`,
-    store, category, oldPrice: old, currentPrice: price, discount: Number(discount) || calculatedDiscount,
+    store, category, oldPrice: old, currentPrice: price, discount: Math.round(Math.abs(Number(discount) || calculatedDiscount)),
     image: image || fallbackImages[store], url, coupon: coupon || null, createdAt: new Date().toISOString()
   };
 }

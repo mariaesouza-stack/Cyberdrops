@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { COMMUNITY_USERS } from '../core/community-users';
+import { normalizeCurrency } from '../core/currency.utils';
 import { Comment, Coupon, Offer, Store, User } from '../models';
 
 interface ApiOffer {
@@ -99,7 +100,9 @@ export class OfferService {
   private normalizeMany(offers: ApiOffer[]): Offer[] { return offers.map(offer => this.normalize(offer)); }
   private normalize(offer: ApiOffer): Offer {
     const author = COMMUNITY_USERS[Math.abs(offer.id) % COMMUNITY_USERS.length]; const image = offer.image || fallbackOffers[0].image!;
-    return { id: offer.id, author, store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.abs(offer.discount || 0), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice: offer.oldPrice || offer.currentPrice || 0, price: offer.currentPrice || 0, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
+    const price = normalizeCurrency(offer.currentPrice);
+    const oldPrice = normalizeCurrency(offer.oldPrice ?? price);
+    return { id: offer.id, author, store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
   }
   private upsert(offer: Offer): void { this.offers.update(items => items.some(item => item.id === offer.id) ? items.map(item => item.id === offer.id ? offer : item) : [...items, offer]); }
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }

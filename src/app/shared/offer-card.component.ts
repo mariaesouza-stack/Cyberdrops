@@ -1,19 +1,19 @@
-import { CurrencyPipe } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Offer } from '../models';
 import { OfferService } from '../services/offer.service';
 import { AppAvatarComponent } from './app-avatar.component';
 import { AppIconComponent } from './app-icon.component';
+import { BrlCurrencyPipe, DiscountLabelPipe } from './brl-format.pipe';
 
 @Component({
-  selector: 'app-offer-card', standalone: true, imports: [CurrencyPipe, AppIconComponent, AppAvatarComponent],
+  selector: 'app-offer-card', standalone: true, imports: [BrlCurrencyPipe, DiscountLabelPipe, AppIconComponent, AppAvatarComponent],
   template: `<article class="offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
     <header class="offer-user"><span class="avatar mini"><app-avatar [src]="offer().author.avatar" [alt]="'Avatar de ' + offer().author.name"/></span><div><strong>{{ offer().author.name }}</strong><small>{{ offer().store }} · {{ offer().time }}</small></div><button aria-label="Compartilhar oferta" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
     <div class="offer-main">
-      <div class="offer-image"><img [src]="offer().image" [alt]="offer().title"><span class="discount">-{{ offer().discount }}%</span></div>
+      <div class="offer-image"><img [src]="offer().image" [alt]="offer().title"><span class="discount">{{ offer().discount | discountLabel }}</span></div>
       <div class="offer-body"><h2>{{ offer().title }}</h2><p>{{ offer().description }}</p>
-        <div class="offer-price-row"><div class="price"><small>{{ offer().oldPrice | currency:'BRL' }}</small><strong>{{ offer().price | currency:'BRL' }}</strong></div><button class="fire-button" (click)="vote($event, 'like')" aria-label="Curtir oferta"><app-icon name="flame" [size]="16"/> {{ offer().likes }}</button></div>
+        <div class="offer-price-row"><div class="price"><small>{{ offer().oldPrice | brlCurrency }}</small><strong>{{ offer().price | brlCurrency }}</strong></div><button class="fire-button" (click)="vote($event, 'like')" aria-label="Curtir oferta"><app-icon name="flame" [size]="16"/> {{ offer().likes }}</button></div>
       </div>
     </div>
   </article>`
