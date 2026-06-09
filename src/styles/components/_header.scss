@@ -4,7 +4,9 @@
 .brand.center { justify-content: center; }
 .app-header { position: fixed; inset: 0 0 auto; height: 64px; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--spacing-md); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid rgba(255, 255, 255, .06); backdrop-filter: blur(18px); }
 .header-actions { display: flex; align-items: center; gap: var(--spacing-sm); }
-.icon-button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); display: grid; place-items: center; font-size: 22px; }
+.icon-button { width: 32px; height: 32px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); display: inline-grid; place-items: center; line-height: 0; font-size: 22px; }
+.icon-button app-icon { display: grid; place-items: center; }
+.icon-button app-icon svg { display: block; }
 .app-header .avatar.mini { width: 44px; height: 44px; font-size: 21px; }
 
 @media (max-width: 420px) {
