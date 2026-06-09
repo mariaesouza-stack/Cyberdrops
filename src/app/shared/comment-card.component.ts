@@ -1,17 +1,18 @@
 import { Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Comment } from '../models';
+import { AppAvatarComponent } from './app-avatar.component';
 import { AppIconComponent } from './app-icon.component';
 
 @Component({
-  selector: 'app-comment-card', standalone: true, imports: [FormsModule, AppIconComponent],
+  selector: 'app-comment-card', standalone: true, imports: [FormsModule, AppIconComponent, AppAvatarComponent],
   template: `<article class="comment">
-    <span class="avatar mini"><app-icon [name]="comment().user.avatar" [size]="18"/></span>
+    <span class="avatar mini"><app-avatar [src]="comment().user.avatar" [alt]="'Avatar de ' + comment().user.name"/></span>
     <div><strong>{{ comment().user.name }}</strong><small>{{ comment().time }}</small><p>{{ comment().text }}</p>
       <button (click)="liked.emit(comment().id)" aria-label="Curtir comentário"><app-icon name="heart" [size]="16"/> {{ comment().likes }}</button><button (click)="toggleReply()"><app-icon name="reply" [size]="16"/>Responder</button>
       @if (replying()) { <div class="reply-form"><input [(ngModel)]="replyText" placeholder="Escreva uma resposta"><button (click)="sendReply()" aria-label="Enviar resposta"><app-icon name="send" [size]="16"/></button></div> }
       @for (reply of comment().replies ?? []; track reply.id) {
-        <div class="reply"><b><app-icon [name]="reply.user.avatar" [size]="16"/>{{ reply.user.name }}</b><p>{{ reply.text }}</p></div>
+        <div class="reply"><b><span class="avatar reply-avatar"><app-avatar [src]="reply.user.avatar" [alt]="'Avatar de ' + reply.user.name"/></span>{{ reply.user.name }}</b><p>{{ reply.text }}</p></div>
       }
     </div>
   </article>`

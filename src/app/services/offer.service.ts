@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { COMMUNITY_USERS } from '../core/community-users';
 import { Comment, Coupon, Offer, Store, User } from '../models';
 
 interface ApiOffer {
@@ -12,15 +13,14 @@ interface ApiOffer {
 interface ApiResponse { offers: ApiOffer[]; source?: string; message?: string; }
 interface LocalInteractions { likes: Record<string, number>; dislikes: Record<string, number>; comments: Record<string, Comment[]>; saved: number[]; }
 
-const users: User[] = [
-  { id: 2, name: 'Luna Nova', username: '@lunanova', email: '', phone: '', avatar: 'moon' },
-  { id: 3, name: 'Zero Cool', username: '@zerocool', email: '', phone: '', avatar: 'bot' },
-  { id: 4, name: 'Pixel Witch', username: '@pixelwitch', email: '', phone: '', avatar: 'wand-sparkles' }
-];
 const fallbackOffers: ApiOffer[] = [
   { id: 1, store: 'Steam', category: 'Games', title: 'Cyberpunk 2077: Ultimate Edition', description: 'Night City nunca esteve tão barata. Inclui Phantom Liberty.', oldPrice: 299.90, currentPrice: 98.97, discount: 67, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85', url: 'https://store.steampowered.com/', coupon: { code: 'NIGHTCITY67', description: '67% OFF na edição completa', store: 'Steam' } },
   { id: 2, store: 'Kabum', category: 'Hardware', title: 'Monitor Gamer UltraWide 34” 165Hz', description: 'Painel IPS, 1ms e suporte a FreeSync Premium.', oldPrice: 3299.90, currentPrice: 2499.90, discount: 24, image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1200&q=85', url: 'https://www.kabum.com.br/' },
   { id: 3, store: 'Epic', category: 'Cupons', title: 'Jogo misterioso grátis nesta semana', description: 'Resgate agora e mantenha para sempre na sua biblioteca.', oldPrice: 89.90, currentPrice: 0, discount: 100, image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=85', url: 'https://store.epicgames.com/pt-BR/free-games', coupon: { code: 'FREEWEEK', description: 'Resgate gratuito', store: 'Epic' } }
+];
+const communityComments: Comment[] = [
+  { id: 101, user: COMMUNITY_USERS[3], text: 'Preço digno de upgrade no setup. O histórico está excelente.', likes: 18, time: 'há 12 min' },
+  { id: 102, user: COMMUNITY_USERS[5], text: 'Drop confirmado. Já entrou no meu radar de promoções.', likes: 11, time: 'há 28 min' }
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -98,8 +98,8 @@ export class OfferService {
   }
   private normalizeMany(offers: ApiOffer[]): Offer[] { return offers.map(offer => this.normalize(offer)); }
   private normalize(offer: ApiOffer): Offer {
-    const author = users[Math.abs(offer.id) % users.length]; const image = offer.image || fallbackOffers[0].image!;
-    return { id: offer.id, author, store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.abs(offer.discount || 0), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice: offer.oldPrice || offer.currentPrice || 0, price: offer.currentPrice || 0, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || [], coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
+    const author = COMMUNITY_USERS[Math.abs(offer.id) % COMMUNITY_USERS.length]; const image = offer.image || fallbackOffers[0].image!;
+    return { id: offer.id, author, store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.abs(offer.discount || 0), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice: offer.oldPrice || offer.currentPrice || 0, price: offer.currentPrice || 0, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
   }
   private upsert(offer: Offer): void { this.offers.update(items => items.some(item => item.id === offer.id) ? items.map(item => item.id === offer.id ? offer : item) : [...items, offer]); }
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }

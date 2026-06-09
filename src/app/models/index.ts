@@ -1,5 +1,5 @@
 export interface User {
-  id: number; name: string; username: string; email: string; phone: string; avatar: string; password?: string;
+  id: number; name: string; username: string; email: string; phone: string; avatar: string; password?: string; bio?: string;
 }
 export interface Store { id: string; name: string; icon: string; color: string; }
 export interface Coupon { code: string; description: string; store: string; }

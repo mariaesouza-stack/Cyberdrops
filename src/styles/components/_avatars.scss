@@ -1,0 +1,34 @@
+app-avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+app-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.avatar {
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.avatar.choice {
+  padding: 0;
+  border-color: transparent;
+}
+
+.avatar.choice:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.reply-avatar {
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+  border-width: 1px;
+}
