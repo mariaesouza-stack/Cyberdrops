@@ -1,0 +1,26 @@
+app-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+app-icon svg {
+  display: block;
+}
+
+button app-icon,
+a app-icon {
+  pointer-events: none;
+}
+
+.avatar app-icon {
+  color: currentColor;
+}
+
+.empty app-icon {
+  margin-bottom: var(--spacing-sm);
+  color: var(--primary);
+}

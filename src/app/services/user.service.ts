@@ -3,7 +3,7 @@ import { NotificationPreference, User } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private readonly defaultUser: User = { id: 1, name: 'Madison Souza', username: '@madbyte', email: 'madi@cyberdrops.gg', phone: '(11) 99999-2049', avatar: '👾' };
+  private readonly defaultUser: User = { id: 1, name: 'Madison Souza', username: '@madbyte', email: 'madi@cyberdrops.gg', phone: '(11) 99999-2049', avatar: 'gamepad' };
   readonly user = signal<User>(this.read('cyberdrops.user', this.defaultUser));
   readonly session = signal(this.read<boolean>('cyberdrops.session', false));
   readonly notifications = signal<NotificationPreference[]>(this.read('cyberdrops.notifications', [

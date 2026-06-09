@@ -19,6 +19,6 @@
 .coupon-code-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .coupon-offer-main b { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 17px; letter-spacing: .04em; }
 .coupon-offer-main p { margin: 0; color: var(--muted); font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.coupon-copy-button { flex: 0 0 auto; padding: 8px 11px; border: 1px dashed var(--primary); border-radius: var(--radius-pill); background: rgba(242, 25, 195, .08); color: var(--primary); font-size: 9px; font-weight: 800; transition: .2s; }
+.coupon-copy-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border: 1px dashed var(--primary); border-radius: var(--radius-pill); background: rgba(242, 25, 195, .08); color: var(--primary); font-size: 9px; font-weight: 800; transition: .2s; }
 .coupon-copy-button:hover { background: var(--primary); color: #fff; }
 .home-coupon-card .coupon-offer-card { width: 100%; flex-basis: auto; }

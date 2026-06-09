@@ -13,9 +13,9 @@ interface ApiResponse { offers: ApiOffer[]; source?: string; message?: string; }
 interface LocalInteractions { likes: Record<string, number>; dislikes: Record<string, number>; comments: Record<string, Comment[]>; saved: number[]; }
 
 const users: User[] = [
-  { id: 2, name: 'Luna Nova', username: '@lunanova', email: '', phone: '', avatar: '🌙' },
-  { id: 3, name: 'Zero Cool', username: '@zerocool', email: '', phone: '', avatar: '🤖' },
-  { id: 4, name: 'Pixel Witch', username: '@pixelwitch', email: '', phone: '', avatar: '🧙' }
+  { id: 2, name: 'Luna Nova', username: '@lunanova', email: '', phone: '', avatar: 'moon' },
+  { id: 3, name: 'Zero Cool', username: '@zerocool', email: '', phone: '', avatar: 'bot' },
+  { id: 4, name: 'Pixel Witch', username: '@pixelwitch', email: '', phone: '', avatar: 'wand-sparkles' }
 ];
 const fallbackOffers: ApiOffer[] = [
   { id: 1, store: 'Steam', category: 'Games', title: 'Cyberpunk 2077: Ultimate Edition', description: 'Night City nunca esteve tão barata. Inclui Phantom Liberty.', oldPrice: 299.90, currentPrice: 98.97, discount: 67, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85', url: 'https://store.steampowered.com/', coupon: { code: 'NIGHTCITY67', description: '67% OFF na edição completa', store: 'Steam' } },
@@ -31,8 +31,8 @@ export class OfferService {
   private interactions = this.readInteractions();
 
   readonly stores: Store[] = [
-    { id: 'Steam', name: 'Steam', icon: '◉', color: '#66c0f4' }, { id: 'AliExpress', name: 'AliExpress', icon: 'A', color: '#ff4747' },
-    { id: 'Epic', name: 'Epic', icon: 'E', color: '#ffffff' }, { id: 'Kabum', name: 'Kabum', icon: 'K', color: '#ff6500' }, { id: 'Amazon', name: 'Amazon', icon: 'a', color: '#ff9900' }
+    { id: 'Steam', name: 'Steam', icon: 'gamepad', color: '#66c0f4' }, { id: 'AliExpress', name: 'AliExpress', icon: 'shopping-bag', color: '#ff4747' },
+    { id: 'Epic', name: 'Epic', icon: 'store', color: '#ffffff' }, { id: 'Kabum', name: 'Kabum', icon: 'cpu', color: '#ff6500' }, { id: 'Amazon', name: 'Amazon', icon: 'shopping-bag', color: '#ff9900' }
   ];
   readonly offers = signal<Offer[]>(this.normalizeMany(fallbackOffers));
   readonly savedOffers = computed(() => this.offers().filter(offer => offer.saved));
