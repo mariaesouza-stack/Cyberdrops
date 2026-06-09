@@ -13,3 +13,18 @@ export interface Offer {
   url: string; createdAt: string; saved?: boolean;
 }
 export interface NotificationPreference { id: string; label: string; enabled: boolean; }
+export type AppNotificationCategory = 'offers' | 'coupons' | 'favorites' | 'community' | 'system';
+export type AppNotificationAction = 'offer' | 'product' | 'coupon' | 'profile';
+export interface AppNotification {
+  id: string;
+  category: AppNotificationCategory;
+  icon: string;
+  title: string;
+  description: string;
+  time: string;
+  createdAt: string;
+  read: boolean;
+  action: AppNotificationAction;
+  offerId?: number;
+  couponCode?: string;
+}

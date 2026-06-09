@@ -3,11 +3,14 @@ import {
   LucideArrowLeft,
   LucideArrowRight,
   LucideBell,
+  LucideBadgePercent,
   LucideBookmark,
   LucideBookmarkCheck,
   LucideBot,
   LucideBrainCircuit,
   LucideCheck,
+  LucideCheckCheck,
+  LucideClock,
   LucideCopy,
   LucideCpu,
   LucideDynamicIcon,
@@ -18,6 +21,8 @@ import {
   LucideHeart,
   LucideLogOut,
   LucideMoon,
+  LucideMessageCircle,
+  LucidePackageCheck,
   LucidePencil,
   LucideRadar,
   LucideReply,
@@ -30,6 +35,8 @@ import {
   LucideStore,
   LucideSun,
   LucideSwords,
+  LucideTicketPercent,
+  LucideTrendingDown,
   LucideUserRound,
   LucideVenetianMask,
   LucideWandSparkles,
@@ -40,21 +47,24 @@ import {
 
 export type AppIconName =
   | 'arrow-left' | 'arrow-right' | 'bell' | 'bookmark' | 'bookmark-check'
-  | 'bot' | 'brain-circuit' | 'check' | 'copy' | 'cpu' | 'external-link'
+  | 'badge-percent' | 'bot' | 'brain-circuit' | 'check' | 'check-check' | 'clock' | 'copy' | 'cpu' | 'external-link'
   | 'flame' | 'gamepad' | 'ghost' | 'heart' | 'log-out' | 'moon' | 'pencil'
-  | 'radar' | 'reply' | 'rocket' | 'search' | 'send' | 'share' | 'shopping-bag'
-  | 'skull' | 'store' | 'sun' | 'swords' | 'user' | 'venetian-mask'
+  | 'message-circle' | 'package-check' | 'radar' | 'reply' | 'rocket' | 'search' | 'send' | 'share' | 'shopping-bag'
+  | 'skull' | 'store' | 'sun' | 'swords' | 'ticket-percent' | 'trending-down' | 'user' | 'venetian-mask'
   | 'wand-sparkles' | 'x' | 'zap';
 
 const ICONS: Record<AppIconName, LucideIcon> = {
   'arrow-left': LucideArrowLeft,
   'arrow-right': LucideArrowRight,
   bell: LucideBell,
+  'badge-percent': LucideBadgePercent,
   bookmark: LucideBookmark,
   'bookmark-check': LucideBookmarkCheck,
   bot: LucideBot,
   'brain-circuit': LucideBrainCircuit,
   check: LucideCheck,
+  'check-check': LucideCheckCheck,
+  clock: LucideClock,
   copy: LucideCopy,
   cpu: LucideCpu,
   'external-link': LucideExternalLink,
@@ -64,6 +74,8 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   heart: LucideHeart,
   'log-out': LucideLogOut,
   moon: LucideMoon,
+  'message-circle': LucideMessageCircle,
+  'package-check': LucidePackageCheck,
   pencil: LucidePencil,
   radar: LucideRadar,
   reply: LucideReply,
@@ -76,6 +88,8 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   store: LucideStore,
   sun: LucideSun,
   swords: LucideSwords,
+  'ticket-percent': LucideTicketPercent,
+  'trending-down': LucideTrendingDown,
   user: LucideUserRound,
   'venetian-mask': LucideVenetianMask,
   'wand-sparkles': LucideWandSparkles,

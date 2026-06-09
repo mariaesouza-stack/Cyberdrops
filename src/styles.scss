@@ -3,6 +3,7 @@
 @use "styles/components/icons";
 @use "styles/components/avatars";
 @use "styles/components/header";
+@use "styles/components/notifications";
 @use "styles/components/filters";
 @use "styles/components/offer-card";
 @use "styles/components/coupon-cards";
@@ -13,5 +14,6 @@
 @use "styles/pages/product";
 @use "styles/pages/search";
 @use "styles/pages/profile";
+@use "styles/pages/notifications-page";
 @use "styles/themes";
 @use "styles/responsive";
