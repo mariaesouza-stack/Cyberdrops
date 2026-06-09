@@ -1,0 +1,12 @@
+.auth-page { min-height: 100vh; display: grid; place-items: center; padding: 58px 18px; background: radial-gradient(circle at top right, rgba(242, 25, 195, .14), transparent 35%), var(--bg); }
+.back, .floating-back { position: absolute; top: 22px; left: 18px; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; background: var(--surface); z-index: 4; }
+.auth-card { width: min(100%, 430px); display: grid; gap: 26px; }
+.auth-card h1 { margin-bottom: 6px; }
+.auth-card form, .profile-form { display: grid; gap: 14px; }
+.text-link { justify-self: end; color: var(--accent); font-size: 12px; }
+.check { grid-template-columns: auto 1fr; align-items: center; }
+.check input { width: auto; }
+.divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 11px; }
+.divider::before, .divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+.social { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); }
+.social button { border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: var(--radius-pill); padding: 12px; font-weight: 700; }

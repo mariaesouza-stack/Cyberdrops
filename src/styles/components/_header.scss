@@ -1,0 +1,8 @@
+.brand { display: flex; align-items: center; }
+.brand img { width: 126px; height: 32px; object-fit: contain; filter: brightness(0) invert(1); transition: filter .25s, opacity .2s; }
+.brand:hover img { opacity: .78; }
+.brand.center { justify-content: center; }
+.app-header { position: fixed; inset: 0 0 auto; height: 64px; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--spacing-md); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid rgba(255, 255, 255, .06); backdrop-filter: blur(18px); }
+.header-actions { display: flex; align-items: center; gap: var(--spacing-sm); }
+.icon-button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); display: grid; place-items: center; font-size: 22px; }
+.app-header .avatar.mini { width: 44px; height: 44px; font-size: 21px; }

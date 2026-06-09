@@ -1,0 +1,15 @@
+.comment { display: flex; gap: 10px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.comment > div { flex: 1; }
+.comment strong, .comment small { display: block; }
+.comment small { color: var(--muted); font-size: 9px; margin-top: 2px; }
+.comment p { font-size: 12px; line-height: 1.5; }
+.comment button { border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); border-radius: var(--radius-pill); padding: 8px 11px; font-size: 11px; }
+.comment button:hover { color: var(--text); border-color: var(--muted); }
+.reply { padding: 10px; margin-top: 10px; border-left: 2px solid var(--secondary); background: var(--surface); border-radius: 0 10px 10px 0; }
+.reply b { font-size: 11px; }
+.reply-form { display: flex; gap: 7px; margin-top: 10px; }
+.reply-form input { padding: 9px 11px; }
+.reply-form button { flex: 0 0 auto; }
+.avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 25px 0; }
+.avatar.choice { width: auto; aspect-ratio: 1; height: auto; border-color: transparent; }
+.avatar.choice.selected { border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 229, 255, .3); transform: scale(1.07); }

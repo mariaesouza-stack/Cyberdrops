@@ -1,0 +1,36 @@
+.feed { display: grid; gap: 10px; }
+.offer-card { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); cursor: pointer; outline: none; transition: border-color .2s, transform .2s, box-shadow .2s; }
+.offer-card:hover { transform: translateY(-2px); border-color: rgba(242, 25, 195, .32); }
+.offer-card:focus-visible { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(242, 25, 195, .18), var(--shadow); }
+.offer-user { display: flex; align-items: center; gap: 10px; padding: 10px 12px 8px; }
+.offer-user div { display: grid; gap: 2px; flex: 1; }
+.offer-user strong { font-size: 13px; }
+.offer-user small { font-size: 10px; color: var(--muted); }
+.offer-user button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); transition: .2s; }
+.offer-user button:hover { background: var(--surface-hover); color: var(--text); }
+.offer-main { display: grid; grid-template-columns: minmax(112px, 35%) 1fr; gap: 12px; padding: 0 12px 10px; }
+.offer-image { position: relative; aspect-ratio: 1.1; border-radius: var(--radius-md); overflow: hidden; min-height: 108px; }
+.offer-image img { width: 100%; height: 100%; object-fit: cover; transition: .3s; }
+.offer-image:hover img { transform: scale(1.03); }
+.discount { position: absolute; top: 12px; left: 12px; border-radius: var(--radius-pill); padding: 6px 10px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 800; }
+.offer-image .discount { top: 7px; left: 7px; padding: 4px 7px; font-size: 9px; }
+.offer-body { min-width: 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.offer-body h2 { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 14px; line-height: 1.25; margin: 0 0 4px; }
+.offer-body p { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin: 0 0 7px; color: var(--muted); font-size: 10px; line-height: 1.35; }
+.price { display: grid; gap: 2px; }
+.price small { text-decoration: line-through; color: var(--muted); }
+.price strong { font: 700 23px var(--font-family); color: var(--accent); }
+.offer-body .price small { font-size: 8px; }
+.offer-body .price strong { font-size: 17px; color: var(--text); }
+.offer-price-row { width: 100%; margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-sm); }
+.fire-button { flex: 0 0 auto; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface-2); color: var(--muted); padding: 7px 9px; font-size: 10px; transition: .2s; }
+.fire-button:hover { border-color: var(--primary); color: var(--text); transform: translateY(-1px); }
+.offer-actions { display: flex; gap: 5px; margin-top: 14px; }
+.offer-actions button { border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); border-radius: var(--radius-pill); padding: 8px 11px; font-size: 11px; }
+.offer-actions button:last-child { margin-left: auto; }
+.offer-skeleton { height: 190px; border-radius: var(--radius-lg); background: var(--surface); padding: 14px; display: grid; grid-template-columns: 35% 1fr; gap: 12px; overflow: hidden; }
+.offer-skeleton i, .offer-skeleton span, .offer-skeleton b { border-radius: 12px; background: linear-gradient(90deg, var(--skeleton) 25%, var(--skeleton-highlight) 50%, var(--skeleton) 75%); background-size: 200% 100%; animation: skeleton 1.2s infinite; }
+.offer-skeleton i { grid-row: 1 / 3; }
+.offer-skeleton b { height: 40px; }
+.offer-skeleton span { height: 80px; }
+@keyframes skeleton { to { background-position: -200% 0; } }

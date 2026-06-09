@@ -1,0 +1,193 @@
+.profile-page {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.profile-hero {
+  padding: 10px 16px 24px;
+  background: radial-gradient(circle at 50% 0, rgba(242, 25, 195, .18), transparent 60%);
+  text-align: center;
+}
+
+.profile-avatar {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 14px;
+  font-size: 45px;
+}
+
+.profile-avatar span {
+  position: absolute;
+  right: -2px;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  font-size: 12px;
+}
+
+.profile-hero h1 {
+  margin-bottom: 2px;
+}
+
+.profile-hero p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.profile-hero > div:last-child {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.profile-hero span {
+  color: var(--muted);
+}
+
+.profile-page > .tabs {
+  padding: 0 16px;
+}
+
+.profile-page > .pill-tabs {
+  margin: 0;
+}
+
+.profile-page > .pill-tabs button span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  font-size: 8px;
+}
+
+.profile-page > .pill-tabs button.active span {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.profile-form,
+.notification-list {
+  padding: 22px 16px;
+}
+
+.profile-form {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.notification-list button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.notification-list span {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+}
+
+.notification-list small {
+  color: var(--muted);
+}
+
+.notification-list i {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+}
+
+.notification-list i::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--muted);
+  content: "";
+  transition: .2s;
+}
+
+.notification-list i.on {
+  background: var(--primary);
+}
+
+.notification-list i.on::after {
+  left: 21px;
+  background: #fff;
+}
+
+.avatar-page {
+  text-align: center;
+}
+
+.avatar-preview {
+  width: 112px;
+  height: 112px;
+  margin: 30px auto;
+  font-size: 58px;
+}
+
+.save-feedback {
+  margin: 0;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  animation: feedback-in .25s ease-out;
+}
+
+.saved-offers {
+  display: grid;
+  gap: 10px;
+  padding: 22px 16px;
+}
+
+.logout-divider {
+  width: min(calc(100% - 32px), 580px);
+  height: 1px;
+  margin: 8px auto 18px;
+  background: var(--line);
+}
+
+.logout-button {
+  min-width: 130px;
+  min-height: 38px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  color: var(--primary);
+  font-size: 11px;
+}
+
+@keyframes feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
