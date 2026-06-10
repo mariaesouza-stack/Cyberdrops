@@ -1,6 +1,7 @@
+import { ViewportScroller } from '@angular/common';
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { OfferService } from '../services/offer.service';
 import { ShareService } from '../services/share.service';
 import { UserService } from '../services/user.service';
@@ -91,7 +92,7 @@ import { ReportCommentModalComponent } from '../shared/report-comment-modal.comp
     </section>
     <section class="product-detail"><div class="tabs pill-tabs"><button [class.active]="tab() === 'discussion'" (click)="tab.set('discussion')">Discussão</button><button [class.active]="tab() === 'about'" (click)="tab.set('about')">Sobre o produto</button></div>
       @if (tab() === 'discussion') { <div class="discussion"><div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="O que você achou deste drop?"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>@if (commentFeedback()) { <p class="comment-action-feedback" role="status">{{ commentFeedback() }}</p> }@for (comment of visibleComments(item); track comment.id) { <app-comment-card [comment]="comment" [currentUserId]="user.user().id" [reported]="service.isCommentReported(item.id, comment.id, user.user().id)" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)" (deleted)="deleteComment(item.id, $event)" (reportedComment)="openReport(item.id, $event)"/> }@if (hasMoreComments(item)) { <button type="button" class="comments-load-more" (click)="showMoreComments()">Ver mais comentários <span>{{ remainingComments(item) }}</span><app-icon name="arrow-right" [size]="16"/></button> }</div>
-      } @else { <div class="about"><p class="eyebrow">DETALHES DO DROP</p><h2>{{ aboutTitle(item) }}</h2><p>{{ aboutDescription(item) }}</p><div class="about-highlights">@for (highlight of aboutHighlights(item); track highlight) { <span><app-icon name="check" [size]="16"/>{{ highlight }}</span> }</div><h3>Produtos relacionados</h3><div class="related">@for (related of relatedProducts(item); track related.id) { <article><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><a class="button secondary" [routerLink]="['/product', related.id]">Ver produto</a></div></article> } @empty { <p>Nenhum produto relacionado disponível agora.</p> }</div></div> }
+      } @else { <div class="about"><p class="eyebrow">DETALHES DO DROP</p><h2>{{ aboutTitle(item) }}</h2><p>{{ aboutDescription(item) }}</p><div class="about-highlights">@for (highlight of aboutHighlights(item); track highlight) { <span><app-icon name="check" [size]="16"/>{{ highlight }}</span> }</div><h3>Produtos relacionados</h3><div class="related">@for (related of relatedProducts(item); track related.id) { <article role="link" tabindex="0" [attr.aria-label]="'Ver produto ' + related.title" (click)="openRelatedProduct(related.id)" (keydown.enter)="openRelatedProduct(related.id)" (keydown.space)="openRelatedProduct(related.id, $event)"><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><span class="button secondary">Ver produto</span></div></article> } @empty { <p>Nenhum produto relacionado disponível agora.</p> }</div></div> }
     </section>
   </main>
     }
@@ -103,6 +104,8 @@ export class ProductPage {
   readonly service = inject(OfferService);
   readonly shareService = inject(ShareService);
   readonly user = inject(UserService);
+  private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
   readonly tab = signal<'discussion' | 'about'>('discussion');
   readonly copied = signal(false);
   readonly shared = signal(false);
@@ -131,6 +134,11 @@ export class ProductPage {
   hasMoreComments(item: Offer): boolean { return this.commentsVisible() < item.comments.length; }
   remainingComments(item: Offer): number { return Math.min(10, Math.max(0, item.comments.length - this.commentsVisible())); }
   showMoreComments(): void { this.commentsVisible.update(count => count + 10); }
+  async openRelatedProduct(id: number, event?: Event): Promise<void> {
+    event?.preventDefault();
+    const navigated = await this.router.navigate(['/product', id]);
+    if (navigated) requestAnimationFrame(() => this.viewportScroller.scrollToPosition([0, 0]));
+  }
   relatedCoupons(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !!offer.coupon).slice(0, 6); }
   relatedProducts(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !offer.coupon).slice(0, 3); }
   aboutTitle(item: Offer): string { return `${item.title}: desempenho e experiência`; }
