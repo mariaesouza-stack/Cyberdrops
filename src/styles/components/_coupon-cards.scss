@@ -5,8 +5,8 @@
 .coupon-card span { color: var(--muted); font-size: 10px; }
 .coupon-card .button { min-height: 38px; padding: 0 14px; }
 .coupon-offer-card { flex: 0 0 250px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); cursor: pointer; outline: none; transition: .2s; }
-.coupon-offer-card:hover { transform: translateY(-2px); border-color: rgba(242, 25, 195, .32); }
-.coupon-offer-card:focus-visible { box-shadow: 0 0 0 3px rgba(242, 25, 195, .18), var(--shadow); }
+.coupon-offer-card:hover { transform: translateY(-2px); border-color: var(--line); }
+.coupon-offer-card:focus-visible { border-color: var(--line); box-shadow: var(--shadow); }
 .coupon-offer-card header { display: flex; align-items: center; gap: var(--spacing-sm); min-height: 56px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
 .coupon-offer-card header > * { align-self: center; }
 .coupon-offer-card header app-content-category-badge { display: flex; align-items: center; height: 20px; line-height: 0; }
