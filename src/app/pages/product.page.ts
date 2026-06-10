@@ -73,7 +73,8 @@ import { ReportCommentModalComponent } from '../shared/report-comment-modal.comp
           <div class="coupon-section-title"><app-icon name="message-circle" [size]="20"/><h2>Discussão</h2></div>
           <div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="Compartilhe sua experiência com este cupom"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>
           @if (commentFeedback()) { <p class="comment-action-feedback" role="status">{{ commentFeedback() }}</p> }
-          <div class="coupon-comments">@for (comment of item.comments; track comment.id) { <app-comment-card [comment]="comment" [currentUserId]="user.user().id" [reported]="service.isCommentReported(item.id, comment.id, user.user().id)" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)" (deleted)="deleteComment(item.id, $event)" (reportedComment)="openReport(item.id, $event)"/> }</div>
+          <div class="coupon-comments">@for (comment of visibleComments(item); track comment.id) { <app-comment-card [comment]="comment" [currentUserId]="user.user().id" [reported]="service.isCommentReported(item.id, comment.id, user.user().id)" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)" (deleted)="deleteComment(item.id, $event)" (reportedComment)="openReport(item.id, $event)"/> }</div>
+          @if (hasMoreComments(item)) { <button type="button" class="comments-load-more" (click)="showMoreComments()">Ver mais comentários <span>{{ remainingComments(item) }}</span><app-icon name="arrow-right" [size]="16"/></button> }
         </section>
 
         <section class="coupon-section coupon-related-section">
@@ -89,7 +90,7 @@ import { ReportCommentModalComponent } from '../shared/report-comment-modal.comp
       <div class="author"><span class="avatar"><app-avatar [src]="item.author.avatar" [alt]="'Avatar de ' + item.author.name"/></span><div><small>PUBLICADO POR</small><b>{{ item.author.name }}</b></div><div class="offer-actions"><button (click)="service.vote(item.id, 'like')"><app-icon name="flame" [size]="16"/>{{ item.likes }}</button><button (click)="service.toggleSaved(item.id)"><app-icon [name]="item.saved ? 'bookmark-check' : 'bookmark'" [size]="16"/>{{ item.saved ? 'Salvo' : 'Salvar' }}</button></div></div>
     </section>
     <section class="product-detail"><div class="tabs pill-tabs"><button [class.active]="tab() === 'discussion'" (click)="tab.set('discussion')">Discussão</button><button [class.active]="tab() === 'about'" (click)="tab.set('about')">Sobre o produto</button></div>
-      @if (tab() === 'discussion') { <div class="discussion"><div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="O que você achou deste drop?"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>@if (commentFeedback()) { <p class="comment-action-feedback" role="status">{{ commentFeedback() }}</p> }@for (comment of item.comments; track comment.id) { <app-comment-card [comment]="comment" [currentUserId]="user.user().id" [reported]="service.isCommentReported(item.id, comment.id, user.user().id)" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)" (deleted)="deleteComment(item.id, $event)" (reportedComment)="openReport(item.id, $event)"/> }</div>
+      @if (tab() === 'discussion') { <div class="discussion"><div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="O que você achou deste drop?"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>@if (commentFeedback()) { <p class="comment-action-feedback" role="status">{{ commentFeedback() }}</p> }@for (comment of visibleComments(item); track comment.id) { <app-comment-card [comment]="comment" [currentUserId]="user.user().id" [reported]="service.isCommentReported(item.id, comment.id, user.user().id)" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)" (deleted)="deleteComment(item.id, $event)" (reportedComment)="openReport(item.id, $event)"/> }@if (hasMoreComments(item)) { <button type="button" class="comments-load-more" (click)="showMoreComments()">Ver mais comentários <span>{{ remainingComments(item) }}</span><app-icon name="arrow-right" [size]="16"/></button> }</div>
       } @else { <div class="about"><p class="eyebrow">DETALHES DO DROP</p><h2>{{ aboutTitle(item) }}</h2><p>{{ aboutDescription(item) }}</p><div class="about-highlights">@for (highlight of aboutHighlights(item); track highlight) { <span><app-icon name="check" [size]="16"/>{{ highlight }}</span> }</div><h3>Produtos relacionados</h3><div class="related">@for (related of relatedProducts(item); track related.id) { <article><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><a class="button secondary" [routerLink]="['/product', related.id]">Ver produto</a></div></article> } @empty { <p>Nenhum produto relacionado disponível agora.</p> }</div></div> }
     </section>
   </main>
@@ -107,8 +108,9 @@ export class ProductPage {
   readonly shared = signal(false);
   readonly commentFeedback = signal('');
   readonly reporting = signal<{ offerId: number; commentId: number } | undefined>(undefined);
+  readonly commentsVisible = signal(10);
   commentText = '';
-  constructor() { effect(() => { const id = Number(this.id()); if (id) void this.service.getOfferById(id); }); }
+  constructor() { effect(() => { const id = Number(this.id()); this.commentsVisible.set(10); if (id) void this.service.getOfferById(id); }); }
   offer() { return this.service.getById(Number(this.id()) || 1); }
   comment(id: number): void { if (!this.commentText.trim()) return; this.service.addComment(id, this.commentText.trim(), this.user.user()); this.commentText = ''; }
   likeComment(id: number, commentId: number): void { this.service.likeComment(id, commentId); }
@@ -125,6 +127,10 @@ export class ProductPage {
       this.showCommentFeedback('Denúncia enviada. O comentário será analisado pela nossa equipe.');
     }
   }
+  visibleComments(item: Offer) { return this.sortedComments(item).slice(0, this.commentsVisible()); }
+  hasMoreComments(item: Offer): boolean { return this.commentsVisible() < item.comments.length; }
+  remainingComments(item: Offer): number { return Math.min(10, Math.max(0, item.comments.length - this.commentsVisible())); }
+  showMoreComments(): void { this.commentsVisible.update(count => count + 10); }
   relatedCoupons(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !!offer.coupon).slice(0, 6); }
   relatedProducts(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !offer.coupon).slice(0, 3); }
   aboutTitle(item: Offer): string { return `${item.title}: desempenho e experiência`; }
@@ -170,5 +176,12 @@ export class ProductPage {
   private showCommentFeedback(message: string): void {
     this.commentFeedback.set(message);
     setTimeout(() => this.commentFeedback.set(''), 2400);
+  }
+  private sortedComments(item: Offer) {
+    return [...item.comments].sort((a, b) => this.commentEngagement(b) - this.commentEngagement(a) || b.likes - a.likes || b.id - a.id);
+  }
+  private commentEngagement(comment: Offer['comments'][number]): number {
+    const replies = comment.replies || [];
+    return comment.likes + (replies.length * 3) + replies.reduce((total, reply) => total + reply.likes, 0);
   }
 }

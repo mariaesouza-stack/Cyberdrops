@@ -43,7 +43,20 @@ const communityComments: Comment[] = [
     id: 104, user: COMMUNITY_USERS[6], text: 'Comparei com outras ofertas de hoje e esta continua sendo uma das melhores considerando preço e especificações.', likes: 14, time: 'há 1 h',
     replies: [{ id: 1005, user: COMMUNITY_USERS[4], text: 'Concordo. Produtos equivalentes estão custando bem mais.', likes: 5, time: 'há 52 min' }]
   },
-  { id: 105, user: COMMUNITY_USERS[4], text: 'Oferta salva. Vou acompanhar até o fim do dia para decidir se faço o upgrade.', likes: 8, time: 'há 2 h' }
+  { id: 105, user: COMMUNITY_USERS[4], text: 'Oferta salva. Vou acompanhar até o fim do dia para decidir se faço o upgrade.', likes: 8, time: 'há 2 h' },
+  {
+    id: 106, user: COMMUNITY_USERS[7], text: 'O preço está competitivo, mas vale confirmar se a garantia é nacional antes de fechar.', likes: 22, time: 'há 2 h',
+    replies: [{ id: 1006, user: COMMUNITY_USERS[2], text: 'Boa observação. A página da loja informa garantia de doze meses.', likes: 9, time: 'há 1 h' }]
+  },
+  { id: 107, user: COMMUNITY_USERS[2], text: 'Usei o cupom no checkout e o desconto apareceu corretamente para mim.', likes: 16, time: 'há 3 h' },
+  {
+    id: 108, user: COMMUNITY_USERS[0], text: 'Para quem está montando o primeiro setup, parece uma opção bem equilibrada pelo valor.', likes: 13, time: 'há 3 h',
+    replies: [{ id: 1007, user: COMMUNITY_USERS[6], text: 'Concordo, principalmente considerando os recursos incluídos.', likes: 6, time: 'há 2 h' }]
+  },
+  { id: 109, user: COMMUNITY_USERS[6], text: 'A entrega da loja foi rápida na minha última compra e o produto chegou bem protegido.', likes: 7, time: 'há 4 h' },
+  { id: 110, user: COMMUNITY_USERS[1], text: 'Alguém encontrou uma condição melhor pagando no Pix?', likes: 5, time: 'há 5 h' },
+  { id: 111, user: COMMUNITY_USERS[5], text: 'As especificações atendem bem ao uso diário e também deixam margem para jogos competitivos.', likes: 10, time: 'há 6 h' },
+  { id: 112, user: COMMUNITY_USERS[3], text: 'Já estava acompanhando este item e esta foi a primeira queda relevante de preço na semana.', likes: 19, time: 'há 7 h' }
 ];
 const publicationMessages: Record<string, string> = {
   'Em análise': 'Sua publicação está sendo revisada pelos moderadores.',
@@ -97,21 +110,23 @@ export class OfferService {
     this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: [...item.comments, comment] } : item));
   }
   likeComment(id: number, commentId: number): void {
-    const comments = this.interactions.comments[id] || this.offers().find(item => item.id === id)?.comments || [];
+    const comments = this.offers().find(item => item.id === id)?.comments || [];
     this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment);
     this.persist(); this.patchComments(id);
   }
   reply(id: number, commentId: number, text: string, user: User): void {
-    const comments = this.interactions.comments[id] || this.offers().find(item => item.id === id)?.comments || [];
+    const comments = this.offers().find(item => item.id === id)?.comments || [];
     this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, replies: [...(comment.replies || []), { id: Date.now(), user, text, likes: 0, time: 'agora' }] } : comment);
     this.persist(); this.patchComments(id);
   }
   deleteComment(id: number, commentId: number, userId: number): boolean {
-    const comments = this.interactions.comments[id] || [];
-    const comment = comments.find(item => item.id === commentId);
+    const offer = this.offers().find(item => item.id === id);
+    const comment = offer?.comments.find(item => item.id === commentId);
     if (!comment || comment.user.id !== userId) return false;
-    this.interactions.comments[id] = comments.filter(item => item.id !== commentId);
-    this.persist(); this.patchComments(id);
+    this.interactions.comments[id] = (this.interactions.comments[id] || []).filter(item => item.id !== commentId);
+    this.interactions.reportedComments[id] = (this.interactions.reportedComments[id] || []).filter(report => report.commentId !== commentId);
+    this.persist();
+    this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: item.comments.filter(current => current.id !== commentId) } : item));
     return true;
   }
   reportComment(id: number, commentId: number, userId: number, reason: string): boolean {

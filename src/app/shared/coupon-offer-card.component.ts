@@ -1,4 +1,5 @@
 import { Component, inject, input, signal } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
 import { Offer } from '../models';
 import { ShareService } from '../services/share.service';
@@ -22,8 +23,13 @@ export class CouponOfferCardComponent {
   readonly shared = signal(false);
   private readonly shareService = inject(ShareService);
   private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
 
-  open(event?: Event): void { event?.preventDefault(); void this.router.navigate(['/product', this.offer().id]); }
+  async open(event?: Event): Promise<void> {
+    event?.preventDefault();
+    const navigated = await this.router.navigate(['/product', this.offer().id]);
+    if (navigated) requestAnimationFrame(() => this.viewportScroller.scrollToPosition([0, 0]));
+  }
   copy(event: Event): void {
     event.stopPropagation();
     navigator.clipboard?.writeText(this.offer().coupon?.code || '');
