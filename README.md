@@ -52,6 +52,21 @@ Quando o scraping falha, o backend retorna o último cache válido. Se o cache a
 
 Sessão, perfil, tema, notificações, curtidas, descurtidas, comentários, respostas e ofertas salvas ficam no `localStorage`.
 
+## Recuperação de senha simulada
+
+O fluxo de recuperação funciona integralmente no frontend, com validação de
+e-mail, loading simulado, confirmação, cooldown de reenvio e atualização da
+senha local.
+
+Para testar, utilize o e-mail mockado:
+
+```text
+player@cyberdrops.gg
+```
+
+Na tela de confirmação, o botão **Criar nova senha** representa o acesso pelo
+link recebido no e-mail durante a demonstração.
+
 ## Limitações do MVP
 
 - Seletores de páginas públicas podem mudar sem aviso.

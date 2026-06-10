@@ -39,6 +39,19 @@ export class UserService {
     this.user.update((user) => ({ ...user, avatar }));
     this.persist();
   }
+  updatePassword(email: string, password: string): void {
+    if (
+      this.user().email.toLocaleLowerCase("pt-BR") ===
+      email.toLocaleLowerCase("pt-BR")
+    ) {
+      this.user.update((user) => ({ ...user, password }));
+      this.persist();
+    }
+    localStorage.setItem(
+      "cyberdrops.mock-password",
+      JSON.stringify({ email, password }),
+    );
+  }
   toggleNotification(id: string): void {
     this.notifications.update((items) =>
       items.map((item) =>

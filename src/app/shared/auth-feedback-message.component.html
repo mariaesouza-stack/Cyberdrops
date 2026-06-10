@@ -1,0 +1,10 @@
+<p
+  class="auth-feedback"
+  [class.error]="type() === 'error'"
+  [class.success]="type() === 'success'"
+  [class.info]="type() === 'info'"
+  role="status"
+>
+  <app-icon [name]="icon()" [size]="17" />
+  <span>{{ message() }}</span>
+</p>

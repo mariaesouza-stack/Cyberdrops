@@ -14,7 +14,14 @@ export class AppComponent {
   constructor(router: Router) {
     const update = (url: string) =>
       this.showChrome.set(
-        !["/", "/login", "/register"].includes(url.split("?")[0]),
+        ![
+          "/",
+          "/login",
+          "/register",
+          "/forgot-password",
+          "/reset-password-confirmation",
+          "/create-new-password",
+        ].includes(url.split("?")[0]),
       );
     update(router.url);
     router.events

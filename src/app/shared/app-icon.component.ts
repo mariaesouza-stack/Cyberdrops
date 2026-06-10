@@ -10,6 +10,7 @@ import {
   LucideBrainCircuit,
   LucideCheck,
   LucideCheckCheck,
+  LucideCircleAlert,
   LucideClock,
   LucideCopy,
   LucideCpu,
@@ -22,7 +23,12 @@ import {
   LucideGhost,
   LucideHeart,
   LucideImageUp,
+  LucideKeyRound,
+  LucideLoaderCircle,
+  LucideLockKeyhole,
   LucideLogOut,
+  LucideMail,
+  LucideMailCheck,
   LucideMoon,
   LucideMessageCircle,
   LucidePackageCheck,
@@ -30,10 +36,12 @@ import {
   LucidePlus,
   LucideRadar,
   LucideReply,
+  LucideRefreshCw,
   LucideRocket,
   LucideSearch,
   LucideSend,
   LucideShare2,
+  LucideShieldCheck,
   LucideShoppingBag,
   LucideSkull,
   LucideStore,
@@ -61,6 +69,7 @@ export type AppIconName =
   | "brain-circuit"
   | "check"
   | "check-check"
+  | "circle-alert"
   | "clock"
   | "copy"
   | "cpu"
@@ -72,7 +81,12 @@ export type AppIconName =
   | "ghost"
   | "heart"
   | "image-up"
+  | "key-round"
+  | "loader-circle"
+  | "lock-keyhole"
   | "log-out"
+  | "mail"
+  | "mail-check"
   | "moon"
   | "pencil"
   | "message-circle"
@@ -80,10 +94,12 @@ export type AppIconName =
   | "plus"
   | "radar"
   | "reply"
+  | "refresh-cw"
   | "rocket"
   | "search"
   | "send"
   | "share"
+  | "shield-check"
   | "shopping-bag"
   | "skull"
   | "store"
@@ -109,6 +125,7 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   "brain-circuit": LucideBrainCircuit,
   check: LucideCheck,
   "check-check": LucideCheckCheck,
+  "circle-alert": LucideCircleAlert,
   clock: LucideClock,
   copy: LucideCopy,
   cpu: LucideCpu,
@@ -120,7 +137,12 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   ghost: LucideGhost,
   heart: LucideHeart,
   "image-up": LucideImageUp,
+  "key-round": LucideKeyRound,
+  "loader-circle": LucideLoaderCircle,
+  "lock-keyhole": LucideLockKeyhole,
   "log-out": LucideLogOut,
+  mail: LucideMail,
+  "mail-check": LucideMailCheck,
   moon: LucideMoon,
   "message-circle": LucideMessageCircle,
   "package-check": LucidePackageCheck,
@@ -128,10 +150,12 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   plus: LucidePlus,
   radar: LucideRadar,
   reply: LucideReply,
+  "refresh-cw": LucideRefreshCw,
   rocket: LucideRocket,
   search: LucideSearch,
   send: LucideSend,
   share: LucideShare2,
+  "shield-check": LucideShieldCheck,
   "shopping-bag": LucideShoppingBag,
   skull: LucideSkull,
   store: LucideStore,
