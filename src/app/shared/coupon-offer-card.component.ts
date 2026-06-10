@@ -10,7 +10,7 @@ import { DiscountLabelPipe } from './brl-format.pipe';
   imports: [AppIconComponent, DiscountLabelPipe],
   template: `<article class="coupon-offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
     <header><img class="coupon-bot-avatar" src="assets/coupon-bot.svg" alt="Bot de cupons"><div><strong>{{ offer().publicationType ? offer().author.name : offer().store }}</strong><small>{{ offer().publicationType ? offer().store + ' · ' + offer().time : offer().time }}</small></div><span class="coupon-discount">{{ offer().publicationDiscountLabel || (offer().discount | discountLabel) }}</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
-    <div class="coupon-offer-main"><div class="coupon-code-row"><b>{{ offer().coupon?.code }}</b><button class="coupon-copy-button" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</button></div><p>{{ offer().coupon?.description || offer().description }}</p></div>
+    <div class="coupon-offer-main"><div class="coupon-info"><b>{{ offer().coupon?.code }}</b><p>{{ offer().coupon?.description || offer().description }}</p></div><button class="coupon-copy-button" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</button></div>
   </article>`
 })
 export class CouponOfferCardComponent {
