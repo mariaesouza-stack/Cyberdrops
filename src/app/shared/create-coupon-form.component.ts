@@ -3,18 +3,18 @@ import { FormsModule } from "@angular/forms";
 import { CouponPublicationDraft } from "../models";
 import { AppIconComponent } from "./app-icon.component";
 import {
-  PublicationDropdownComponent,
-  PublicationDropdownOption,
-} from "./publication-dropdown.component";
+  PublicationOption,
+  PublicationOptionTabsComponent,
+} from "./publication-option-tabs.component";
 
 @Component({
   selector: "app-create-coupon-form",
   standalone: true,
-  imports: [FormsModule, AppIconComponent, PublicationDropdownComponent],
+  imports: [FormsModule, AppIconComponent, PublicationOptionTabsComponent],
   templateUrl: "./create-coupon-form.component.html",
 })
 export class CreateCouponFormComponent {
-  readonly discountOptions: readonly PublicationDropdownOption[] = [
+  readonly discountOptions: readonly PublicationOption[] = [
     { label: "Percentual", value: "percent" },
     { label: "Valor em reais", value: "value" },
   ];

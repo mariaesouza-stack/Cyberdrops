@@ -161,8 +161,7 @@
   gap: 10px;
 }
 
-.publication-dropdown {
-  position: relative;
+.publication-option-tabs {
   display: grid;
   gap: 7px;
   color: var(--muted);
@@ -170,79 +169,47 @@
   font-weight: 700;
 }
 
-.publication-dropdown-trigger {
+.publication-option-tabs-list {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 7px;
   width: 100%;
-  min-height: 47px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.publication-option-tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.publication-option-tabs-list button {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
   padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--tab-bg);
+  color: var(--muted);
+  font-size: 11px;
   font-weight: 700;
-  text-align: left;
+  white-space: nowrap;
   transition: 0.2s;
 }
 
-.publication-dropdown-trigger:hover,
-.publication-dropdown-trigger.open {
-  border-color: rgba(0, 229, 255, 0.42);
-  background: var(--surface-hover);
-}
-
-.publication-dropdown-trigger.open app-icon {
-  transform: rotate(180deg);
-}
-
-.publication-dropdown-trigger app-icon {
-  flex: 0 0 auto;
-  color: var(--accent);
-  transition: transform 0.2s;
-}
-
-.publication-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 7px);
-  right: 0;
-  left: 0;
-  z-index: 35;
-  display: grid;
-  padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-
-.publication-dropdown-menu button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  min-height: 38px;
-  padding: 0 11px;
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  text-align: left;
-}
-
-.publication-dropdown-menu button:hover {
+.publication-option-tabs-list button:hover {
+  border-color: rgba(0, 229, 255, 0.32);
   background: var(--surface-hover);
   color: var(--text);
 }
 
-.publication-dropdown-menu button.active {
-  background: rgba(0, 229, 255, 0.1);
-  color: var(--accent);
+.publication-option-tabs-list button.active {
+  border-color: var(--tab-active);
+  background: var(--tab-active);
+  color: var(--tab-active-text);
+  box-shadow: var(--shadow);
 }
 
 .publication-form textarea {

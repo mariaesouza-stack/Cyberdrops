@@ -3,18 +3,18 @@ import { FormsModule } from "@angular/forms";
 import { DealPublicationDraft } from "../models";
 import { AppIconComponent } from "./app-icon.component";
 import {
-  PublicationDropdownComponent,
-  PublicationDropdownOption,
-} from "./publication-dropdown.component";
+  PublicationOption,
+  PublicationOptionTabsComponent,
+} from "./publication-option-tabs.component";
 
 @Component({
   selector: "app-create-deal-item-form",
   standalone: true,
-  imports: [FormsModule, AppIconComponent, PublicationDropdownComponent],
+  imports: [FormsModule, AppIconComponent, PublicationOptionTabsComponent],
   templateUrl: "./create-deal-item-form.component.html",
 })
 export class CreateDealItemFormComponent {
-  readonly categoryOptions: readonly PublicationDropdownOption[] = [
+  readonly categoryOptions: readonly PublicationOption[] = [
     { label: "Games", value: "Games" },
     { label: "Hardware", value: "Hardware" },
     { label: "Periféricos", value: "Periféricos" },
