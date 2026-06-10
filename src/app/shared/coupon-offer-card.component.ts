@@ -12,7 +12,7 @@ import { AppAvatarComponent } from './app-avatar.component';
   imports: [AppIconComponent, AppAvatarComponent, DiscountLabelPipe, ContentCategoryBadgeComponent],
   template: `<article class="coupon-offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
     <header><span class="coupon-publisher-avatar"><app-avatar [src]="offer().author.avatar" [alt]="'Avatar de ' + offer().author.name"/></span><div><strong>{{ offer().author.name }}</strong><small>{{ offer().store }} · {{ offer().time }}</small></div><app-content-category-badge [category]="offer().category" [coupon]="true"/><span class="coupon-discount">{{ offer().publicationDiscountLabel || (offer().discount | discountLabel) }}</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
-    <div class="coupon-offer-main"><div class="coupon-info"><b>{{ offer().coupon?.code }}</b><p>{{ offer().coupon?.description || offer().description }}</p></div><button class="coupon-copy-button" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</button></div>
+    <div class="coupon-offer-main"><div class="coupon-info"><b>{{ offer().coupon?.code }}</b><p>{{ offer().coupon?.description || offer().description }}</p></div><button class="coupon-copy-button" [attr.aria-label]="copied() ? 'Cupom copiado' : 'Copiar cupom'" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/><span>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</span></button></div>
   </article>`
 })
 export class CouponOfferCardComponent {
