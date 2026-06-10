@@ -7,6 +7,11 @@
 .product-info, .product-detail { padding: var(--spacing-md); }
 .product-info h1 { font-size: 27px; }
 .product-info > p, .about p { color: var(--muted); line-height: 1.6; font-size: 13px; }
+.about > .eyebrow { margin-bottom: 7px; color: var(--accent); font-size: 9px; }
+.about h2 { margin-bottom: 10px; font-size: 20px; line-height: 1.3; }
+.about-highlights { display: grid; gap: 8px; margin: 18px 0 24px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.about-highlights span { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.about-highlights app-icon { flex: 0 0 auto; margin-top: 1px; color: var(--accent); }
 .product-info > .price { margin: 20px 0; }
 .product-info .button.primary { margin-top: 16px; }
 .author { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--line); margin-top: 20px; padding-top: 18px; }

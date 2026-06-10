@@ -13,12 +13,37 @@ interface ApiOffer {
   coupon?: Coupon | null; createdAt?: string;
 }
 interface ApiResponse { offers: ApiOffer[]; source?: string; message?: string; }
-interface LocalInteractions { likes: Record<string, number>; dislikes: Record<string, number>; comments: Record<string, Comment[]>; saved: number[]; }
+interface CommentReport { commentId: number; userId: number; reason: string; createdAt: string; }
+interface LocalInteractions {
+  likes: Record<string, number>;
+  dislikes: Record<string, number>;
+  comments: Record<string, Comment[]>;
+  saved: number[];
+  reportedComments: Record<string, CommentReport[]>;
+}
 
 const fallbackOffers = mockCatalog as ApiOffer[];
 const communityComments: Comment[] = [
-  { id: 101, user: COMMUNITY_USERS[3], text: 'Preço digno de upgrade no setup. O histórico está excelente.', likes: 18, time: 'há 12 min' },
-  { id: 102, user: COMMUNITY_USERS[5], text: 'Drop confirmado. Já entrou no meu radar de promoções.', likes: 11, time: 'há 28 min' }
+  {
+    id: 101, user: COMMUNITY_USERS[3], text: 'Preço digno de upgrade no setup. O histórico está excelente e ficou abaixo da média dos últimos meses.', likes: 18, time: 'há 12 min',
+    replies: [{ id: 1001, user: COMMUNITY_USERS[5], text: 'Também acompanhei o histórico. Nesse valor, vale bastante a pena.', likes: 7, time: 'há 8 min' }]
+  },
+  {
+    id: 102, user: COMMUNITY_USERS[5], text: 'Drop confirmado. Já entrou no meu radar de promoções e a loja está com entrega rápida para minha região.', likes: 11, time: 'há 28 min',
+    replies: [{ id: 1002, user: COMMUNITY_USERS[1], text: 'Aqui também apareceu entrega antecipada. Ótimo sinal.', likes: 4, time: 'há 20 min' }]
+  },
+  {
+    id: 103, user: COMMUNITY_USERS[1], text: 'Alguém já testou esse modelo por algumas semanas? Quero saber principalmente sobre acabamento e durabilidade.', likes: 9, time: 'há 43 min',
+    replies: [
+      { id: 1003, user: COMMUNITY_USERS[3], text: 'Uso uma versão parecida no setup. A construção é sólida e não apresentou folgas.', likes: 6, time: 'há 31 min' },
+      { id: 1004, user: COMMUNITY_USERS[6], text: 'Vale conferir as avaliações recentes da loja antes de fechar.', likes: 3, time: 'há 25 min' }
+    ]
+  },
+  {
+    id: 104, user: COMMUNITY_USERS[6], text: 'Comparei com outras ofertas de hoje e esta continua sendo uma das melhores considerando preço e especificações.', likes: 14, time: 'há 1 h',
+    replies: [{ id: 1005, user: COMMUNITY_USERS[4], text: 'Concordo. Produtos equivalentes estão custando bem mais.', likes: 5, time: 'há 52 min' }]
+  },
+  { id: 105, user: COMMUNITY_USERS[4], text: 'Oferta salva. Vou acompanhar até o fim do dia para decidir se faço o upgrade.', likes: 8, time: 'há 2 h' }
 ];
 const publicationMessages: Record<string, string> = {
   'Em análise': 'Sua publicação está sendo revisada pelos moderadores.',
@@ -80,6 +105,27 @@ export class OfferService {
     const comments = this.interactions.comments[id] || this.offers().find(item => item.id === id)?.comments || [];
     this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, replies: [...(comment.replies || []), { id: Date.now(), user, text, likes: 0, time: 'agora' }] } : comment);
     this.persist(); this.patchComments(id);
+  }
+  deleteComment(id: number, commentId: number, userId: number): boolean {
+    const comments = this.interactions.comments[id] || [];
+    const comment = comments.find(item => item.id === commentId);
+    if (!comment || comment.user.id !== userId) return false;
+    this.interactions.comments[id] = comments.filter(item => item.id !== commentId);
+    this.persist(); this.patchComments(id);
+    return true;
+  }
+  reportComment(id: number, commentId: number, userId: number, reason: string): boolean {
+    const comment = this.offers().find(item => item.id === id)?.comments.find(item => item.id === commentId);
+    if (!comment || comment.user.id === userId) return false;
+    const reported = this.interactions.reportedComments[id] || [];
+    if (!reported.some(report => report.commentId === commentId && report.userId === userId)) {
+      this.interactions.reportedComments[id] = [...reported, { commentId, userId, reason, createdAt: new Date().toISOString() }];
+      this.persist();
+    }
+    return true;
+  }
+  isCommentReported(id: number, commentId: number, userId: number): boolean {
+    return (this.interactions.reportedComments[id] || []).some(report => report.commentId === commentId && report.userId === userId);
   }
   toggleSaved(id: number): void {
     this.interactions.saved = this.interactions.saved.includes(id) ? this.interactions.saved.filter(item => item !== id) : [...this.interactions.saved, id];
@@ -151,12 +197,26 @@ export class OfferService {
     const author = CYBERDROPS_BOT; const image = offer.coupon ? 'assets/coupon-background.png' : (offer.image || fallbackOffers[0].image!);
     const price = normalizeCurrency(offer.currentPrice);
     const oldPrice = normalizeCurrency(offer.oldPrice ?? price);
-    return { id: offer.id, author, publisherType: 'bot', store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
+    return { id: offer.id, author, publisherType: 'bot', store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.commentsFor(offer.id), coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
   }
   private upsert(offer: Offer): void { this.offers.update(items => items.some(item => item.id === offer.id) ? items.map(item => item.id === offer.id ? offer : item) : [...items, offer]); }
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }
+  private commentsFor(id: number): Comment[] {
+    const saved = this.interactions.comments[id] || [];
+    const savedIds = new Set(saved.map(comment => comment.id));
+    return [...saved, ...communityComments.filter(comment => !savedIds.has(comment.id))];
+  }
   private readInteractions(): LocalInteractions {
-    try { return JSON.parse(localStorage.getItem(this.storageKey) || '') as LocalInteractions; } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [] }; }
+    try {
+      const saved = JSON.parse(localStorage.getItem(this.storageKey) || '') as Partial<LocalInteractions>;
+      const reportedComments = Object.fromEntries(Object.entries(saved.reportedComments || {}).map(([offerId, reports]) => [
+        offerId,
+        (reports || []).map(report => typeof report === 'number'
+          ? { commentId: report, userId: 1, reason: 'Motivo não informado', createdAt: new Date().toISOString() }
+          : report)
+      ]));
+      return { likes: saved.likes || {}, dislikes: saved.dislikes || {}, comments: saved.comments || {}, saved: saved.saved || [], reportedComments };
+    } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [], reportedComments: {} }; }
   }
   private readPublications(): Offer[] {
     try {

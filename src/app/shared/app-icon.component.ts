@@ -16,6 +16,7 @@ import {
   LucideDynamicIcon,
   LucideExternalLink,
   LucideFilter,
+  LucideFlag,
   LucideFlame,
   LucideGamepad2,
   LucideGhost,
@@ -52,7 +53,7 @@ import {
 export type AppIconName =
   | 'arrow-left' | 'arrow-right' | 'bell' | 'bookmark' | 'bookmark-check'
   | 'badge-percent' | 'bot' | 'brain-circuit' | 'check' | 'check-check' | 'clock' | 'copy' | 'cpu' | 'external-link' | 'filter'
-  | 'flame' | 'gamepad' | 'ghost' | 'heart' | 'image-up' | 'log-out' | 'moon' | 'pencil'
+  | 'flag' | 'flame' | 'gamepad' | 'ghost' | 'heart' | 'image-up' | 'log-out' | 'moon' | 'pencil'
   | 'message-circle' | 'package-check' | 'plus' | 'radar' | 'reply' | 'rocket' | 'search' | 'send' | 'share' | 'shopping-bag'
   | 'skull' | 'store' | 'sun' | 'swords' | 'ticket-percent' | 'trash' | 'trending-down' | 'user' | 'venetian-mask'
   | 'wand-sparkles' | 'x' | 'zap';
@@ -73,6 +74,7 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   cpu: LucideCpu,
   'external-link': LucideExternalLink,
   filter: LucideFilter,
+  flag: LucideFlag,
   flame: LucideFlame,
   gamepad: LucideGamepad2,
   ghost: LucideGhost,

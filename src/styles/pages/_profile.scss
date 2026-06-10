@@ -11,24 +11,33 @@
 
 .profile-avatar {
   position: relative;
+  overflow: visible;
   width: 92px;
   height: 92px;
   margin: 0 auto 14px;
   font-size: 45px;
 }
 
+.profile-avatar app-avatar {
+  overflow: hidden;
+  border-radius: 50%;
+}
+
 .profile-avatar span {
   position: absolute;
-  right: -2px;
-  bottom: 0;
+  right: -5px;
+  bottom: -2px;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--bg);
   border-radius: 50%;
   background: var(--primary);
+  color: #fff;
   font-size: 12px;
-  z-index: 1;
+  box-shadow: 0 4px 14px rgba(242, 25, 195, .4);
+  z-index: 2;
 }
 
 .profile-hero h1 {
@@ -54,12 +63,13 @@
 }
 
 .profile-page > .tabs {
-  padding: 0 16px;
+  width: calc(100% - 32px);
+  margin: 0 16px;
+  padding: 5px;
+  scroll-padding: 5px;
 }
 
 .profile-page > .pill-tabs {
-  margin: 0;
-  width: 100%;
   max-width: 100%;
   overscroll-behavior-x: contain;
 }
@@ -198,7 +208,7 @@
 
 @media (max-width: 350px) {
   .profile-hero { padding-right: 12px; padding-left: 12px; }
-  .profile-page > .tabs { padding-right: 12px; padding-left: 12px; }
+  .profile-page > .tabs { width: calc(100% - 24px); margin-right: 12px; margin-left: 12px; padding: 5px; }
   .profile-page > .pill-tabs button { padding-right: 14px; padding-left: 14px; font-size: 11px; }
   .profile-form, .notification-list, .saved-offers { padding-right: 12px; padding-left: 12px; }
   .notification-list button { gap: 10px; }
