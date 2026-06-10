@@ -8,8 +8,8 @@
   --accent: #00e5ff;
   --text: #fff;
   --muted: #a1a1aa;
-  --line: rgba(255, 255, 255, .1);
-  --shadow: 0 16px 50px rgba(0, 0, 0, .45);
+  --line: rgba(255, 255, 255, 0.1);
+  --shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
   --tab-bg: #0d0d0e;
   --tab-shell: #080808;
   --tab-active: #fff;
@@ -38,8 +38,8 @@ body.light-theme {
   --accent: #007f91;
   --text: #17131b;
   --muted: #696270;
-  --line: rgba(31, 20, 38, .13);
-  --shadow: 0 12px 35px rgba(35, 15, 45, .1);
+  --line: rgba(31, 20, 38, 0.13);
+  --shadow: 0 12px 35px rgba(35, 15, 45, 0.1);
   --tab-bg: #ece8f0;
   --tab-shell: #e6e1ea;
   --tab-active: #17131b;

@@ -1,0 +1,27 @@
+<div
+  class="publication-overlay delete-publication-overlay"
+  (click)="cancelled.emit()"
+>
+  <section
+    class="delete-publication-modal"
+    role="alertdialog"
+    aria-modal="true"
+    aria-label="Excluir publicação"
+    (click)="$event.stopPropagation()"
+  >
+    <span><app-icon name="trash" [size]="24" /></span>
+    <h2>Tem certeza que deseja excluir esta publicação?</h2>
+    <p>Essa ação não poderá ser desfeita.</p>
+    <small>{{ publication().title }}</small>
+    <div>
+      <button class="button secondary" (click)="cancelled.emit()">
+        Cancelar</button
+      ><button
+        class="button delete-button"
+        (click)="confirmed.emit(publication().id)"
+      >
+        Excluir publicação
+      </button>
+    </div>
+  </section>
+</div>

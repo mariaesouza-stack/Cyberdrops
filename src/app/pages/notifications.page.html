@@ -1,0 +1,27 @@
+<section class="page notifications-page">
+  <header class="notifications-heading">
+    <div>
+      <p class="eyebrow">SEU RADAR</p>
+      <h1>Notificações</h1>
+      <p>{{ unreadLabel() }}</p>
+    </div>
+    @if (service.unreadCount()) {
+    <button (click)="service.markAllAsRead()">
+      <app-icon name="check-check" [size]="17" />Marcar todas como lidas
+    </button>
+    }
+  </header>
+  <app-notification-filter
+    [selected]="filter()"
+    (changed)="filter.set($event)"
+  />
+  <div class="notifications-list">
+    @for (notification of filteredNotifications(); track notification.id) {
+    <app-notification-card
+      [notification]="notification"
+      (read)="service.markAsRead($event)"
+      (opened)="open($event)"
+    />
+    } @empty { <app-notification-empty-state /> }
+  </div>
+</section>

@@ -1,0 +1,9 @@
+@if (status(); as value) {
+  <span
+    class="publication-status"
+    [class.pending]="value === 'Em análise'"
+    [class.published]="value === 'Publicado'"
+    [class.rejected]="value === 'Rejeitado'"
+    >{{ value }}</span
+  >
+}

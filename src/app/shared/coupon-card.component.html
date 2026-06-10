@@ -1,0 +1,11 @@
+<div class="coupon-card">
+  <div>
+    <small>CUPOM ATIVO</small><strong>{{ coupon().code }}</strong
+    ><span>{{ coupon().description }}</span>
+  </div>
+  <button class="button secondary" (click)="copy()">
+    <app-icon [name]="copied() ? 'check' : 'copy'" [size]="16" />{{
+      copied() ? "Copiado!" : "Copiar"
+    }}
+  </button>
+</div>

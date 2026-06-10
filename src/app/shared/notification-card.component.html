@@ -1,0 +1,26 @@
+<article class="notification-card" [class.unread]="!notification().read">
+  <button class="notification-main" (click)="opened.emit(notification())">
+    <span class="notification-event-icon"
+      ><app-icon [name]="notification().icon" [size]="22"
+    /></span>
+    <span class="notification-copy"
+      ><span class="notification-title-row"
+        ><b>{{ notification().title }}</b>
+        @if (!notification().read) {
+          <i aria-label="Não lida"></i>
+        }</span
+      ><span>{{ notification().description }}</span
+      ><small>{{ notification().time }}</small></span
+    >
+  </button>
+  <div class="notification-quick-actions">
+    @if (!notification().read) {
+      <button (click)="read.emit(notification().id)">
+        <app-icon name="check" [size]="15" />Marcar como lida
+      </button>
+    }
+    <button class="open-notification" (click)="opened.emit(notification())">
+      <app-icon name="arrow-right" [size]="15" />{{ actionLabel() }}
+    </button>
+  </div>
+</article>

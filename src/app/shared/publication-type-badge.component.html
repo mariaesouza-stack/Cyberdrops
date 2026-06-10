@@ -1,0 +1,8 @@
+@if (type(); as value) {
+  <span class="publication-type"
+    ><app-icon
+      [name]="value === 'coupon' ? 'ticket-percent' : 'badge-percent'"
+      [size]="13"
+    />{{ value === "coupon" ? "Cupom" : "Item em promoção" }}</span
+  >
+}

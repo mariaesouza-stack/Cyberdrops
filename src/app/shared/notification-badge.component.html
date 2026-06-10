@@ -1,0 +1,7 @@
+@if (count() > 0) {
+  <span
+    class="notification-badge"
+    [attr.aria-label]="count() + ' notificações não lidas'"
+    >{{ label() }}</span
+  >
+}

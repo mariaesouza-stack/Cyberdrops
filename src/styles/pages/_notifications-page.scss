@@ -27,9 +27,9 @@
   flex: 0 0 auto;
   min-height: 36px;
   padding: 0 13px;
-  border: 1px solid rgba(242, 25, 195, .3);
+  border: 1px solid rgba(242, 25, 195, 0.3);
   border-radius: var(--radius-pill);
-  background: rgba(242, 25, 195, .08);
+  background: rgba(242, 25, 195, 0.08);
   color: var(--primary);
   font-size: 9px;
   font-weight: 800;
@@ -59,7 +59,13 @@
 }
 
 @media (max-width: 350px) {
-  .notifications-heading { gap: 10px; }
-  .notifications-heading h1 { font-size: 28px; }
-  .notifications-heading p:last-child { font-size: 9px; }
+  .notifications-heading {
+    gap: 10px;
+  }
+  .notifications-heading h1 {
+    font-size: 28px;
+  }
+  .notifications-heading p:last-child {
+    font-size: 9px;
+  }
 }

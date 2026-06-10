@@ -1,0 +1,7 @@
+<div class="tabs category-tabs">
+  @for (tab of tabs; track tab) {
+    <button [class.active]="selected() === tab" (click)="changed.emit(tab)">
+      {{ tab }}
+    </button>
+  }
+</div>

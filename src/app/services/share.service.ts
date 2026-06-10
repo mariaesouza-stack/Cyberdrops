@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-export type ShareResult = 'native' | 'copied' | 'cancelled' | 'failed';
+export type ShareResult = "native" | "copied" | "cancelled" | "failed";
 
 export interface ShareContent {
   title: string;
@@ -8,15 +8,16 @@ export interface ShareContent {
   url: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ShareService {
   async share(content: ShareContent): Promise<ShareResult> {
-    if (typeof navigator.share === 'function') {
+    if (typeof navigator.share === "function") {
       try {
         await navigator.share(content);
-        return 'native';
+        return "native";
       } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return 'cancelled';
+        if (error instanceof DOMException && error.name === "AbortError")
+          return "cancelled";
       }
     }
 
@@ -26,9 +27,9 @@ export class ShareService {
   private async copyFallback(url: string): Promise<ShareResult> {
     try {
       await navigator.clipboard.writeText(url);
-      return 'copied';
+      return "copied";
     } catch {
-      return 'failed';
+      return "failed";
     }
   }
 }

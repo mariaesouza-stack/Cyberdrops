@@ -36,7 +36,7 @@
   background: var(--primary);
   color: #fff;
   font-size: 12px;
-  box-shadow: 0 4px 14px rgba(242, 25, 195, .4);
+  box-shadow: 0 4px 14px rgba(242, 25, 195, 0.4);
   z-index: 2;
 }
 
@@ -146,7 +146,7 @@
   border-radius: 50%;
   background: var(--muted);
   content: "";
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .notification-list i.on {
@@ -175,7 +175,7 @@
   font-size: 11px;
   font-weight: 700;
   text-align: center;
-  animation: feedback-in .25s ease-out;
+  animation: feedback-in 0.25s ease-out;
 }
 
 .saved-offers {
@@ -213,11 +213,34 @@
 }
 
 @media (max-width: 350px) {
-  .profile-hero { padding-right: 12px; padding-left: 12px; }
-  .profile-page > .tabs { width: calc(100% - 24px); margin-right: 12px; margin-left: 12px; padding: 5px; }
-  .profile-page > .pill-tabs button { padding-right: 14px; padding-left: 14px; font-size: 11px; }
-  .profile-form, .notification-list, .saved-offers { padding-right: 12px; padding-left: 12px; }
-  .notification-list button { gap: 10px; }
-  .notification-list b { font-size: 11px; }
-  .notification-list small { font-size: 9px; }
+  .profile-hero {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .profile-page > .tabs {
+    width: calc(100% - 24px);
+    margin-right: 12px;
+    margin-left: 12px;
+    padding: 5px;
+  }
+  .profile-page > .pill-tabs button {
+    padding-right: 14px;
+    padding-left: 14px;
+    font-size: 11px;
+  }
+  .profile-form,
+  .notification-list,
+  .saved-offers {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .notification-list button {
+    gap: 10px;
+  }
+  .notification-list b {
+    font-size: 11px;
+  }
+  .notification-list small {
+    font-size: 9px;
+  }
 }

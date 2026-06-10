@@ -1,12 +1,12 @@
-const brlFormatter = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
+const brlFormatter = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
   minimumFractionDigits: 2,
-  maximumFractionDigits: 2
+  maximumFractionDigits: 2,
 });
 
 export function normalizeCurrency(value: unknown): number {
-  const number = typeof value === 'number' ? value : Number(value);
+  const number = typeof value === "number" ? value : Number(value);
   return Number.isFinite(number) ? Math.round(number * 100) / 100 : 0;
 }
 

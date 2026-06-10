@@ -1,0 +1,12 @@
+<div class="avatar-grid">
+  @for (avatar of avatars; track avatar) {
+    <button
+      class="avatar choice"
+      [class.selected]="selected() === avatar"
+      (click)="picked.emit(avatar)"
+      aria-label="Selecionar avatar cyber"
+    >
+      <app-avatar [src]="avatar" />
+    </button>
+  }
+</div>

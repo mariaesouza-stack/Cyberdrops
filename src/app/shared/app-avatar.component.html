@@ -1,0 +1,6 @@
+<img
+  [src]="failed() ? fallback : src()"
+  [alt]="alt()"
+  loading="lazy"
+  (error)="failed.set(true)"
+/>

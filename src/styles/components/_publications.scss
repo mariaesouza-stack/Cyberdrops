@@ -14,13 +14,15 @@
   color: #fff;
   font-size: 11px;
   font-weight: 800;
-  box-shadow: 0 12px 35px rgba(242, 25, 195, .35);
-  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 12px 35px rgba(242, 25, 195, 0.35);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .publication-fab:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 42px rgba(242, 25, 195, .48);
+  box-shadow: 0 16px 42px rgba(242, 25, 195, 0.48);
 }
 
 .publication-overlay {
@@ -30,9 +32,9 @@
   display: grid;
   align-items: end;
   padding: 16px;
-  background: rgba(0, 0, 0, .72);
+  background: rgba(0, 0, 0, 0.72);
   backdrop-filter: blur(8px);
-  animation: publication-fade .2s ease-out;
+  animation: publication-fade 0.2s ease-out;
 }
 
 .publication-sheet {
@@ -40,11 +42,11 @@
   max-height: min(88vh, 760px);
   margin: 0 auto;
   overflow-y: auto;
-  border: 1px solid rgba(242, 25, 195, .28);
+  border: 1px solid rgba(242, 25, 195, 0.28);
   border-radius: 24px;
   background: var(--surface);
-  box-shadow: 0 -18px 60px rgba(0, 0, 0, .55);
-  animation: publication-up .25s ease-out;
+  box-shadow: 0 -18px 60px rgba(0, 0, 0, 0.55);
+  animation: publication-up 0.25s ease-out;
 }
 
 .publication-sheet > header {
@@ -96,11 +98,13 @@
   background: var(--surface-2);
   color: var(--text);
   text-align: left;
-  transition: border-color .2s, transform .2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
 }
 
 .publication-options button:hover {
-  border-color: rgba(242, 25, 195, .5);
+  border-color: rgba(242, 25, 195, 0.5);
   transform: translateY(-2px);
 }
 
@@ -111,7 +115,7 @@
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: rgba(242, 25, 195, .1);
+  background: rgba(242, 25, 195, 0.1);
   color: var(--primary);
 }
 
@@ -189,18 +193,20 @@
   min-height: 142px;
   overflow: hidden;
   padding: 18px;
-  border: 1px dashed rgba(242, 25, 195, .45);
+  border: 1px dashed rgba(242, 25, 195, 0.45);
   border-radius: var(--radius-lg);
-  background: rgba(242, 25, 195, .05);
+  background: rgba(242, 25, 195, 0.05);
   color: var(--primary);
   text-align: center;
   cursor: pointer;
-  transition: border-color .2s, background .2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .publication-upload:hover {
   border-color: var(--primary);
-  background: rgba(242, 25, 195, .1);
+  background: rgba(242, 25, 195, 0.1);
 }
 
 .publication-upload input {
@@ -244,7 +250,7 @@
   min-height: 34px;
   padding: 0 12px;
   border-radius: var(--radius-pill);
-  background: rgba(9, 9, 9, .82);
+  background: rgba(9, 9, 9, 0.82);
   color: #fff;
   font-size: 9px;
   font-weight: 800;
@@ -296,7 +302,7 @@
   gap: 6px;
   min-height: 36px;
   padding: 0 13px;
-  border-color: rgba(242, 25, 195, .3);
+  border-color: rgba(242, 25, 195, 0.3);
   color: var(--primary);
 }
 
@@ -415,7 +421,7 @@
 }
 
 .user-publication-actions button.danger {
-  border-color: rgba(242, 25, 85, .25);
+  border-color: rgba(242, 25, 85, 0.25);
   color: #ff6f91;
 }
 
@@ -456,7 +462,7 @@
   justify-items: center;
   width: min(100%, 420px);
   padding: 24px;
-  border: 1px solid rgba(242, 25, 85, .28);
+  border: 1px solid rgba(242, 25, 85, 0.28);
   border-radius: var(--radius-lg);
   background: var(--surface);
   text-align: center;
@@ -470,7 +476,7 @@
   height: 52px;
   margin-bottom: 16px;
   border-radius: 17px;
-  background: rgba(242, 25, 85, .1);
+  background: rgba(242, 25, 85, 0.1);
   color: #ff6f91;
 }
 
@@ -538,26 +544,26 @@
 }
 
 .publication-type {
-  border: 1px solid rgba(0, 229, 255, .25);
-  background: rgba(0, 229, 255, .08);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: rgba(0, 229, 255, 0.08);
   color: var(--accent);
 }
 
 .publication-status.pending {
-  border: 1px solid rgba(139, 92, 246, .35);
-  background: rgba(139, 92, 246, .12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: rgba(139, 92, 246, 0.12);
   color: #b89cff;
 }
 
 .publication-status.published {
-  border: 1px solid rgba(0, 229, 255, .3);
-  background: rgba(0, 229, 255, .1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.1);
   color: var(--accent);
 }
 
 .publication-status.rejected {
-  border: 1px solid rgba(242, 25, 85, .3);
-  background: rgba(242, 25, 85, .1);
+  border: 1px solid rgba(242, 25, 85, 0.3);
+  background: rgba(242, 25, 85, 0.1);
   color: #ff6f91;
 }
 
@@ -571,12 +577,12 @@
   gap: 10px;
   max-width: min(360px, calc(100vw - 36px));
   padding: 13px 15px;
-  border: 1px solid rgba(0, 229, 255, .3);
+  border: 1px solid rgba(0, 229, 255, 0.3);
   border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--accent);
   box-shadow: var(--shadow);
-  animation: publication-up .25s ease-out;
+  animation: publication-up 0.25s ease-out;
 }
 
 .publication-success span {
@@ -653,19 +659,47 @@
 }
 
 @media (max-width: 350px) {
-  .publication-sheet > header { padding: 16px; }
-  .publication-options { padding: 16px; }
-  .publication-options button { grid-template-columns: 42px 1fr auto; gap: 10px; padding: 13px; }
-  .publication-options button > span { width: 42px; height: 42px; border-radius: 14px; }
-  .publication-form { padding-right: 16px; padding-left: 16px; }
-  .user-publications-tab { padding-right: 12px; padding-left: 12px; }
-  .publication-status-filter { margin-right: -12px; margin-left: -12px; padding-right: 12px; padding-left: 12px; }
+  .publication-sheet > header {
+    padding: 16px;
+  }
+  .publication-options {
+    padding: 16px;
+  }
+  .publication-options button {
+    grid-template-columns: 42px 1fr auto;
+    gap: 10px;
+    padding: 13px;
+  }
+  .publication-options button > span {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+  .publication-form {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+  .user-publications-tab {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .publication-status-filter {
+    margin-right: -12px;
+    margin-left: -12px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
 }
 
 @keyframes publication-fade {
-  from { opacity: 0; }
+  from {
+    opacity: 0;
+  }
 }
 
 @keyframes publication-up {
-  from { opacity: 0; transform: translateY(14px); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }

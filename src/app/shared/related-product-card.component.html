@@ -1,0 +1,16 @@
+<article
+  class="related-product-card"
+  role="link"
+  tabindex="0"
+  [attr.aria-label]="'Ver produto ' + product().title"
+  (click)="open()"
+  (keydown.enter)="open()"
+  (keydown.space)="open($event)"
+>
+  <img [src]="product().image" [alt]="product().title" />
+  <div>
+    <b>{{ product().title }}</b
+    ><strong>{{ product().price | brlCurrency }}</strong
+    ><span class="button secondary">Ver produto</span>
+  </div>
+</article>
