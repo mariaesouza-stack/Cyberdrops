@@ -4,7 +4,7 @@
 .offer-card:focus-visible { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(242, 25, 195, .18), var(--shadow); }
 .offer-user { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 8px 12px; }
 .offer-user > * { align-self: center; }
-.offer-user div { display: grid; align-content: center; gap: 2px; flex: 1; min-height: 36px; }
+.offer-user div { display: grid; align-content: center; flex: 1; min-height: 36px; }
 .offer-user strong { font-size: 13px; line-height: 1.2; }
 .offer-user small { font-size: 10px; line-height: 1.2; color: var(--muted); }
 .offer-user button { display: grid; place-items: center; padding: 0; line-height: 0; }

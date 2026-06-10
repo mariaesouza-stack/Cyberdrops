@@ -86,7 +86,7 @@ import { ReportCommentModalComponent } from '../shared/report-comment-modal.comp
     } @else {
     <main class="product page">
     <a class="floating-back" routerLink="/home" aria-label="Voltar"><app-icon name="arrow-left" [size]="20"/></a><div class="product-image"><img [src]="item.image" [alt]="item.title"><span class="discount">{{ item.discount | discountLabel }}</span></div>
-    <section class="product-info"><h1>{{ item.title }}</h1><p>{{ item.description }}</p><div class="price"><small>{{ item.oldPrice | brlCurrency }}</small><strong>{{ item.price | brlCurrency }}</strong></div>
+    <section class="product-info"><div class="product-context"><app-content-category-badge [category]="item.category"/><span>{{ item.store }}</span></div><h1>{{ item.title }}</h1><p>{{ item.description }}</p><div class="price"><small>{{ item.oldPrice | brlCurrency }}</small><strong>{{ item.price | brlCurrency }}</strong></div>
       <button class="button primary wide" (click)="service.openStore(item)">Ir para a loja <app-icon name="external-link" [size]="18"/></button>
       <div class="author"><span class="avatar"><app-avatar [src]="item.author.avatar" [alt]="'Avatar de ' + item.author.name"/></span><div><small>PUBLICADO POR</small><b>{{ item.author.name }}</b></div><div class="offer-actions"><button [class.active]="service.isVoted(item.id, 'like')" (click)="service.vote(item.id, 'like')"><app-icon name="flame" [size]="16"/>{{ item.likes }}</button><button [class.active]="item.saved" (click)="service.toggleSaved(item.id)"><app-icon [name]="item.saved ? 'bookmark-check' : 'bookmark'" [size]="16"/>{{ item.saved ? 'Salvo' : 'Salvar' }}</button></div></div>
     </section>

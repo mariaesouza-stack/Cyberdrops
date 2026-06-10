@@ -13,7 +13,7 @@
 .coupon-publisher-avatar { flex: 0 0 auto; display: block; width: 36px; height: 36px; overflow: hidden; border: 1px solid rgba(242, 25, 195, .38); border-radius: 50%; box-shadow: 0 0 14px rgba(242, 25, 195, .22); }
 .coupon-offer-card header div { display: grid; align-content: center; flex: 1; min-height: 36px; }
 .coupon-offer-card header strong { font-size: 11px; line-height: 1.2; }
-.coupon-offer-card header small { color: var(--muted); font-size: 8px; line-height: 1.2; }
+.coupon-offer-card header small { color: var(--muted); font-size: 10px; line-height: 1.2; }
 .coupon-discount { display: inline-flex; align-items: center; justify-content: center; height: 20px; padding: 0 7px; border-radius: var(--radius-pill); background: var(--primary); color: #fff; font-size: 8px; font-weight: 800; line-height: 1; }
 .coupon-share-button { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; background: var(--surface-2); color: var(--muted); font-size: 14px; line-height: 0; transition: .2s; }
 .coupon-share-button:hover { color: var(--text); background: var(--surface-hover); }
@@ -31,7 +31,7 @@
   .coupon-publisher-avatar { width: 32px; height: 32px; }
   .coupon-offer-card header div { min-height: 32px; }
   .coupon-offer-card header strong { font-size: 10px; }
-  .coupon-offer-card header small { font-size: 7px; }
+  .coupon-offer-card header small { font-size: 8px; }
   .coupon-discount { padding: 0 6px; font-size: 7px; }
   .coupon-share-button { width: 28px; height: 28px; }
   .coupon-offer-main { gap: 7px; padding-right: 9px; padding-left: 9px; }

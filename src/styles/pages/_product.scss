@@ -5,6 +5,10 @@
 .product-image .discount { left: auto; right: 12px; }
 .floating-back { position: fixed; top: 82px; }
 .product-info, .product-detail { padding: var(--spacing-md); }
+.product-context { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.product-context app-content-category-badge { display: flex; align-items: center; height: 20px; line-height: 0; }
+.product-context > span { display: flex; align-items: center; gap: 8px; height: 20px; color: var(--muted); font-size: 9px; font-weight: 700; line-height: 1; }
+.product-context > span::before { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); content: ''; }
 .product-info h1 { font-size: 27px; }
 .product-info > p, .about p { color: var(--muted); line-height: 1.6; font-size: 13px; }
 .about > .eyebrow { margin-bottom: 7px; color: var(--accent); font-size: 9px; }
