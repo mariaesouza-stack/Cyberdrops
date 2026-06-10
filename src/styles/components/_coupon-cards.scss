@@ -24,6 +24,9 @@
 .coupon-offer-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
 .coupon-copy-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border: 1px dashed var(--primary); border-radius: var(--radius-pill); background: rgba(242, 25, 195, .08); color: var(--primary); font-size: 9px; font-weight: 800; transition: .2s; }
 .coupon-copy-button:hover { background: var(--primary); color: #fff; }
+.coupon-offer-card.compact-copy .coupon-copy-button { display: grid; place-items: center; width: 36px; min-width: 36px; height: 36px; min-height: 36px; padding: 0; }
+.coupon-offer-card.compact-copy .coupon-copy-button app-icon { display: grid; place-items: center; }
+.coupon-scroll .coupon-offer-card.compact-copy { min-width: 300px; }
 .home-coupon-card .coupon-offer-card { width: 100%; flex-basis: auto; }
 
 @media (max-width: 350px) {

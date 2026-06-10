@@ -81,8 +81,7 @@
 }
 
 .popular-stores,
-.coupon-scroll,
-.game-carousel {
+.coupon-scroll {
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -113,38 +112,11 @@
   font-style: normal;
 }
 
-.game-carousel a {
-  flex: 0 0 150px;
-  display: grid;
-  gap: 6px;
-}
-
-.game-carousel img {
-  height: 190px;
-  border-radius: var(--radius-lg);
-  object-fit: cover;
-  transition: .25s;
-}
-
-.game-carousel a:hover img {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, .3);
-}
-
-.game-carousel b {
-  font-size: 11px;
-}
-
-.game-carousel span {
-  color: var(--muted);
-  font-size: 9px;
-}
+.search-related-products { margin-top: 12px; }
 
 @media (max-width: 350px) {
   .search-page h1 { font-size: 27px; }
   .search-box { gap: 5px; padding: 0 10px; }
   .search-box input { padding-right: 4px; padding-left: 4px; font-size: 11px; }
-  .popular-stores, .coupon-scroll, .game-carousel { margin-right: -12px; margin-left: -12px; padding-right: 12px; padding-left: 12px; }
-  .game-carousel a { flex-basis: 138px; }
-  .game-carousel img { height: 176px; }
+  .popular-stores, .coupon-scroll { margin-right: -12px; margin-left: -12px; padding-right: 12px; padding-left: 12px; }
 }
