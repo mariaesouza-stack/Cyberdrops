@@ -17,6 +17,11 @@ export const CYBER_AVATARS = [
 
 export const DEFAULT_AVATAR = CYBER_AVATARS[0];
 export const FALLBACK_AVATAR = 'assets/avatars/cyber-fallback.png';
+export const BOT_AVATAR = 'assets/coupon-bot.svg';
+export const CYBERDROPS_BOT: User = {
+  id: 0, name: 'CyberDrops Bot', username: '@cyberdropsbot', email: '', phone: '', avatar: BOT_AVATAR,
+  bio: 'Radar automatizado de ofertas e cupons'
+};
 
 export const COMMUNITY_USERS: User[] = [
   { id: 2, name: 'NeonHunter', username: '@neonhunter', email: '', phone: '', avatar: CYBER_AVATARS[0], bio: 'Rastreia os menores preços da Steam' },

@@ -5,11 +5,12 @@ import { OfferService } from '../services/offer.service';
 import { AppAvatarComponent } from './app-avatar.component';
 import { AppIconComponent } from './app-icon.component';
 import { BrlCurrencyPipe, DiscountLabelPipe } from './brl-format.pipe';
+import { ContentCategoryBadgeComponent } from './content-category-badge.component';
 
 @Component({
-  selector: 'app-offer-card', standalone: true, imports: [BrlCurrencyPipe, DiscountLabelPipe, AppIconComponent, AppAvatarComponent],
+  selector: 'app-offer-card', standalone: true, imports: [BrlCurrencyPipe, DiscountLabelPipe, AppIconComponent, AppAvatarComponent, ContentCategoryBadgeComponent],
   template: `<article class="offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
-    <header class="offer-user"><span class="avatar mini"><app-avatar [src]="offer().author.avatar" [alt]="'Avatar de ' + offer().author.name"/></span><div><strong>{{ offer().author.name }}</strong><small>{{ offer().store }} · {{ offer().time }}</small></div><button aria-label="Compartilhar oferta" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
+    <header class="offer-user"><span class="avatar mini"><app-avatar [src]="offer().author.avatar" [alt]="'Avatar de ' + offer().author.name"/></span><div><strong>{{ offer().author.name }}</strong><small>{{ offer().store }} · {{ offer().time }}</small></div><app-content-category-badge [category]="offer().category"/><button class="coupon-share-button" aria-label="Compartilhar oferta" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
     <div class="offer-main">
       <div class="offer-image"><img [src]="offer().image" [alt]="offer().title"><span class="discount">{{ offer().discount | discountLabel }}</span></div>
       <div class="offer-body"><h2>{{ offer().title }}</h2><p>{{ offer().description }}</p>

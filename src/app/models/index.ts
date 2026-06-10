@@ -13,6 +13,7 @@ export interface Offer {
   url: string; createdAt: string; saved?: boolean;
   publicationType?: PublicationType; publicationStatus?: PublicationStatus; publicationDiscountLabel?: string;
   publicationDraft?: PublicationDraft; moderationMessage?: string;
+  publisherType?: 'bot' | 'user';
 }
 export type PublicationType = 'coupon' | 'deal';
 export type PublicationStatus = 'Em análise' | 'Publicado' | 'Rejeitado';

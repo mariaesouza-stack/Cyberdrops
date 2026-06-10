@@ -3,13 +3,15 @@ import { Router } from '@angular/router';
 import { Offer } from '../models';
 import { AppIconComponent } from './app-icon.component';
 import { DiscountLabelPipe } from './brl-format.pipe';
+import { ContentCategoryBadgeComponent } from './content-category-badge.component';
+import { AppAvatarComponent } from './app-avatar.component';
 
 @Component({
   selector: 'app-coupon-offer-card',
   standalone: true,
-  imports: [AppIconComponent, DiscountLabelPipe],
+  imports: [AppIconComponent, AppAvatarComponent, DiscountLabelPipe, ContentCategoryBadgeComponent],
   template: `<article class="coupon-offer-card" role="link" tabindex="0" (click)="open()" (keydown.enter)="open()" (keydown.space)="open($event)">
-    <header><img class="coupon-bot-avatar" src="assets/coupon-bot.svg" alt="Bot de cupons"><div><strong>{{ offer().publicationType ? offer().author.name : offer().store }}</strong><small>{{ offer().publicationType ? offer().store + ' · ' + offer().time : offer().time }}</small></div><span class="coupon-discount">{{ offer().publicationDiscountLabel || (offer().discount | discountLabel) }}</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
+    <header><span class="coupon-publisher-avatar"><app-avatar [src]="offer().author.avatar" [alt]="'Avatar de ' + offer().author.name"/></span><div><strong>{{ offer().author.name }}</strong><small>{{ offer().store }} · {{ offer().time }}</small></div><app-content-category-badge [category]="offer().category" [coupon]="true"/><span class="coupon-discount">{{ offer().publicationDiscountLabel || (offer().discount | discountLabel) }}</span><button class="coupon-share-button" aria-label="Compartilhar cupom" (click)="share($event)"><app-icon [name]="shared() ? 'check' : 'share'" [size]="16"/></button></header>
     <div class="coupon-offer-main"><div class="coupon-info"><b>{{ offer().coupon?.code }}</b><p>{{ offer().coupon?.description || offer().description }}</p></div><button class="coupon-copy-button" (click)="copy($event)"><app-icon [name]="copied() ? 'check' : 'copy'" [size]="16"/>{{ copied() ? 'Copiado' : 'Copiar cupom' }}</button></div>
   </article>`
 })

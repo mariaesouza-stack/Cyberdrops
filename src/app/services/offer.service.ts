@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { COMMUNITY_USERS } from '../core/community-users';
+import { COMMUNITY_USERS, CYBERDROPS_BOT } from '../core/community-users';
 import { formatCurrency, normalizeCurrency } from '../core/currency.utils';
 import { Comment, Coupon, Offer, PublicationDraft, Store, User } from '../models';
 
@@ -128,6 +128,7 @@ export class OfferService {
       title: isCoupon ? `Cupom ${draft.store}` : draft.title, description: draft.description, oldPrice, price,
       likes: 0, dislikes: 0, comments: [], url: draft.url, createdAt, publicationType: draft.type, publicationStatus: status,
       publicationDraft: { ...draft }, moderationMessage: publicationMessages[status || 'Em análise'],
+      publisherType: 'user',
       publicationDiscountLabel: isCoupon && draft.discountKind === 'value' ? `${formatCurrency(draft.discountValue)} OFF` : undefined,
       coupon: isCoupon ? { code: draft.code, description: `${draft.description} · Válido até ${this.formatDate(draft.expiresAt)}`, store: draft.store } : undefined
     };
@@ -150,10 +151,10 @@ export class OfferService {
   }
   private normalizeMany(offers: ApiOffer[]): Offer[] { return offers.map(offer => this.normalize(offer)); }
   private normalize(offer: ApiOffer): Offer {
-    const author = COMMUNITY_USERS[Math.abs(offer.id) % COMMUNITY_USERS.length]; const image = offer.image || fallbackOffers[0].image!;
+    const author = CYBERDROPS_BOT; const image = offer.image || fallbackOffers[0].image!;
     const price = normalizeCurrency(offer.currentPrice);
     const oldPrice = normalizeCurrency(offer.oldPrice ?? price);
-    return { id: offer.id, author, store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
+    return { id: offer.id, author, publisherType: 'bot', store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.interactions.comments[offer.id] || communityComments, coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
   }
   private upsert(offer: Offer): void { this.offers.update(items => items.some(item => item.id === offer.id) ? items.map(item => item.id === offer.id ? offer : item) : [...items, offer]); }
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }
@@ -163,7 +164,7 @@ export class OfferService {
   private readPublications(): Offer[] {
     try {
       const saved = JSON.parse(localStorage.getItem(this.publicationsKey) || '') as Offer[];
-      return saved.map(item => ({ ...item, publicationDraft: item.publicationDraft || this.draftFromOffer(item), moderationMessage: item.moderationMessage || publicationMessages[item.publicationStatus || 'Em análise'] }));
+      return saved.map(item => ({ ...item, publisherType: 'user', publicationDraft: item.publicationDraft || this.draftFromOffer(item), moderationMessage: item.moderationMessage || publicationMessages[item.publicationStatus || 'Em análise'] }));
     } catch {
       const author = { id: 1, name: 'NeonHunter', username: '@neonhunter', email: 'player@cyberdrops.gg', phone: '(11) 99999-2049', avatar: COMMUNITY_USERS[0].avatar };
       const mocks = [
