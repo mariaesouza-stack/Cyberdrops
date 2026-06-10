@@ -30,3 +30,16 @@ input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3p
 .pill-tabs button.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); box-shadow: var(--shadow); }
 .empty { display: grid; place-items: center; gap: 5px; padding: 50px; color: var(--muted); border: 1px dashed var(--line); border-radius: 18px; }
 .api-message { margin: 0 0 14px; padding: 11px 13px; border: 1px solid rgba(242, 25, 195, .24); border-radius: var(--radius-md); background: rgba(242, 25, 195, .07); color: var(--muted); font-size: 10px; }
+
+@media (max-width: 759px), (hover: none) and (pointer: coarse) {
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
