@@ -1,17 +1,22 @@
 const express = require('express');
 const { readCache, writeCache, isFresh } = require('../services/cache.service');
 const { scrapeOffers } = require('../services/scraper.service');
-const mockOffers = require('../data/mock-offers.json');
+const mockOffers = require('../../mock-catalog.json');
 
 const router = express.Router();
 let refreshInFlight = null;
 
+function withMockCatalog(offers = []) {
+  const existing = new Set(offers.map(offer => `${offer.store}:${offer.title}`.toLowerCase()));
+  return [...offers, ...mockOffers.filter(offer => !existing.has(`${offer.store}:${offer.title}`.toLowerCase()))];
+}
+
 async function availableOffers() {
   const cache = await readCache();
-  if (isFresh(cache)) return cache.offers;
+  if (isFresh(cache)) return withMockCatalog(cache.offers);
   if (!refreshInFlight) {
     refreshInFlight = scrapeOffers()
-      .then(async result => result.offers.length ? (await writeCache(result.offers)).offers : cache.offers.length ? cache.offers : mockOffers)
+      .then(async result => result.offers.length ? withMockCatalog((await writeCache(result.offers)).offers) : withMockCatalog(cache.offers))
       .finally(() => { refreshInFlight = null; });
   }
   return refreshInFlight;
@@ -40,9 +45,9 @@ router.post('/refresh', async (_req, res) => {
   const cache = await readCache();
   if (isFresh(cache)) return res.json({ ...cache, source: 'cache', message: 'Cache ainda válido.' });
   const result = await scrapeOffers();
-  if (!result.offers.length) return res.json({ offers: cache.offers.length ? cache.offers : mockOffers, source: cache.offers.length ? 'cache' : 'mock', warnings: result.errors });
+  if (!result.offers.length) return res.json({ offers: withMockCatalog(cache.offers), source: cache.offers.length ? 'cache' : 'mock', warnings: result.errors });
   const saved = await writeCache(result.offers);
-  res.json({ ...saved, source: 'scraping', warnings: result.errors });
+  res.json({ ...saved, offers: withMockCatalog(saved.offers), source: 'scraping', warnings: result.errors });
 });
 router.get('/:id', async (req, res) => {
   const offer = (await availableOffers()).find(item => String(item.id) === req.params.id);
