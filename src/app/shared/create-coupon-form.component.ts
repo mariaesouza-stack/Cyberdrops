@@ -2,14 +2,22 @@ import { Component, effect, input, output } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { CouponPublicationDraft } from "../models";
 import { AppIconComponent } from "./app-icon.component";
+import {
+  PublicationDropdownComponent,
+  PublicationDropdownOption,
+} from "./publication-dropdown.component";
 
 @Component({
   selector: "app-create-coupon-form",
   standalone: true,
-  imports: [FormsModule, AppIconComponent],
+  imports: [FormsModule, AppIconComponent, PublicationDropdownComponent],
   templateUrl: "./create-coupon-form.component.html",
 })
 export class CreateCouponFormComponent {
+  readonly discountOptions: readonly PublicationDropdownOption[] = [
+    { label: "Percentual", value: "percent" },
+    { label: "Valor em reais", value: "value" },
+  ];
   readonly submitted = output<CouponPublicationDraft>();
   readonly initial = input<CouponPublicationDraft>();
   draft: CouponPublicationDraft = {
@@ -28,6 +36,10 @@ export class CreateCouponFormComponent {
       if (initial) this.draft = { ...initial };
     });
   }
+  setDiscountKind(value: string): void {
+    this.draft.discountKind = value as CouponPublicationDraft["discountKind"];
+  }
+
   submit(): void {
     if (
       !this.draft.store.trim() ||

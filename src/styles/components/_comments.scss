@@ -296,7 +296,7 @@
 }
 .comment-report-modal .report-submit {
   color: #fff;
-  background: linear-gradient(110deg, var(--primary), var(--secondary));
+  background: var(--primary);
   box-shadow: 0 9px 25px rgba(242, 25, 195, 0.22);
 }
 .comment-report-modal .report-submit:disabled {

@@ -1,6 +1,7 @@
 import { Component, effect, inject, input, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
+import { COPY_FEEDBACK_DURATION_MS } from "../core/app.constants";
 import { formatCurrency } from "../core/currency.utils";
 import { Offer } from "../models";
 import { OfferService } from "../services/offer.service";
@@ -67,6 +68,8 @@ export class ProductPage {
   >(undefined);
   readonly commentsVisible = signal(10);
   commentText = "";
+  private copyFeedbackTimer?: ReturnType<typeof setTimeout>;
+
   constructor() {
     effect(() => {
       const id = Number(this.id());
@@ -182,10 +185,18 @@ export class ProductPage {
       !expiresAt || new Date(`${expiresAt}T23:59:59`).getTime() >= Date.now()
     );
   }
-  copyCoupon(item: Offer): void {
+  copyCoupon(item: Offer, event: Event): void {
+    const button = event.currentTarget as HTMLButtonElement;
     void navigator.clipboard?.writeText(item.coupon?.code || "");
     this.copied.set(true);
-    setTimeout(() => this.copied.set(false), 1600);
+    clearTimeout(this.copyFeedbackTimer);
+    this.copyFeedbackTimer = setTimeout(
+      () => {
+        this.copied.set(false);
+        button.blur();
+      },
+      COPY_FEEDBACK_DURATION_MS,
+    );
   }
   async share(item: Offer): Promise<void> {
     const url = `${window.location.origin}/product/${item.id}`;

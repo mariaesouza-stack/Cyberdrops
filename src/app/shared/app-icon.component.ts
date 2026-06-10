@@ -10,6 +10,7 @@ import {
   LucideBrainCircuit,
   LucideCheck,
   LucideCheckCheck,
+  LucideChevronDown,
   LucideClock,
   LucideCopy,
   LucideCpu,
@@ -61,6 +62,7 @@ export type AppIconName =
   | "brain-circuit"
   | "check"
   | "check-check"
+  | "chevron-down"
   | "clock"
   | "copy"
   | "cpu"
@@ -109,6 +111,7 @@ const ICONS: Record<AppIconName, LucideIcon> = {
   "brain-circuit": LucideBrainCircuit,
   check: LucideCheck,
   "check-check": LucideCheckCheck,
+  "chevron-down": LucideChevronDown,
   clock: LucideClock,
   copy: LucideCopy,
   cpu: LucideCpu,

@@ -37,7 +37,11 @@
         <div>
           <small>CÓDIGO DO CUPOM</small><strong>{{ item.coupon.code }}</strong>
         </div>
-        <button type="button" (click)="copyCoupon(item)">
+        <button
+          type="button"
+          [class.copied]="copied()"
+          (click)="copyCoupon(item, $event)"
+        >
           <app-icon [name]="copied() ? 'check' : 'copy'" [size]="18" />{{
           copied() ? 'Copiado' : 'Copiar' }}
         </button>

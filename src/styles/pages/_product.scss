@@ -360,19 +360,27 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.coupon-code-row button {
-  display: flex;
+.coupon-code-row button,
+.coupon-code-row button:not(.copied),
+.coupon-code-row button:not(.copied):hover,
+.coupon-code-row button:not(.copied):focus {
+  flex: 0 0 auto;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 38px;
-  padding: 0 13px;
-  border: 0;
-  border-radius: 999px;
-  color: #090909;
-  background: var(--primary);
-  font-size: 10px;
+  gap: 5px;
+  padding: 8px 11px;
+  border: 1px dashed var(--primary);
+  border-radius: var(--radius-pill);
+  background: rgba(242, 25, 195, 0.08);
+  color: var(--primary);
+  font-size: 9px;
   font-weight: 800;
+  transition: 0.2s;
+}
+.coupon-code-row button.copied {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
 }
 .coupon-detail-content > .button {
   margin: 0;

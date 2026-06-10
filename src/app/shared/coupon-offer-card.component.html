@@ -51,6 +51,7 @@
       }
       <button
         class="coupon-copy-button"
+        [class.copied]="copied()"
         [attr.aria-label]="copied() ? 'Cupom copiado' : 'Copiar cupom'"
         (click)="copy($event)"
       >

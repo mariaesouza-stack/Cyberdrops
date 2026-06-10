@@ -105,7 +105,7 @@ textarea:focus {
   gap: 10px;
 }
 .button.primary {
-  background: linear-gradient(105deg, var(--primary), var(--secondary));
+  background: var(--primary);
   box-shadow: 0 0 24px rgba(242, 25, 195, 0.28);
 }
 .button.secondary {

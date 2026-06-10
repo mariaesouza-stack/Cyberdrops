@@ -42,14 +42,12 @@
         placeholder="1299,90"
     /></label>
   </div>
-  <label
-    >Categoria<select name="category" [(ngModel)]="draft.category">
-      <option>Games</option>
-      <option>Hardware</option>
-      <option>Periféricos</option>
-      <option>Consoles</option>
-    </select></label
-  >
+  <app-publication-dropdown
+    label="Categoria"
+    [value]="draft.category"
+    [options]="categoryOptions"
+    (changed)="setCategory($event)"
+  />
   <div class="publication-upload-field">
     <span>Imagem do produto</span
     ><label class="publication-upload" [class.has-image]="draft.image">

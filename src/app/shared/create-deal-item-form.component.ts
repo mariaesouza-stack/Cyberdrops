@@ -2,14 +2,24 @@ import { Component, effect, input, output, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { DealPublicationDraft } from "../models";
 import { AppIconComponent } from "./app-icon.component";
+import {
+  PublicationDropdownComponent,
+  PublicationDropdownOption,
+} from "./publication-dropdown.component";
 
 @Component({
   selector: "app-create-deal-item-form",
   standalone: true,
-  imports: [FormsModule, AppIconComponent],
+  imports: [FormsModule, AppIconComponent, PublicationDropdownComponent],
   templateUrl: "./create-deal-item-form.component.html",
 })
 export class CreateDealItemFormComponent {
+  readonly categoryOptions: readonly PublicationDropdownOption[] = [
+    { label: "Games", value: "Games" },
+    { label: "Hardware", value: "Hardware" },
+    { label: "Periféricos", value: "Periféricos" },
+    { label: "Consoles", value: "Consoles" },
+  ];
   readonly submitted = output<DealPublicationDraft>();
   readonly initial = input<DealPublicationDraft>();
   readonly imageError = signal("");
@@ -30,6 +40,10 @@ export class CreateDealItemFormComponent {
       if (initial) this.draft = { ...initial };
     });
   }
+  setCategory(value: string): void {
+    this.draft.category = value;
+  }
+
   selectImage(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];

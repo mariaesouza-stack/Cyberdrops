@@ -1,6 +1,7 @@
 import { Component, inject, input, signal } from "@angular/core";
 import { ViewportScroller } from "@angular/common";
 import { Router } from "@angular/router";
+import { COPY_FEEDBACK_DURATION_MS } from "../core/app.constants";
 import { Offer } from "../models";
 import { OfferService } from "../services/offer.service";
 import { ShareService } from "../services/share.service";
@@ -31,6 +32,7 @@ export class CouponOfferCardComponent {
   readonly offerService = inject(OfferService);
   private readonly router = inject(Router);
   private readonly viewportScroller = inject(ViewportScroller);
+  private copyFeedbackTimer?: ReturnType<typeof setTimeout>;
 
   async open(event?: Event): Promise<void> {
     event?.preventDefault();
@@ -46,9 +48,17 @@ export class CouponOfferCardComponent {
   }
   copy(event: Event): void {
     event.stopPropagation();
+    const button = event.currentTarget as HTMLButtonElement;
     navigator.clipboard?.writeText(this.offer().coupon?.code || "");
     this.copied.set(true);
-    setTimeout(() => this.copied.set(false), 1600);
+    clearTimeout(this.copyFeedbackTimer);
+    this.copyFeedbackTimer = setTimeout(
+      () => {
+        this.copied.set(false);
+        button.blur();
+      },
+      COPY_FEEDBACK_DURATION_MS,
+    );
   }
   async share(event: Event): Promise<void> {
     event.stopPropagation();
