@@ -5,7 +5,7 @@
 
 .profile-hero {
   padding: 10px 16px 24px;
-  background: radial-gradient(circle at 50% 0, rgba(242, 25, 195, .18), transparent 60%);
+  background: var(--bg);
   text-align: center;
 }
 
@@ -38,6 +38,12 @@
   font-size: 12px;
   box-shadow: 0 4px 14px rgba(242, 25, 195, .4);
   z-index: 2;
+}
+
+.profile-avatar span app-icon,
+.profile-avatar span app-icon svg {
+  color: #fff;
+  stroke: #fff;
 }
 
 .profile-hero h1 {
