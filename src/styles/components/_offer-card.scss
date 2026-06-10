@@ -8,27 +8,28 @@
 .offer-user strong { font-size: 13px; line-height: 1.2; }
 .offer-user small { font-size: 10px; line-height: 1.2; color: var(--muted); }
 .offer-user button { display: grid; place-items: center; padding: 0; line-height: 0; }
-.offer-main { display: grid; grid-template-columns: minmax(112px, 35%) 1fr; gap: 12px; padding: 0 12px 10px; }
-.offer-image { position: relative; aspect-ratio: 1.1; border-radius: var(--radius-md); overflow: hidden; min-height: 108px; }
+.offer-main { display: grid; grid-template-columns: minmax(112px, 35%) minmax(0, 1fr); gap: 12px; min-width: 0; padding: 0 12px 10px; }
+.offer-image { position: relative; width: 100%; max-width: 100%; aspect-ratio: 1.1; border-radius: var(--radius-md); overflow: hidden; min-height: 108px; }
 .offer-image img { width: 100%; height: 100%; object-fit: cover; transition: .3s; }
 .offer-image:hover img { transform: scale(1.03); }
 .discount { position: absolute; top: 12px; left: 12px; border-radius: var(--radius-pill); padding: 6px 10px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 800; }
 .offer-image .discount { top: 7px; left: 7px; padding: 4px 7px; font-size: 9px; }
-.offer-body { min-width: 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.offer-body { width: 100%; min-width: 0; overflow: hidden; padding: 0; display: flex; flex-direction: column; align-items: flex-start; }
 .content-category-tag { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: fit-content; height: 20px; padding: 0 8px; border: 1px solid rgba(0, 229, 255, .22); border-radius: var(--radius-pill); background: rgba(0, 229, 255, .08); color: var(--accent); font-size: 8px; font-weight: 800; line-height: 1; }
 .content-category-tag[data-category="games"] { border-color: rgba(139, 92, 246, .4); background: rgba(139, 92, 246, .14); color: #bda7ff; }
 .content-category-tag[data-category="hardware"] { border-color: rgba(0, 229, 255, .35); background: rgba(0, 229, 255, .1); color: var(--accent); }
 .content-category-tag[data-category="perifericos"] { border-color: rgba(242, 25, 195, .38); background: rgba(242, 25, 195, .12); color: #ff71df; }
 .content-category-tag[data-category="consoles"] { border-color: rgba(255, 153, 0, .4); background: rgba(255, 153, 0, .12); color: #ffb84d; }
 .content-category-tag[data-category="geral"] { border-color: rgba(161, 161, 170, .3); background: rgba(161, 161, 170, .1); color: var(--muted); }
-.offer-body h2 { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 14px; line-height: 1.25; margin: 0 0 4px; }
-.offer-body p { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin: 0 0 7px; color: var(--muted); font-size: 10px; line-height: 1.35; }
+.offer-body h2 { display: -webkit-box; overflow: hidden; width: 100%; max-width: 100%; margin: 0 0 4px; font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; text-overflow: ellipsis; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.offer-body p { display: -webkit-box; overflow: hidden; width: 100%; max-width: 100%; margin: 0 0 7px; color: var(--muted); font-size: 10px; line-height: 1.35; overflow-wrap: anywhere; text-overflow: ellipsis; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .price { display: grid; gap: 2px; }
 .price small { text-decoration: line-through; color: var(--muted); }
 .price strong { font: 700 23px var(--font-family); color: var(--accent); }
 .offer-body .price small { font-size: 8px; }
 .offer-body .price strong { font-size: 17px; color: var(--text); }
-.offer-price-row { width: 100%; margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-sm); }
+.offer-price-row { width: 100%; min-width: 0; margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-sm); }
+.offer-price-row .price { min-width: 0; }
 .fire-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface-2); color: var(--muted); padding: 7px 9px; font-size: 10px; transition: .2s; }
 .fire-button:hover { border-color: var(--primary); color: var(--text); transform: translateY(-1px); }
 .offer-actions { display: flex; gap: 5px; margin-top: 14px; }
@@ -46,9 +47,10 @@
   .offer-user .avatar.mini { width: 32px; height: 32px; }
   .offer-user strong { font-size: 11px; }
   .offer-user small { font-size: 8px; }
-  .offer-main { grid-template-columns: minmax(100px, 34%) 1fr; gap: 9px; padding-right: 9px; padding-left: 9px; }
+  .offer-main { grid-template-columns: minmax(92px, 33%) minmax(0, 1fr); gap: 9px; padding-right: 9px; padding-left: 9px; }
+  .offer-image { min-height: 100px; }
   .offer-body h2 { font-size: 12px; }
-  .offer-body p { -webkit-line-clamp: 1; font-size: 9px; }
+  .offer-body p { font-size: 9px; }
   .offer-body .price strong { font-size: 15px; }
   .fire-button { padding: 6px 8px; font-size: 9px; }
 }
