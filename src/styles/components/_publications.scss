@@ -606,10 +606,23 @@
   }
 
   .user-publications-heading button {
+    display: grid;
+    place-items: center;
+    gap: 0;
     width: 38px;
+    height: 38px;
+    min-height: 38px;
     padding: 0;
-    justify-content: center;
     font-size: 0;
+  }
+
+  .user-publications-heading button app-icon {
+    display: grid;
+    place-items: center;
+  }
+
+  .user-publications-heading button span {
+    display: none;
   }
 
   .user-publication-card {

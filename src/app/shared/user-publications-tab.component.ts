@@ -12,7 +12,7 @@ import { UserPublicationCardComponent } from './user-publication-card.component'
   selector: 'app-user-publications-tab',
   standalone: true,
   imports: [AppIconComponent, CreatePublicationModalComponent, DeletePublicationModalComponent, PublicationStatusFilterComponent, UserPublicationCardComponent],
-  template: `<section class="user-publications-tab"><div class="user-publications-heading"><div><h2>Minhas publicações</h2><p>Acompanhe o ciclo dos seus cupons e itens em promoção.</p></div><button (click)="createOpen.set(true)"><app-icon name="plus" [size]="17"/>Publicar agora</button></div>
+  template: `<section class="user-publications-tab"><div class="user-publications-heading"><div><h2>Minhas publicações</h2><p>Acompanhe o ciclo dos seus cupons e itens em promoção.</p></div><button (click)="createOpen.set(true)" aria-label="Publicar agora"><app-icon name="plus" [size]="17"/><span>Publicar agora</span></button></div>
     <app-publication-status-filter [selected]="filter()" (changed)="filter.set($event)"/>
     <div class="user-publications-list">@for (publication of filtered(); track publication.id) { <app-user-publication-card [publication]="publication" (edited)="editing.set($event)" (deleted)="deleting.set($event)"/> } @empty { <div class="user-publications-empty"><app-icon name="badge-percent" [size]="38"/><h3>Nenhuma publicação ainda</h3><p>Quando você compartilhar cupons ou itens em promoção, eles aparecerão aqui.</p><button class="button primary" (click)="createOpen.set(true)"><app-icon name="plus" [size]="17"/>Publicar agora</button></div> }</div>
     @if (createOpen()) { <app-create-publication-modal (closed)="createOpen.set(false)" (submitted)="create($event)"/> }
