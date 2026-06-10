@@ -19,13 +19,13 @@
 .comment-composer textarea { min-height: 78px; margin: 0; grid-column: 2; font-size: 12px; }
 .comment-composer textarea::placeholder { font-size: 12px; }
 .comment-composer .button { grid-column: 2; justify-self: end; min-height: 38px; padding: 0 18px; }
-.related { display: flex; gap: 12px; overflow: auto; margin: 0 -16px; padding: 0 16px 6px; }
-.related article { flex: 0 0 210px; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+.related { display: flex; align-items: stretch; gap: 12px; overflow: auto; margin: 0 -16px; padding: 0 16px 6px; }
+.related article { display: flex; flex: 0 0 210px; flex-direction: column; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
 .related article img { height: 120px; object-fit: cover; }
-.related article > div { padding: 12px; display: grid; gap: var(--spacing-sm); }
-.related article b { font-size: 12px; line-height: 1.35; }
+.related article > div { display: flex; flex: 1; flex-direction: column; gap: var(--spacing-sm); padding: 12px; }
+.related article b { display: -webkit-box; overflow: hidden; min-height: calc(2em * 1.35); font-size: 12px; line-height: 1.35; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .related article strong { color: var(--accent); font-size: 13px; }
-.related article .button { min-height: 34px; font-size: 10px; }
+.related article .button { min-height: 34px; margin-top: auto; font-size: 10px; }
 
 .coupon-detail.page { display: grid; gap: var(--spacing-md); padding: 72px 16px 40px; }
 .coupon-detail-header { display: grid; grid-template-columns: 36px 1fr 36px; align-items: center; gap: 12px; }

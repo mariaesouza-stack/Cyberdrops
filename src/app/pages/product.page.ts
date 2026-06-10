@@ -88,7 +88,7 @@ import { CouponOfferCardComponent } from '../shared/coupon-offer-card.component'
     </section>
     <section class="product-detail"><div class="tabs pill-tabs"><button [class.active]="tab() === 'discussion'" (click)="tab.set('discussion')">Discussão</button><button [class.active]="tab() === 'about'" (click)="tab.set('about')">Sobre o produto</button></div>
       @if (tab() === 'discussion') { <div class="discussion"><div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="O que você achou deste drop?"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>@for (comment of item.comments; track comment.id) { <app-comment-card [comment]="comment" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)"/> }</div>
-      } @else { <div class="about"><h2>Um futuro que vale a pena explorar</h2><p>Explore uma metrópole obcecada por poder, glamour e modificações corporais. Construa sua lenda, escolha seu estilo e encare missões de alto risco.</p><h3>Produtos relacionados</h3><div class="related">@for (related of service.offers(); track related.id) { <article><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><a class="button secondary" [routerLink]="['/product', related.id]">Ver produto</a></div></article> }</div></div> }
+      } @else { <div class="about"><h2>Um futuro que vale a pena explorar</h2><p>Explore uma metrópole obcecada por poder, glamour e modificações corporais. Construa sua lenda, escolha seu estilo e encare missões de alto risco.</p><h3>Produtos relacionados</h3><div class="related">@for (related of relatedProducts(item); track related.id) { <article><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><a class="button secondary" [routerLink]="['/product', related.id]">Ver produto</a></div></article> } @empty { <p>Nenhum produto relacionado disponível agora.</p> }</div></div> }
     </section>
   </main>
     }
@@ -109,6 +109,7 @@ export class ProductPage {
   likeComment(id: number, commentId: number): void { this.service.likeComment(id, commentId); }
   reply(id: number, event: { commentId: number; text: string }): void { this.service.reply(id, event.commentId, event.text, this.user.user()); }
   relatedCoupons(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !!offer.coupon).slice(0, 6); }
+  relatedProducts(item: Offer): Offer[] { return this.service.offers().filter(offer => offer.id !== item.id && !offer.coupon).slice(0, 3); }
   couponValidity(item: Offer): string {
     const expiresAt = item.publicationDraft?.type === 'coupon' ? item.publicationDraft.expiresAt : '';
     return expiresAt ? new Intl.DateTimeFormat('pt-BR').format(new Date(`${expiresAt}T12:00:00`)) : 'Consulte as condições';
