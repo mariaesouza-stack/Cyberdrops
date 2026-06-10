@@ -39,6 +39,7 @@ export interface AppNotification {
   createdAt: string;
   read: boolean;
   action: AppNotificationAction;
+  preferenceId?: string;
   offerId?: number;
   couponCode?: string;
 }

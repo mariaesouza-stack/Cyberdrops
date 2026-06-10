@@ -22,7 +22,7 @@ import { NotificationFilter, NotificationFilterComponent } from '../shared/notif
 export class NotificationsPage {
   readonly service = inject(NotificationService);
   readonly filter = signal<NotificationFilter>('all');
-  readonly filteredNotifications = computed(() => this.filter() === 'all' ? this.service.notifications() : this.service.notifications().filter(item => item.category === this.filter()));
+  readonly filteredNotifications = computed(() => this.filter() === 'all' ? this.service.visibleNotifications() : this.service.visibleNotifications().filter(item => item.category === this.filter()));
   readonly unreadLabel = computed(() => this.service.unreadCount() ? `${this.service.unreadCount()} alertas não lidos no seu radar.` : 'Você está em dia com todos os alertas.');
   open(notification: AppNotification): void { void this.service.open(notification); }
 }
