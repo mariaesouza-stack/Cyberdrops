@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { copyText } from "../core/clipboard.utils";
 
 export type ShareResult = "native" | "copied" | "cancelled" | "failed";
 
@@ -25,11 +26,6 @@ export class ShareService {
   }
 
   private async copyFallback(url: string): Promise<ShareResult> {
-    try {
-      await navigator.clipboard.writeText(url);
-      return "copied";
-    } catch {
-      return "failed";
-    }
+    return (await copyText(url)) ? "copied" : "failed";
   }
 }

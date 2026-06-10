@@ -23,6 +23,13 @@ npm start
 
 Abra `http://localhost:4200`.
 
+Se o servidor ficar aberto por muito tempo e deixar de refletir alterações
+recentes, reinicie-o limpando o cache do Angular:
+
+```bash
+npm run start:clean
+```
+
 ## Endpoints
 
 - `GET /api/health`

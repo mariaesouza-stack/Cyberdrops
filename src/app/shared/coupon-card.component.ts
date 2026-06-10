@@ -1,5 +1,6 @@
 import { Component, input, signal } from "@angular/core";
 import { COPY_FEEDBACK_DURATION_MS } from "../core/app.constants";
+import { copyText } from "../core/clipboard.utils";
 import { Coupon } from "../models";
 import { AppIconComponent } from "./app-icon.component";
 
@@ -14,17 +15,14 @@ export class CouponCardComponent {
   readonly copied = signal(false);
   private copyFeedbackTimer?: ReturnType<typeof setTimeout>;
 
-  copy(event: Event): void {
+  async copy(event: Event): Promise<void> {
     const button = event.currentTarget as HTMLButtonElement;
-    navigator.clipboard?.writeText(this.coupon().code);
+    if (!(await copyText(this.coupon().code))) return;
     this.copied.set(true);
     clearTimeout(this.copyFeedbackTimer);
-    this.copyFeedbackTimer = setTimeout(
-      () => {
-        this.copied.set(false);
-        button.blur();
-      },
-      COPY_FEEDBACK_DURATION_MS,
-    );
+    this.copyFeedbackTimer = setTimeout(() => {
+      this.copied.set(false);
+      button.blur();
+    }, COPY_FEEDBACK_DURATION_MS);
   }
 }
