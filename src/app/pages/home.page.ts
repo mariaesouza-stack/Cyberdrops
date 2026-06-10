@@ -20,8 +20,16 @@ import { FloatingActionButtonComponent } from '../shared/floating-action-button.
     <div class="feed">
       @if (service.loading()) { @for (item of [1,2,3]; track item) { <div class="offer-skeleton"><i></i><span></span><b></b></div> } }
       @else {
-        @if (feedType() !== 'Produtos') { @for (coupon of couponOffers(); track coupon.id) { <app-coupon-offer-card class="home-coupon-card" [offer]="coupon"/> } }
-        @if (feedType() !== 'Cupons') { @for (offer of productOffers(); track offer.id) { <app-offer-card [offer]="offer"/> } }
+        @if (feedType() === 'Todos') {
+          @for (offer of chronologicalOffers(); track offer.id) {
+            @if (offer.coupon) { <app-coupon-offer-card class="home-coupon-card" [offer]="offer"/> }
+            @else { <app-offer-card [offer]="offer"/> }
+          }
+        } @else if (feedType() === 'Cupons') {
+          @for (coupon of couponOffers(); track coupon.id) { <app-coupon-offer-card class="home-coupon-card" [offer]="coupon"/> }
+        } @else {
+          @for (offer of productOffers(); track offer.id) { <app-offer-card [offer]="offer"/> }
+        }
         @if (!visibleOffersCount()) { <div class="empty"><app-icon name="search" [size]="36"/><b>Sem drops por aqui.</b><span>Tente outro filtro.</span></div> }
       }
     </div>
@@ -50,13 +58,14 @@ export class HomePage {
     (!this.categories().length || this.categories().some(category => offer.category.toLocaleLowerCase('pt-BR') === category.toLocaleLowerCase('pt-BR')))
   ));
   readonly couponOffers = computed(() => {
-    const coupons = this.offers().filter(offer => offer.coupon);
+    const coupons = this.sortByNewest(this.offers().filter(offer => offer.coupon));
     if (coupons.length) return coupons;
     if (this.categories().length) return [];
     const offer = this.offers()[0];
     return offer ? [{ ...offer, coupon: { code: 'CYBERDROP', description: `${offer.discount || 10}% OFF em ${offer.store}`, store: offer.store } }] : [];
   });
-  readonly productOffers = computed(() => this.offers().filter(offer => !offer.coupon));
+  readonly productOffers = computed(() => this.sortByNewest(this.offers().filter(offer => !offer.coupon)));
+  readonly chronologicalOffers = computed(() => this.sortByNewest(this.offers()));
   readonly visibleOffersCount = computed(() => {
     if (this.feedType() === 'Produtos') return this.productOffers().length;
     if (this.feedType() === 'Cupons') return this.couponOffers().length;
@@ -68,6 +77,13 @@ export class HomePage {
   toggleCategory(category: string): void { this.categories.update(items => items.includes(category) ? items.filter(item => item !== category) : [...items, category]); }
   removeCategory(category: string): void { this.categories.update(items => items.filter(item => item !== category)); }
   clearCategories(): void { this.categories.set([]); }
+  private sortByNewest<T extends { id: number; createdAt: string }>(offers: T[]): T[] {
+    return [...offers].sort((a, b) => this.postedAt(b.createdAt) - this.postedAt(a.createdAt) || b.id - a.id);
+  }
+  private postedAt(value: string): number {
+    const timestamp = Date.parse(value);
+    return Number.isNaN(timestamp) ? 0 : timestamp;
+  }
   publish(draft: PublicationDraft): void {
     this.service.createPublication(draft, this.user.user());
     this.store.set('');

@@ -20,6 +20,9 @@ interface LocalInteractions {
   comments: Record<string, Comment[]>;
   saved: number[];
   reportedComments: Record<string, CommentReport[]>;
+  likedOffers: number[];
+  dislikedOffers: number[];
+  likedComments: Record<string, number[]>;
 }
 
 const fallbackOffers = mockCatalog as ApiOffer[];
@@ -101,8 +104,15 @@ export class OfferService {
   }
   vote(id: number, kind: 'like' | 'dislike'): void {
     const bucket = kind === 'like' ? this.interactions.likes : this.interactions.dislikes;
-    bucket[id] = (bucket[id] || 0) + 1; this.persist();
-    this.offers.update(items => items.map(item => item.id === id ? { ...item, [kind === 'like' ? 'likes' : 'dislikes']: item[kind === 'like' ? 'likes' : 'dislikes'] + 1 } : item));
+    const selected = kind === 'like' ? this.interactions.likedOffers : this.interactions.dislikedOffers;
+    const active = selected.includes(id);
+    if (kind === 'like') this.interactions.likedOffers = active ? selected.filter(item => item !== id) : [...selected, id];
+    else this.interactions.dislikedOffers = active ? selected.filter(item => item !== id) : [...selected, id];
+    bucket[id] = Math.max(0, (bucket[id] || 0) + (active ? -1 : 1)); this.persist();
+    this.offers.update(items => items.map(item => item.id === id ? { ...item, [kind === 'like' ? 'likes' : 'dislikes']: Math.max(0, item[kind === 'like' ? 'likes' : 'dislikes'] + (active ? -1 : 1)) } : item));
+  }
+  isVoted(id: number, kind: 'like' | 'dislike'): boolean {
+    return (kind === 'like' ? this.interactions.likedOffers : this.interactions.dislikedOffers).includes(id);
   }
   addComment(id: number, text: string, user: User): void {
     const comment: Comment = { id: Date.now(), user, text, likes: 0, time: 'agora' };
@@ -111,8 +121,14 @@ export class OfferService {
   }
   likeComment(id: number, commentId: number): void {
     const comments = this.offers().find(item => item.id === id)?.comments || [];
-    this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment);
+    const liked = this.interactions.likedComments[id] || [];
+    const active = liked.includes(commentId);
+    this.interactions.likedComments[id] = active ? liked.filter(item => item !== commentId) : [...liked, commentId];
+    this.interactions.comments[id] = comments.map(comment => comment.id === commentId ? { ...comment, likes: Math.max(0, comment.likes + (active ? -1 : 1)) } : comment);
     this.persist(); this.patchComments(id);
+  }
+  isCommentLiked(id: number, commentId: number): boolean {
+    return (this.interactions.likedComments[id] || []).includes(commentId);
   }
   reply(id: number, commentId: number, text: string, user: User): void {
     const comments = this.offers().find(item => item.id === id)?.comments || [];
@@ -230,8 +246,11 @@ export class OfferService {
           ? { commentId: report, userId: 1, reason: 'Motivo não informado', createdAt: new Date().toISOString() }
           : report)
       ]));
-      return { likes: saved.likes || {}, dislikes: saved.dislikes || {}, comments: saved.comments || {}, saved: saved.saved || [], reportedComments };
-    } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [], reportedComments: {} }; }
+      return {
+        likes: saved.likes || {}, dislikes: saved.dislikes || {}, comments: saved.comments || {}, saved: saved.saved || [], reportedComments,
+        likedOffers: saved.likedOffers || [], dislikedOffers: saved.dislikedOffers || [], likedComments: saved.likedComments || {}
+      };
+    } catch { return { likes: {}, dislikes: {}, comments: {}, saved: [], reportedComments: {}, likedOffers: [], dislikedOffers: [], likedComments: {} }; }
   }
   private readPublications(): Offer[] {
     try {

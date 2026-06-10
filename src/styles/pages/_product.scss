@@ -70,6 +70,9 @@
 .coupon-detail-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .coupon-detail-actions button, .coupon-worked-actions button { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 0 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: 10px; font-weight: 700; }
 .coupon-detail-actions button:hover, .coupon-detail-actions button.active, .coupon-worked-actions button:hover { border-color: var(--primary); color: var(--primary); }
+.coupon-detail-actions button.active, .coupon-worked-actions button.active { background: rgba(242, 25, 195, .13); }
+.coupon-detail-actions button:nth-child(2).active { border-color: rgba(139, 92, 246, .48); background: rgba(139, 92, 246, .14); color: #bda7ff; }
+.coupon-worked-actions button:last-child.active { border-color: rgba(255, 91, 114, .5); background: rgba(255, 91, 114, .12); color: #ff7b8f; }
 .coupon-detail-actions b, .coupon-worked-actions b { color: inherit; font-size: 9px; }
 .coupon-section { display: grid; gap: 14px; padding: 16px; }
 .coupon-section-title { display: flex; align-items: center; gap: 8px; color: var(--primary); }

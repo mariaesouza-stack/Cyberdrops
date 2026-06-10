@@ -15,7 +15,7 @@ import { ContentCategoryBadgeComponent } from './content-category-badge.componen
     <div class="offer-main">
       <div class="offer-image"><img [src]="offer().image" [alt]="offer().title"><span class="discount">{{ offer().discount | discountLabel }}</span></div>
       <div class="offer-body"><h2>{{ offer().title }}</h2><p>{{ offer().description }}</p>
-        <div class="offer-price-row"><div class="price"><small>{{ offer().oldPrice | brlCurrency }}</small><strong>{{ offer().price | brlCurrency }}</strong></div><button class="fire-button" (click)="vote($event, 'like')" aria-label="Curtir oferta"><app-icon name="flame" [size]="16"/> {{ offer().likes }}</button></div>
+        <div class="offer-price-row"><div class="price"><small>{{ offer().oldPrice | brlCurrency }}</small><strong>{{ offer().price | brlCurrency }}</strong></div><button class="fire-button" [class.active]="service.isVoted(offer().id, 'like')" (click)="vote($event, 'like')" aria-label="Curtir oferta"><app-icon name="flame" [size]="16"/> {{ offer().likes }}</button></div>
       </div>
     </div>
   </article>`

@@ -4,8 +4,8 @@
 .coupon-card strong { font: 700 18px var(--font-family); }
 .coupon-card span { color: var(--muted); font-size: 10px; }
 .coupon-card .button { min-height: 38px; padding: 0 14px; }
-.coupon-offer-card { flex: 0 0 250px; overflow: hidden; border: 1px solid rgba(242, 25, 195, .32); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); cursor: pointer; outline: none; transition: .2s; }
-.coupon-offer-card:hover { transform: translateY(-2px); border-color: var(--primary); }
+.coupon-offer-card { flex: 0 0 250px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); cursor: pointer; outline: none; transition: .2s; }
+.coupon-offer-card:hover { transform: translateY(-2px); border-color: rgba(242, 25, 195, .32); }
 .coupon-offer-card:focus-visible { box-shadow: 0 0 0 3px rgba(242, 25, 195, .18), var(--shadow); }
 .coupon-offer-card header { display: flex; align-items: center; gap: var(--spacing-sm); min-height: 56px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
 .coupon-offer-card header > * { align-self: center; }
@@ -21,6 +21,7 @@
 .coupon-info { display: grid; flex: 1 1 auto; gap: 5px; min-width: 0; }
 .coupon-offer-main b { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 17px; letter-spacing: .04em; }
 .coupon-offer-main p { margin: 0; color: var(--muted); font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.coupon-offer-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
 .coupon-copy-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border: 1px dashed var(--primary); border-radius: var(--radius-pill); background: rgba(242, 25, 195, .08); color: var(--primary); font-size: 9px; font-weight: 800; transition: .2s; }
 .coupon-copy-button:hover { background: var(--primary); color: #fff; }
 .home-coupon-card .coupon-offer-card { width: 100%; flex-basis: auto; }
@@ -35,5 +36,7 @@
   .coupon-share-button { width: 28px; height: 28px; }
   .coupon-offer-main { gap: 7px; padding-right: 9px; padding-left: 9px; }
   .coupon-offer-main b { font-size: 15px; }
+  .coupon-offer-actions { gap: 4px; }
+  .coupon-offer-actions .fire-button { padding: 6px 7px; font-size: 8px; }
   .coupon-copy-button { padding: 7px 9px; font-size: 8px; }
 }

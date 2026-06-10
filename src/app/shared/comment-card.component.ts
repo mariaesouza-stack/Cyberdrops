@@ -10,7 +10,7 @@ import { AppIconComponent } from './app-icon.component';
     <span class="avatar mini"><app-avatar [src]="comment().user.avatar" [alt]="'Avatar de ' + comment().user.name"/></span>
     <div><strong>{{ comment().user.name }}</strong><small>{{ comment().time }}</small><p>{{ comment().text }}</p>
       <div class="comment-actions">
-        <button (click)="liked.emit(comment().id)" aria-label="Curtir comentário"><app-icon name="heart" [size]="16"/> {{ comment().likes }}</button>
+        <button class="comment-like" [class.active]="likedByUser()" (click)="liked.emit(comment().id)" aria-label="Curtir comentário"><app-icon name="heart" [size]="16"/> {{ comment().likes }}</button>
         <button (click)="toggleReply()"><app-icon name="reply" [size]="16"/>Responder</button>
         @if (isOwner()) {
           <button class="comment-delete" [class.confirming]="confirmingDelete()" (click)="requestDelete()">
@@ -33,6 +33,7 @@ export class CommentCardComponent {
   readonly comment = input.required<Comment>();
   readonly currentUserId = input.required<number>();
   readonly reported = input(false);
+  readonly likedByUser = input(false);
   readonly liked = output<number>();
   readonly replied = output<{ commentId: number; text: string }>();
   readonly deleted = output<number>();
