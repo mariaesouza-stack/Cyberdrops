@@ -9,7 +9,7 @@ import { AppIconComponent } from './app-icon.component';
   template: `<article class="comment">
     <span class="avatar mini"><app-avatar [src]="comment().user.avatar" [alt]="'Avatar de ' + comment().user.name"/></span>
     <div><strong>{{ comment().user.name }}</strong><small>{{ comment().time }}</small><p>{{ comment().text }}</p>
-      <button (click)="liked.emit(comment().id)" aria-label="Curtir comentário"><app-icon name="heart" [size]="16"/> {{ comment().likes }}</button><button (click)="toggleReply()"><app-icon name="reply" [size]="16"/>Responder</button>
+      <div class="comment-actions"><button (click)="liked.emit(comment().id)" aria-label="Curtir comentário"><app-icon name="heart" [size]="16"/> {{ comment().likes }}</button><button (click)="toggleReply()"><app-icon name="reply" [size]="16"/>Responder</button></div>
       @if (replying()) { <div class="reply-form"><input [(ngModel)]="replyText" placeholder="Escreva uma resposta"><button (click)="sendReply()" aria-label="Enviar resposta"><app-icon name="send" [size]="16"/></button></div> }
       @for (reply of comment().replies ?? []; track reply.id) {
         <div class="reply"><b><span class="avatar reply-avatar"><app-avatar [src]="reply.user.avatar" [alt]="'Avatar de ' + reply.user.name"/></span>{{ reply.user.name }}</b><p>{{ reply.text }}</p></div>

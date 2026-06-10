@@ -12,7 +12,7 @@ label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; font-weig
 input, textarea { width: 100%; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: var(--radius-md); padding: 14px 15px; outline: 0; }
 input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(242, 25, 195, .12); }
 
-.page { width: min(100%, 760px); margin: 0 auto; padding: 86px var(--spacing-md) 40px; min-height: 100vh; }
+.page { width: min(100%, 760px); margin: 0 auto; padding: calc(86px + env(safe-area-inset-top)) max(var(--spacing-md), env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom)) max(var(--spacing-md), env(safe-area-inset-left)); min-height: 100vh; }
 .eyebrow { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .2em; margin-bottom: var(--spacing-sm); }
 .muted { color: var(--muted); }
 .center { text-align: center; }
@@ -41,5 +41,27 @@ input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3p
     display: none;
     width: 0;
     height: 0;
+  }
+
+  .tabs {
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .tabs button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 350px) {
+  .page {
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .empty {
+    padding: 38px 20px;
+    text-align: center;
   }
 }

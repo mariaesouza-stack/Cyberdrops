@@ -1,6 +1,7 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Offer } from '../models';
+import { ShareService } from '../services/share.service';
 import { AppIconComponent } from './app-icon.component';
 import { DiscountLabelPipe } from './brl-format.pipe';
 import { ContentCategoryBadgeComponent } from './content-category-badge.component';
@@ -19,6 +20,7 @@ export class CouponOfferCardComponent {
   readonly offer = input.required<Offer>();
   readonly copied = signal(false);
   readonly shared = signal(false);
+  private readonly shareService = inject(ShareService);
   private readonly router = inject(Router);
 
   open(event?: Event): void { event?.preventDefault(); void this.router.navigate(['/product', this.offer().id]); }
@@ -32,10 +34,7 @@ export class CouponOfferCardComponent {
     event.stopPropagation();
     const url = `${window.location.origin}/product/${this.offer().id}`;
     const text = `${this.offer().coupon?.code}: ${this.offer().coupon?.description || this.offer().description}`;
-    if (navigator.share) {
-      try { await navigator.share({ title: `Cupom ${this.offer().store}`, text, url }); } catch { return; }
-    } else {
-      await navigator.clipboard?.writeText(url); this.shared.set(true); setTimeout(() => this.shared.set(false), 1600);
-    }
+    const result = await this.shareService.share({ title: `Cupom ${this.offer().store}`, text, url });
+    if (result === 'copied' || result === 'native') { this.shared.set(true); setTimeout(() => this.shared.set(false), 1600); }
   }
 }

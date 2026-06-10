@@ -1,7 +1,7 @@
 .publication-fab {
   position: fixed;
   right: max(18px, calc((100vw - 760px) / 2 + 18px));
-  bottom: 22px;
+  bottom: max(22px, calc(env(safe-area-inset-bottom) + 12px));
   z-index: 18;
   display: flex;
   align-items: center;
@@ -580,7 +580,7 @@
 @media (max-width: 520px) {
   .publication-fab {
     right: 14px;
-    bottom: 16px;
+    bottom: max(16px, calc(env(safe-area-inset-bottom) + 10px));
     width: 52px;
     padding: 0;
     justify-content: center;
@@ -596,6 +596,8 @@
 
   .publication-sheet {
     max-height: 92vh;
+    max-height: min(92vh, calc(100dvh - env(safe-area-inset-top)));
+    padding-bottom: env(safe-area-inset-bottom);
     border-radius: 24px 24px 0 0;
   }
 
@@ -618,6 +620,16 @@
     width: 82px;
     height: 82px;
   }
+}
+
+@media (max-width: 350px) {
+  .publication-sheet > header { padding: 16px; }
+  .publication-options { padding: 16px; }
+  .publication-options button { grid-template-columns: 42px 1fr auto; gap: 10px; padding: 13px; }
+  .publication-options button > span { width: 42px; height: 42px; border-radius: 14px; }
+  .publication-form { padding-right: 16px; padding-left: 16px; }
+  .user-publications-tab { padding-right: 12px; padding-left: 12px; }
+  .publication-status-filter { margin-right: -12px; margin-left: -12px; padding-right: 12px; padding-left: 12px; }
 }
 
 @keyframes publication-fade {

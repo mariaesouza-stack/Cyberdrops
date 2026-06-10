@@ -24,3 +24,16 @@
 .coupon-copy-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border: 1px dashed var(--primary); border-radius: var(--radius-pill); background: rgba(242, 25, 195, .08); color: var(--primary); font-size: 9px; font-weight: 800; transition: .2s; }
 .coupon-copy-button:hover { background: var(--primary); color: #fff; }
 .home-coupon-card .coupon-offer-card { width: 100%; flex-basis: auto; }
+
+@media (max-width: 350px) {
+  .coupon-offer-card header { gap: 6px; padding-right: 9px; padding-left: 9px; }
+  .coupon-publisher-avatar { width: 32px; height: 32px; }
+  .coupon-offer-card header div { min-height: 32px; }
+  .coupon-offer-card header strong { font-size: 10px; }
+  .coupon-offer-card header small { font-size: 7px; }
+  .coupon-discount { padding: 0 6px; font-size: 7px; }
+  .coupon-share-button { width: 28px; height: 28px; }
+  .coupon-offer-main { gap: 7px; padding-right: 9px; padding-left: 9px; }
+  .coupon-offer-main b { font-size: 15px; }
+  .coupon-copy-button { padding: 7px 9px; font-size: 8px; }
+}

@@ -2,6 +2,7 @@ import { Component, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { OfferService } from '../services/offer.service';
+import { ShareService } from '../services/share.service';
 import { UserService } from '../services/user.service';
 import { Offer } from '../models';
 import { AppAvatarComponent } from '../shared/app-avatar.component';
@@ -80,13 +81,12 @@ import { CouponOfferCardComponent } from '../shared/coupon-offer-card.component'
       </main>
     } @else {
     <main class="product page">
-    <a class="floating-back" routerLink="/home" aria-label="Voltar"><app-icon name="arrow-left" [size]="20"/></a><div class="product-image"><img [src]="selectedImage() || item.image" [alt]="item.title"><span class="discount">{{ item.discount | discountLabel }}</span></div>
-    <div class="gallery">@for (image of item.gallery; track image) { <button (click)="selectedImage.set(image)"><img [src]="image" alt=""></button> }</div>
+    <a class="floating-back" routerLink="/home" aria-label="Voltar"><app-icon name="arrow-left" [size]="20"/></a><div class="product-image"><img [src]="item.image" [alt]="item.title"><span class="discount">{{ item.discount | discountLabel }}</span></div>
     <section class="product-info"><h1>{{ item.title }}</h1><p>{{ item.description }}</p><div class="price"><small>{{ item.oldPrice | brlCurrency }}</small><strong>{{ item.price | brlCurrency }}</strong></div>
       <button class="button primary wide" (click)="service.openStore(item)">Ir para a loja <app-icon name="external-link" [size]="18"/></button>
       <div class="author"><span class="avatar"><app-avatar [src]="item.author.avatar" [alt]="'Avatar de ' + item.author.name"/></span><div><small>PUBLICADO POR</small><b>{{ item.author.name }}</b></div><div class="offer-actions"><button (click)="service.vote(item.id, 'like')"><app-icon name="flame" [size]="16"/>{{ item.likes }}</button><button (click)="service.toggleSaved(item.id)"><app-icon [name]="item.saved ? 'bookmark-check' : 'bookmark'" [size]="16"/>{{ item.saved ? 'Salvo' : 'Salvar' }}</button></div></div>
     </section>
-    <section class="product-detail"><div class="tabs pill-tabs"><button [class.active]="tab() === 'discussion'" (click)="tab.set('discussion')">Discussão</button><button [class.active]="tab() === 'about'" (click)="tab.set('about')">Sobre o jogo</button></div>
+    <section class="product-detail"><div class="tabs pill-tabs"><button [class.active]="tab() === 'discussion'" (click)="tab.set('discussion')">Discussão</button><button [class.active]="tab() === 'about'" (click)="tab.set('about')">Sobre o produto</button></div>
       @if (tab() === 'discussion') { <div class="discussion"><div class="comment-composer"><span class="avatar"><app-avatar [src]="user.user().avatar" [alt]="'Avatar de ' + user.user().name"/></span><textarea [(ngModel)]="commentText" placeholder="O que você achou deste drop?"></textarea><button class="button primary" (click)="comment(item.id)"><app-icon name="send" [size]="16"/>Comentar</button></div>@for (comment of item.comments; track comment.id) { <app-comment-card [comment]="comment" (liked)="likeComment(item.id, $event)" (replied)="reply(item.id, $event)"/> }</div>
       } @else { <div class="about"><h2>Um futuro que vale a pena explorar</h2><p>Explore uma metrópole obcecada por poder, glamour e modificações corporais. Construa sua lenda, escolha seu estilo e encare missões de alto risco.</p><h3>Produtos relacionados</h3><div class="related">@for (related of service.offers(); track related.id) { <article><img [src]="related.image" [alt]="related.title"><div><b>{{ related.title }}</b><strong>{{ related.price | brlCurrency }}</strong><a class="button secondary" [routerLink]="['/product', related.id]">Ver produto</a></div></article> }</div></div> }
     </section>
@@ -97,9 +97,9 @@ import { CouponOfferCardComponent } from '../shared/coupon-offer-card.component'
 export class ProductPage {
   readonly id = input<string>();
   readonly service = inject(OfferService);
+  readonly shareService = inject(ShareService);
   readonly user = inject(UserService);
   readonly tab = signal<'discussion' | 'about'>('discussion');
-  readonly selectedImage = signal('');
   readonly copied = signal(false);
   readonly shared = signal(false);
   commentText = '';
@@ -124,10 +124,8 @@ export class ProductPage {
   }
   async share(item: Offer): Promise<void> {
     const url = `${window.location.origin}/product/${item.id}`;
-    if (navigator.share) {
-      try { await navigator.share({ title: item.title, text: `${item.coupon?.code}: ${item.coupon?.description || item.description}`, url }); } catch { return; }
-    } else {
-      await navigator.clipboard?.writeText(url);
+    const result = await this.shareService.share({ title: item.title, text: `${item.coupon?.code}: ${item.coupon?.description || item.description}`, url });
+    if (result === 'copied' || result === 'native') {
       this.shared.set(true);
       setTimeout(() => this.shared.set(false), 1600);
     }

@@ -4,10 +4,6 @@
 .product-image:hover img { transform: scale(1.02); }
 .product-image .discount { left: auto; right: 12px; }
 .floating-back { position: fixed; top: 82px; }
-.gallery { display: flex; gap: var(--spacing-sm); padding: 10px 16px; overflow: auto; }
-.gallery button { padding: 0; border: 2px solid transparent; border-radius: 12px; overflow: hidden; background: none; min-width: 74px; transition: .2s; }
-.gallery button:hover { border-color: var(--primary); transform: translateY(-2px); }
-.gallery img { width: 74px; height: 54px; object-fit: cover; }
 .product-info, .product-detail { padding: var(--spacing-md); }
 .product-info h1 { font-size: 27px; }
 .product-info > p, .about p { color: var(--muted); line-height: 1.6; font-size: 13px; }
@@ -20,7 +16,8 @@
 .product-detail { border-top: 8px solid var(--surface); }
 .product-detail > .pill-tabs { margin-bottom: 16px; }
 .comment-composer { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 14px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
-.comment-composer textarea { min-height: 78px; margin: 0; grid-column: 2; }
+.comment-composer textarea { min-height: 78px; margin: 0; grid-column: 2; font-size: 12px; }
+.comment-composer textarea::placeholder { font-size: 12px; }
 .comment-composer .button { grid-column: 2; justify-self: end; min-height: 38px; padding: 0 18px; }
 .related { display: flex; gap: 12px; overflow: auto; margin: 0 -16px; padding: 0 16px 6px; }
 .related article { flex: 0 0 210px; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
@@ -103,4 +100,10 @@
   .coupon-related .coupon-copy-button span { display: none; }
   .coupon-detail-actions button { gap: 4px; padding: 0 5px; font-size: 9px; }
   .coupon-worked-actions { grid-template-columns: 1fr; }
+  .comment-composer { grid-template-columns: 38px minmax(0, 1fr); gap: 8px; padding: 10px; }
+  .comment-composer .avatar { width: 38px; height: 38px; }
+  .comment-composer textarea { padding: 11px; }
+  .comment-composer .button { min-height: 36px; padding: 0 14px; }
+  .author { flex-wrap: wrap; }
+  .author .offer-actions { width: 100%; justify-content: flex-end; }
 }

@@ -207,3 +207,10 @@
   font-size: 11px;
   line-height: 1.6;
 }
+
+@media (max-width: 350px) {
+  .notification-main { grid-template-columns: 36px 1fr; gap: 9px; padding: 13px; }
+  .notification-event-icon { width: 36px; height: 36px; border-radius: 12px; }
+  .notification-copy > span:not(.notification-title-row) { font-size: 10px; }
+  .notification-quick-actions button { min-height: 32px; padding-right: 10px; padding-left: 10px; font-size: 8px; }
+}

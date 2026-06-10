@@ -40,3 +40,15 @@
 .offer-skeleton b { height: 40px; }
 .offer-skeleton span { height: 80px; }
 @keyframes skeleton { to { background-position: -200% 0; } }
+
+@media (max-width: 350px) {
+  .offer-user { gap: 7px; padding-right: 9px; padding-left: 9px; }
+  .offer-user .avatar.mini { width: 32px; height: 32px; }
+  .offer-user strong { font-size: 11px; }
+  .offer-user small { font-size: 8px; }
+  .offer-main { grid-template-columns: minmax(100px, 34%) 1fr; gap: 9px; padding-right: 9px; padding-left: 9px; }
+  .offer-body h2 { font-size: 12px; }
+  .offer-body p { -webkit-line-clamp: 1; font-size: 9px; }
+  .offer-body .price strong { font-size: 15px; }
+  .fire-button { padding: 6px 8px; font-size: 9px; }
+}

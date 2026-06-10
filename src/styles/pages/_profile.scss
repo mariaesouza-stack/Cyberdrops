@@ -61,6 +61,7 @@
   margin: 0;
   width: 100%;
   max-width: 100%;
+  overscroll-behavior-x: contain;
 }
 
 .profile-page > .pill-tabs button span {
@@ -193,4 +194,14 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@media (max-width: 350px) {
+  .profile-hero { padding-right: 12px; padding-left: 12px; }
+  .profile-page > .tabs { padding-right: 12px; padding-left: 12px; }
+  .profile-page > .pill-tabs button { padding-right: 14px; padding-left: 14px; font-size: 11px; }
+  .profile-form, .notification-list, .saved-offers { padding-right: 12px; padding-left: 12px; }
+  .notification-list button { gap: 10px; }
+  .notification-list b { font-size: 11px; }
+  .notification-list small { font-size: 9px; }
 }

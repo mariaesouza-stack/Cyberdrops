@@ -2,7 +2,7 @@
 .brand img { width: 126px; height: 32px; object-fit: contain; filter: brightness(0) invert(1); transition: filter .25s, opacity .2s; }
 .brand:hover img { opacity: .78; }
 .brand.center { justify-content: center; }
-.app-header { position: fixed; inset: 0 0 auto; height: 64px; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--spacing-md); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid rgba(255, 255, 255, .06); backdrop-filter: blur(18px); }
+.app-header { position: fixed; inset: 0 0 auto; height: calc(64px + env(safe-area-inset-top)); z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: env(safe-area-inset-top) max(var(--spacing-md), env(safe-area-inset-right)) 0 max(var(--spacing-md), env(safe-area-inset-left)); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid rgba(255, 255, 255, .06); backdrop-filter: blur(18px); }
 .header-actions { display: flex; align-items: center; gap: var(--spacing-sm); }
 .icon-button { width: 32px; height: 32px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); display: inline-grid; place-items: center; line-height: 0; font-size: 22px; }
 .icon-button app-icon { display: grid; place-items: center; }
@@ -11,7 +11,8 @@
 
 @media (max-width: 420px) {
   .app-header {
-    padding: 0 12px;
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-left: max(12px, env(safe-area-inset-left));
   }
 
   .brand img {

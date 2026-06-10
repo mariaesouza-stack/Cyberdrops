@@ -57,3 +57,9 @@
     flex-wrap: wrap;
   }
 }
+
+@media (max-width: 350px) {
+  .notifications-heading { gap: 10px; }
+  .notifications-heading h1 { font-size: 28px; }
+  .notifications-heading p:last-child { font-size: 9px; }
+}

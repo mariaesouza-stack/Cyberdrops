@@ -139,3 +139,12 @@
   color: var(--muted);
   font-size: 9px;
 }
+
+@media (max-width: 350px) {
+  .search-page h1 { font-size: 27px; }
+  .search-box { gap: 5px; padding: 0 10px; }
+  .search-box input { padding-right: 4px; padding-left: 4px; font-size: 11px; }
+  .popular-stores, .coupon-scroll, .game-carousel { margin-right: -12px; margin-left: -12px; padding-right: 12px; padding-left: 12px; }
+  .game-carousel a { flex-basis: 138px; }
+  .game-carousel img { height: 176px; }
+}
