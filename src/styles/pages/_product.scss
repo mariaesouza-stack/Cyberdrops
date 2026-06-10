@@ -77,6 +77,7 @@
 .coupon-detail-actions button.active, .coupon-worked-actions button.active { background: rgba(242, 25, 195, .13); }
 .coupon-detail-actions button:nth-child(2).active { border-color: rgba(139, 92, 246, .48); background: rgba(139, 92, 246, .14); color: #bda7ff; }
 .coupon-worked-actions button:last-child.active { border-color: rgba(255, 91, 114, .5); background: rgba(255, 91, 114, .12); color: #ff7b8f; }
+.coupon-detail-actions button:not(.active), .coupon-worked-actions button:not(.active) { border-color: var(--line); background: var(--surface); color: var(--muted); }
 .coupon-detail-actions b, .coupon-worked-actions b { color: inherit; font-size: 9px; }
 .coupon-section { display: grid; gap: 14px; padding: 16px; }
 .coupon-section-title { display: flex; align-items: center; gap: 8px; color: var(--primary); }

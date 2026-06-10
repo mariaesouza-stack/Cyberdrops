@@ -33,11 +33,13 @@
 .fire-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface-2); color: var(--muted); padding: 7px 9px; font-size: 10px; transition: .2s; }
 .fire-button:hover { border-color: var(--primary); color: var(--text); transform: translateY(-1px); }
 .fire-button.active { border-color: rgba(242, 25, 195, .5); background: rgba(242, 25, 195, .14); color: var(--primary); }
+.fire-button:not(.active) { border-color: var(--line); background: var(--surface-2); color: var(--muted); }
 .offer-actions { display: flex; gap: 5px; margin-top: 14px; }
 .offer-actions button { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); border-radius: var(--radius-pill); padding: 8px 11px; font-size: 11px; }
 .offer-actions button:last-child { margin-left: auto; }
 .offer-actions button.active { border-color: rgba(139, 92, 246, .48); background: rgba(139, 92, 246, .14); color: #bda7ff; }
 .offer-actions button:first-child.active { border-color: rgba(242, 25, 195, .5); background: rgba(242, 25, 195, .14); color: var(--primary); }
+.offer-actions button:not(.active) { border-color: var(--line); background: var(--surface-2); color: var(--muted); }
 .offer-skeleton { height: 190px; border-radius: var(--radius-lg); background: var(--surface); padding: 14px; display: grid; grid-template-columns: 35% 1fr; gap: 12px; overflow: hidden; }
 .offer-skeleton i, .offer-skeleton span, .offer-skeleton b { border-radius: 12px; background: linear-gradient(90deg, var(--skeleton) 25%, var(--skeleton-highlight) 50%, var(--skeleton) 75%); background-size: 200% 100%; animation: skeleton 1.2s infinite; }
 .offer-skeleton i { grid-row: 1 / 3; }

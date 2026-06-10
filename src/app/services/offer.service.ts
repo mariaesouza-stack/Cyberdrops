@@ -228,7 +228,8 @@ export class OfferService {
     const author = CYBERDROPS_BOT; const image = offer.coupon ? 'assets/coupon-background.png' : (offer.image || fallbackOffers[0].image!);
     const price = normalizeCurrency(offer.currentPrice);
     const oldPrice = normalizeCurrency(offer.oldPrice ?? price);
-    return { id: offer.id, author, publisherType: 'bot', store: offer.store, time: 'recentemente', image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.commentsFor(offer.id), coupon: offer.coupon || undefined, url: offer.url || '#', createdAt: offer.createdAt || new Date().toISOString(), saved: this.interactions.saved.includes(offer.id) };
+    const createdAt = offer.createdAt || new Date().toISOString();
+    return { id: offer.id, author, publisherType: 'bot', store: offer.store, time: this.relativeTime(createdAt), image, gallery: [image], discount: Math.round(Math.abs(offer.discount || 0)), category: offer.category || 'Games', title: offer.title, description: offer.description || `Oferta encontrada na ${offer.store}.`, oldPrice, price, likes: 120 + (this.interactions.likes[offer.id] || 0), dislikes: 4 + (this.interactions.dislikes[offer.id] || 0), comments: this.commentsFor(offer.id), coupon: offer.coupon || undefined, url: offer.url || '#', createdAt, saved: this.interactions.saved.includes(offer.id) };
   }
   private upsert(offer: Offer): void { this.offers.update(items => items.some(item => item.id === offer.id) ? items.map(item => item.id === offer.id ? offer : item) : [...items, offer]); }
   private patchComments(id: number): void { this.offers.update(items => items.map(item => item.id === id ? { ...item, comments: this.interactions.comments[id] } : item)); }
@@ -279,6 +280,18 @@ export class OfferService {
   private formatDate(value: string): string {
     if (!value) return 'data não informada';
     return new Intl.DateTimeFormat('pt-BR').format(new Date(`${value}T12:00:00`));
+  }
+  private relativeTime(value: string): string {
+    const elapsed = Math.max(0, Date.now() - new Date(value).getTime());
+    const minutes = Math.floor(elapsed / 60_000);
+    if (minutes < 1) return 'agora';
+    if (minutes < 60) return `há ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `há ${hours} h`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `há ${days} ${days === 1 ? 'dia' : 'dias'}`;
+    const months = Math.floor(days / 30);
+    return `há ${months} ${months === 1 ? 'mês' : 'meses'}`;
   }
   private persist(): void { localStorage.setItem(this.storageKey, JSON.stringify(this.interactions)); }
 }
