@@ -138,20 +138,36 @@
               </b>
               <p>{{ reply.text }}</p>
               <div class="reply-actions">
-                <span>
-                  <app-icon name="heart" [size]="13" />{{ reply.likes }}
-                </span>
+                <button
+                  class="comment-like"
+                  [class.active]="isReplyLiked(reply.id)"
+                  (click)="
+                    likedReply.emit({
+                      commentId: comment().id,
+                      replyId: reply.id,
+                    })
+                  "
+                  aria-label="Curtir resposta"
+                >
+                  <app-icon name="heart" [size]="14" />{{ reply.likes }}
+                </button>
                 @if (isReplyOwner(reply)) {
                   <button
                     class="comment-delete"
                     [class.confirming]="confirmingReplyDelete() === reply.id"
                     (click)="requestReplyDelete(reply.id)"
-                  >
-                    <app-icon name="trash" [size]="14" />{{
+                    [attr.aria-label]="
                       confirmingReplyDelete() === reply.id
-                        ? "Confirmar"
-                        : "Apagar"
-                    }}
+                        ? 'Confirmar exclusão da resposta'
+                        : 'Apagar resposta'
+                    "
+                    [attr.title]="
+                      confirmingReplyDelete() === reply.id
+                        ? 'Confirmar exclusão'
+                        : 'Apagar resposta'
+                    "
+                  >
+                    <app-icon name="trash" [size]="14" />
                   </button>
                 } @else {
                   <button

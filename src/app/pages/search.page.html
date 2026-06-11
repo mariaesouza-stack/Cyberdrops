@@ -26,7 +26,7 @@
   <div class="search-results">
     <h2>Resultados para “{{ query() }}”</h2>
     @for (offer of results(); track offer.id) {
-    <app-offer-card [offer]="offer" /> } @empty {
+    <app-offer-card [offer]="offer" navigationFrom="search" /> } @empty {
     <div class="empty">
       <app-icon name="search" [size]="36" /><b>Nenhum drop encontrado.</b
       ><span>Tente buscar por Steam, games ou hardware.</span>
@@ -56,6 +56,7 @@
           [showLike]="false"
           [showShare]="false"
           [compactCopy]="true"
+          navigationFrom="search"
         />
         }
       </div>
@@ -64,7 +65,7 @@
       <div class="section-heading"><h2>Produtos populares</h2></div>
       <div class="related search-related-products">
         @for (product of popularProducts(); track product.id) {
-        <app-related-product-card [product]="product" /> }
+        <app-related-product-card [product]="product" navigationFrom="search" /> }
       </div>
     </section>
   </div>

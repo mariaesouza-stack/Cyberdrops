@@ -16,8 +16,10 @@ export class CommentCardComponent {
   readonly currentUser = input<User>();
   readonly reported = input(false);
   readonly reportedReplyIds = input<number[]>([]);
+  readonly likedReplyIds = input<number[]>([]);
   readonly likedByUser = input(false);
   readonly liked = output<number>();
+  readonly likedReply = output<{ commentId: number; replyId: number }>();
   readonly replied = output<{ commentId: number; text: string }>();
   readonly deleted = output<number>();
   readonly reportedComment = output<number>();
@@ -74,6 +76,9 @@ export class CommentCardComponent {
   }
   isReplyReported(replyId: number): boolean {
     return this.reportedReplyIds().includes(replyId);
+  }
+  isReplyLiked(replyId: number): boolean {
+    return this.likedReplyIds().includes(replyId);
   }
   sortedReplies(): Comment[] {
     return [...(this.comment().replies || [])].sort(

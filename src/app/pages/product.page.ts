@@ -57,6 +57,7 @@ const DEFAULT_ABOUT_DESCRIPTION =
 })
 export class ProductPage {
   readonly id = input<string>();
+  readonly from = input("");
   readonly service = inject(OfferService);
   readonly shareService = inject(ShareService);
   readonly user = inject(UserService);
@@ -82,6 +83,11 @@ export class ProductPage {
   offer() {
     return this.service.getById(Number(this.id()) || 1);
   }
+  backRoute(): string {
+    if (this.from() === "search") return "/search";
+    if (this.from() === "notifications") return "/notifications";
+    return "/home";
+  }
   comment(id: number): void {
     if (!this.commentText.trim()) return;
     this.service.addComment(id, this.commentText.trim(), this.user.user());
@@ -90,6 +96,9 @@ export class ProductPage {
   }
   likeComment(id: number, commentId: number): void {
     this.service.likeComment(id, commentId);
+  }
+  likeReply(id: number, event: { commentId: number; replyId: number }): void {
+    this.service.likeReply(id, event.commentId, event.replyId);
   }
   reply(id: number, event: { commentId: number; text: string }): void {
     this.service.reply(id, event.commentId, event.text, this.user.user());
@@ -149,6 +158,11 @@ export class ProductPage {
       .filter((reply) =>
         this.service.isReplyReported(id, reply.id, this.user.user().id),
       )
+      .map((reply) => reply.id);
+  }
+  likedReplyIds(id: number, comment: Offer["comments"][number]): number[] {
+    return (comment.replies || [])
+      .filter((reply) => this.service.isReplyLiked(id, reply.id))
       .map((reply) => reply.id);
   }
   visibleComments(item: Offer) {

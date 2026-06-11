@@ -12,15 +12,20 @@ import { BrlCurrencyPipe } from "./brl-format.pipe";
 })
 export class RelatedProductCardComponent {
   readonly product = input.required<Offer>();
+  readonly navigationFrom = input("");
   private readonly router = inject(Router);
   private readonly viewportScroller = inject(ViewportScroller);
 
   async open(event?: Event): Promise<void> {
     event?.preventDefault();
-    const navigated = await this.router.navigate([
-      "/product",
-      this.product().id,
-    ]);
+    const navigated = await this.router.navigate(
+      ["/product", this.product().id],
+      {
+        queryParams: this.navigationFrom()
+          ? { from: this.navigationFrom() }
+          : undefined,
+      },
+    );
     if (navigated)
       requestAnimationFrame(() =>
         this.viewportScroller.scrollToPosition([0, 0]),

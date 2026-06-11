@@ -27,6 +27,7 @@ export class CouponOfferCardComponent {
   readonly showLike = input(true);
   readonly showShare = input(true);
   readonly compactCopy = input(false);
+  readonly navigationFrom = input("");
   readonly copied = signal(false);
   readonly shared = signal(false);
   private readonly shareService = inject(ShareService);
@@ -37,7 +38,11 @@ export class CouponOfferCardComponent {
 
   async open(event?: Event): Promise<void> {
     event?.preventDefault();
-    const navigated = await this.router.navigate(["/product", this.offer().id]);
+    const navigated = await this.router.navigate(["/product", this.offer().id], {
+      queryParams: this.navigationFrom()
+        ? { from: this.navigationFrom() }
+        : undefined,
+    });
     if (navigated)
       requestAnimationFrame(() =>
         this.viewportScroller.scrollToPosition([0, 0]),

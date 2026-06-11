@@ -1,7 +1,7 @@
 @if (offer(); as item) { @if (item.coupon) {
 <main class="coupon-detail page">
   <header class="coupon-detail-header">
-    <a routerLink="/home" aria-label="Voltar"
+    <a [routerLink]="backRoute()" aria-label="Voltar"
       ><app-icon name="arrow-left" [size]="20"
     /></a>
     <div>
@@ -182,8 +182,10 @@
         [currentUser]="user.user()"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
         [reportedReplyIds]="reportedReplyIds(item.id, comment)"
+        [likedReplyIds]="likedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"
         (liked)="likeComment(item.id, $event)"
+        (likedReply)="likeReply(item.id, $event)"
         (replied)="reply(item.id, $event)"
         (deleted)="deleteComment(item.id, $event)"
         (deletedReply)="deleteReply(item.id, $event)"
@@ -219,7 +221,7 @@
 </main>
 } @else {
 <main class="product page">
-  <a class="floating-back" routerLink="/home" aria-label="Voltar"
+  <a class="floating-back" [routerLink]="backRoute()" aria-label="Voltar"
     ><app-icon name="arrow-left" [size]="20"
   /></a>
   <div class="product-image">
@@ -304,8 +306,10 @@
         [currentUser]="user.user()"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
         [reportedReplyIds]="reportedReplyIds(item.id, comment)"
+        [likedReplyIds]="likedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"
         (liked)="likeComment(item.id, $event)"
+        (likedReply)="likeReply(item.id, $event)"
         (replied)="reply(item.id, $event)"
         (deleted)="deleteComment(item.id, $event)"
         (deletedReply)="deleteReply(item.id, $event)"

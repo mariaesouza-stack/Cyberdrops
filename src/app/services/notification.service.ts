@@ -40,6 +40,7 @@ export class NotificationService {
     this.markAsRead(item.id);
     await this.router.navigate(
       item.offerId ? ["/product", item.offerId] : ["/profile"],
+      item.offerId ? { queryParams: { from: "notifications" } } : undefined,
     );
   }
 
@@ -54,9 +55,21 @@ export class NotificationService {
 
   private read(): AppNotification[] {
     try {
-      return JSON.parse(
+      const saved = JSON.parse(
         localStorage.getItem(this.storageKey) || "",
       ) as AppNotification[];
+      const savedById = new Map(saved.map((item) => [item.id, item]));
+      const mockIds = new Set(MOCK_NOTIFICATIONS.map((item) => item.id));
+      return [
+        ...MOCK_NOTIFICATIONS.map((item) => ({
+          ...item,
+          read: savedById.get(item.id)?.read ?? item.read,
+        })),
+        ...saved.filter((item) => !mockIds.has(item.id)),
+      ].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
     } catch {
       return MOCK_NOTIFICATIONS;
     }

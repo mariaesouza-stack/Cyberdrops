@@ -22,13 +22,18 @@ import { ContentCategoryBadgeComponent } from "./content-category-badge.componen
 })
 export class OfferCardComponent {
   readonly offer = input.required<Offer>();
+  readonly navigationFrom = input("");
   readonly service = inject(OfferService);
   readonly shareService = inject(ShareService);
   readonly shared = signal(false);
   private readonly router = inject(Router);
   open(event?: Event): void {
     event?.preventDefault();
-    void this.router.navigate(["/product", this.offer().id]);
+    void this.router.navigate(["/product", this.offer().id], {
+      queryParams: this.navigationFrom()
+        ? { from: this.navigationFrom() }
+        : undefined,
+    });
   }
   vote(event: Event, kind: "like" | "dislike"): void {
     event.stopPropagation();

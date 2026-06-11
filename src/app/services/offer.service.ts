@@ -51,6 +51,7 @@ interface LocalInteractions {
   likedOffers: number[];
   dislikedOffers: number[];
   likedComments: Record<string, number[]>;
+  likedReplies: Record<string, number[]>;
 }
 
 const fallbackOffers = mockCatalog as ApiOffer[];
@@ -235,6 +236,36 @@ export class OfferService {
   isCommentLiked(id: number, commentId: number): boolean {
     return (this.interactions.likedComments[id] || []).includes(commentId);
   }
+  likeReply(id: number, commentId: number, replyId: number): void {
+    const comments =
+      this.offers().find((item) => item.id === id)?.comments || [];
+    this.interactions.likedReplies ||= {};
+    const liked = this.interactions.likedReplies[id] || [];
+    const active = liked.includes(replyId);
+    this.interactions.likedReplies[id] = active
+      ? liked.filter((item) => item !== replyId)
+      : [...liked, replyId];
+    this.interactions.comments[id] = comments.map((comment) =>
+      comment.id === commentId
+        ? {
+            ...comment,
+            replies: (comment.replies || []).map((reply) =>
+              reply.id === replyId
+                ? {
+                    ...reply,
+                    likes: Math.max(0, reply.likes + (active ? -1 : 1)),
+                  }
+                : reply,
+            ),
+          }
+        : comment,
+    );
+    this.persist();
+    this.patchComments(id);
+  }
+  isReplyLiked(id: number, replyId: number): boolean {
+    return (this.interactions.likedReplies?.[id] || []).includes(replyId);
+  }
   reply(id: number, commentId: number, text: string, user: User): void {
     const comments =
       this.offers().find((item) => item.id === id)?.comments || [];
@@ -277,6 +308,10 @@ export class OfferService {
     this.interactions.reportedComments[id] = (
       this.interactions.reportedComments[id] || []
     ).filter((report) => report.replyId !== replyId);
+    this.interactions.likedReplies ||= {};
+    this.interactions.likedReplies[id] = (
+      this.interactions.likedReplies[id] || []
+    ).filter((likedReplyId) => likedReplyId !== replyId);
     this.persist();
     this.patchComments(id);
     return true;
@@ -640,6 +675,7 @@ export class OfferService {
         likedOffers,
         dislikedOffers,
         likedComments: saved.likedComments || {},
+        likedReplies: saved.likedReplies || {},
       };
     } catch {
       return {
@@ -651,6 +687,7 @@ export class OfferService {
         likedOffers: [],
         dislikedOffers: [],
         likedComments: {},
+        likedReplies: {},
       };
     }
   }

@@ -580,18 +580,34 @@
   align-items: center;
   gap: 6px;
 }
-.reply-actions > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--muted);
-  font-size: 9px;
-  font-weight: 700;
-}
 .reply-actions button {
-  min-height: 30px;
-  padding: 5px 8px;
-  font-size: 9px;
+  min-height: 34px;
+  padding: 8px 11px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+}
+.reply-actions .comment-like.active {
+  color: var(--primary);
+  border-color: rgba(242, 25, 195, 0.5);
+  background: rgba(242, 25, 195, 0.14);
+}
+.reply-actions .comment-like:not(.active) {
+  color: var(--muted);
+  border-color: var(--line);
+  background: var(--surface-2);
+}
+.reply-actions .comment-delete:hover {
+  color: #ff6b7a;
+  border-color: rgba(255, 107, 122, 0.5);
+}
+.reply-actions .comment-delete {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  margin-left: auto;
+  padding: 0;
 }
 .reply-actions .comment-report {
   display: grid;
