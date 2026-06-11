@@ -6,6 +6,7 @@ import { environment } from "../../environments/environment";
 import { COMMUNITY_COMMENTS } from "../core/community-comments";
 import { COMMUNITY_USERS, CYBERDROPS_BOT } from "../core/community-users";
 import { formatCurrency, normalizeCurrency } from "../core/currency.utils";
+import { mockEngagement } from "../core/mock-engagement";
 import { PUBLICATION_MESSAGES } from "../core/publication.constants";
 import {
   Comment,
@@ -587,6 +588,8 @@ export class OfferService {
     const price = normalizeCurrency(offer.currentPrice);
     const oldPrice = normalizeCurrency(offer.oldPrice ?? price);
     const createdAt = offer.createdAt || new Date().toISOString();
+    const discount = Math.round(Math.abs(offer.discount || 0));
+    const engagement = mockEngagement(offer.id, discount, !!offer.coupon);
     return {
       id: offer.id,
       author,
@@ -595,14 +598,17 @@ export class OfferService {
       time: this.relativeTime(createdAt),
       image,
       gallery: [image],
-      discount: Math.round(Math.abs(offer.discount || 0)),
+      discount,
       category: offer.category || "Games",
       title: offer.title,
       description: offer.description || `Oferta encontrada na ${offer.store}.`,
       oldPrice,
       price,
-      likes: 120 + (this.interactions.likes[offer.id] || 0),
-      dislikes: 4 + (this.interactions.dislikes[offer.id] || 0),
+      likes: Math.max(0, engagement.likes + (this.interactions.likes[offer.id] || 0)),
+      dislikes: Math.max(
+        0,
+        engagement.dislikes + (this.interactions.dislikes[offer.id] || 0),
+      ),
       comments: this.commentsFor(offer.id),
       coupon: offer.coupon || undefined,
       url: offer.url || "#",

@@ -71,7 +71,7 @@
     @if (service.loading()) { @for (item of [1,2,3]; track item) {
     <div class="offer-skeleton"><i></i><span></span><b></b></div>
     } } @else { @if (feedType() === 'Todos') { @for (offer of
-    chronologicalOffers(); track offer.id) { @if (offer.coupon) {
+    relevantOffers(); track offer.id) { @if (offer.coupon) {
     <app-coupon-offer-card class="home-coupon-card" [offer]="offer" /> } @else {
     <app-offer-card [offer]="offer" /> } } } @else if (feedType() === 'Cupons')
     { @for (coupon of couponOffers(); track coupon.id) {

@@ -57,7 +57,7 @@ export class HomePage {
       ),
   );
   readonly couponOffers = computed(() => {
-    const coupons = this.sortByNewest(
+    const coupons = this.sortByRelevance(
       this.offers().filter((offer) => offer.coupon),
     );
     if (coupons.length) return coupons;
@@ -77,10 +77,10 @@ export class HomePage {
       : [];
   });
   readonly productOffers = computed(() =>
-    this.sortByNewest(this.offers().filter((offer) => !offer.coupon)),
+    this.sortByRelevance(this.offers().filter((offer) => !offer.coupon)),
   );
-  readonly chronologicalOffers = computed(() =>
-    this.sortByNewest(this.offers()),
+  readonly relevantOffers = computed(() =>
+    this.sortByRelevance(this.offers()),
   );
   readonly visibleOffersCount = computed(() => {
     if (this.feedType() === "Produtos") return this.productOffers().length;
@@ -112,12 +112,16 @@ export class HomePage {
   clearCategories(): void {
     this.categories.set([]);
   }
-  private sortByNewest<T extends { id: number; createdAt: string }>(
+  private sortByRelevance<
+    T extends { id: number; likes: number; createdAt: string },
+  >(
     offers: T[],
   ): T[] {
     return [...offers].sort(
       (a, b) =>
-        this.postedAt(b.createdAt) - this.postedAt(a.createdAt) || b.id - a.id,
+        b.likes - a.likes ||
+        this.postedAt(b.createdAt) - this.postedAt(a.createdAt) ||
+        b.id - a.id,
     );
   }
   private postedAt(value: string): number {
