@@ -12,34 +12,49 @@
       <label
         >Nome completo<input
           [(ngModel)]="name"
+          (ngModelChange)="saveDraft()"
           name="name"
           placeholder="Como podemos te chamar?" /></label
       ><label
         >Nome de usuário<input
           [(ngModel)]="username"
+          (ngModelChange)="saveDraft()"
           name="username"
           placeholder="@seuusername" /></label
       ><label
         >E-mail<input
           [(ngModel)]="email"
+          (ngModelChange)="saveDraft()"
           name="email"
           type="email"
           placeholder="voce@email.com" /></label
       ><label
         >Telefone<input
           [(ngModel)]="phone"
+          (ngModelChange)="saveDraft()"
           name="phone"
           type="tel"
           placeholder="(00) 00000-0000" /></label
       ><label
         >Senha<input
           [(ngModel)]="password"
+          (ngModelChange)="saveDraft()"
           name="password"
           type="password"
           placeholder="Crie uma senha forte"
       /></label>
       <label class="check"
-        ><input type="checkbox" required /> Li e aceito os termos de uso</label
+        ><input
+          [(ngModel)]="termsAccepted"
+          (ngModelChange)="saveDraft()"
+          name="termsAccepted"
+          type="checkbox"
+          required
+        />
+        <span
+          >Li e aceito os
+          <a routerLink="/terms" (click)="saveDraft()">Termos de Uso</a></span
+        ></label
       ><button class="button primary wide">Finalizar cadastro</button>
     </form>
     <div class="divider"><span>cadastro rápido</span></div>

@@ -11,11 +11,13 @@ import { RegisterPage } from "./pages/register.page";
 import { ResetPasswordConfirmationPage } from "./pages/reset-password-confirmation.page";
 import { SearchPage } from "./pages/search.page";
 import { SplashPage } from "./pages/splash.page";
+import { TermsPage } from "./pages/terms.page";
 
 export const routes: Routes = [
   { path: "", component: SplashPage },
   { path: "login", component: LoginPage },
   { path: "register", component: RegisterPage },
+  { path: "terms", component: TermsPage },
   { path: "forgot-password", component: ForgotPasswordPage },
   {
     path: "reset-password-confirmation",

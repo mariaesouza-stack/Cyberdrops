@@ -18,6 +18,7 @@ export class AppComponent {
           "/",
           "/login",
           "/register",
+          "/terms",
           "/forgot-password",
           "/reset-password-confirmation",
           "/create-new-password",

@@ -50,6 +50,17 @@
 .check input {
   width: auto;
 }
+.check span {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.check a {
+  color: var(--primary);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .divider {
   display: flex;
   align-items: center;
@@ -76,6 +87,94 @@
   border-radius: var(--radius-pill);
   padding: 12px;
   font-weight: 700;
+}
+
+.terms-page {
+  min-height: 100vh;
+  padding: 72px 16px 40px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(242, 25, 195, 0.11),
+      transparent 32%
+    ),
+    var(--bg);
+}
+
+.terms-card {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.terms-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.terms-header > span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(242, 25, 195, 0.36);
+  border-radius: 16px;
+  background: rgba(242, 25, 195, 0.09);
+  color: var(--primary);
+}
+
+.terms-header h1,
+.terms-header p {
+  margin: 0;
+}
+
+.terms-header small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.terms-intro,
+.terms-card section,
+.terms-footer {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.terms-intro {
+  border-color: rgba(242, 25, 195, 0.25);
+  background: rgba(242, 25, 195, 0.06);
+}
+
+.terms-intro strong {
+  font-size: 13px;
+}
+
+.terms-card h2 {
+  margin: 0 0 7px;
+  font-size: 13px;
+}
+
+.terms-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.terms-footer {
+  display: grid;
+  gap: 13px;
+  margin-top: 4px;
+}
+
+.terms-footer .button {
+  gap: 7px;
 }
 
 .recovery-card {
