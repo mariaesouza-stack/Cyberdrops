@@ -100,6 +100,14 @@
         </article>
 
         <div class="reply-form">
+          @if (currentUser(); as replyAuthor) {
+            <span class="avatar comment-thread-user-avatar">
+              <app-avatar
+                [src]="replyAuthor.avatar"
+                [alt]="'Avatar de ' + replyAuthor.name"
+              />
+            </span>
+          }
           <input
             [(ngModel)]="replyText"
             placeholder="Escreva uma resposta"

@@ -179,6 +179,7 @@
       <app-comment-card
         [comment]="comment"
         [currentUserId]="user.user().id"
+        [currentUser]="user.user()"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
         [reportedReplyIds]="reportedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"
@@ -300,6 +301,7 @@
       <app-comment-card
         [comment]="comment"
         [currentUserId]="user.user().id"
+        [currentUser]="user.user()"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
         [reportedReplyIds]="reportedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"

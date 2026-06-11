@@ -1,6 +1,6 @@
 import { Component, input, output, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Comment } from "../models";
+import { Comment, User } from "../models";
 import { AppAvatarComponent } from "./app-avatar.component";
 import { AppIconComponent } from "./app-icon.component";
 
@@ -13,6 +13,7 @@ import { AppIconComponent } from "./app-icon.component";
 export class CommentCardComponent {
   readonly comment = input.required<Comment>();
   readonly currentUserId = input.required<number>();
+  readonly currentUser = input<User>();
   readonly reported = input(false);
   readonly reportedReplyIds = input<number[]>([]);
   readonly likedByUser = input(false);
