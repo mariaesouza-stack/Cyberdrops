@@ -180,11 +180,14 @@
         [comment]="comment"
         [currentUserId]="user.user().id"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
+        [reportedReplyIds]="reportedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"
         (liked)="likeComment(item.id, $event)"
         (replied)="reply(item.id, $event)"
         (deleted)="deleteComment(item.id, $event)"
+        (deletedReply)="deleteReply(item.id, $event)"
         (reportedComment)="openReport(item.id, $event)"
+        (reportedReply)="openReplyReport(item.id, $event)"
       />
       }
     </div>
@@ -298,11 +301,14 @@
         [comment]="comment"
         [currentUserId]="user.user().id"
         [reported]="service.isCommentReported(item.id, comment.id, user.user().id)"
+        [reportedReplyIds]="reportedReplyIds(item.id, comment)"
         [likedByUser]="service.isCommentLiked(item.id, comment.id)"
         (liked)="likeComment(item.id, $event)"
         (replied)="reply(item.id, $event)"
         (deleted)="deleteComment(item.id, $event)"
+        (deletedReply)="deleteReply(item.id, $event)"
         (reportedComment)="openReport(item.id, $event)"
+        (reportedReply)="openReplyReport(item.id, $event)"
       />
       }@if (hasMoreComments(item)) {
       <button
@@ -337,7 +343,10 @@
 </main>
 } } @if (reporting(); as report) {
 <app-report-comment-modal
+  [contentType]="report.replyId ? 'resposta' : 'comentário'"
   (cancelled)="reporting.set(undefined)"
-  (submitted)="submitReport(report.offerId, report.commentId, $event)"
+  (submitted)="
+    submitReport(report.offerId, report.commentId, $event, report.replyId)
+  "
 />
 }

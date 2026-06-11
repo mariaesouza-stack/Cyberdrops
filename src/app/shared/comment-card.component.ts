@@ -14,20 +14,40 @@ export class CommentCardComponent {
   readonly comment = input.required<Comment>();
   readonly currentUserId = input.required<number>();
   readonly reported = input(false);
+  readonly reportedReplyIds = input<number[]>([]);
   readonly likedByUser = input(false);
   readonly liked = output<number>();
   readonly replied = output<{ commentId: number; text: string }>();
   readonly deleted = output<number>();
   readonly reportedComment = output<number>();
-  readonly replying = signal(false);
+  readonly deletedReply = output<{ commentId: number; replyId: number }>();
+  readonly reportedReply = output<{ commentId: number; replyId: number }>();
+  readonly threadOpen = signal(false);
   readonly confirmingDelete = signal(false);
+  readonly confirmingReplyDelete = signal<number | undefined>(undefined);
   replyText = "";
+
   isOwner(): boolean {
     return this.comment().user.id === this.currentUserId();
   }
-  toggleReply(): void {
-    this.replying.update((value) => !value);
+
+  openThread(): void {
+    this.threadOpen.set(true);
   }
+
+  closeThread(): void {
+    this.threadOpen.set(false);
+  }
+
+  replyCount(): number {
+    return this.comment().replies?.length || 0;
+  }
+
+  threadButtonLabel(): string {
+    const count = this.replyCount();
+    return `Abrir ${count} ${count === 1 ? "resposta" : "respostas"}`;
+  }
+
   requestDelete(): void {
     if (this.confirmingDelete()) {
       this.deleted.emit(this.comment().id);
@@ -36,6 +56,29 @@ export class CommentCardComponent {
     this.confirmingDelete.set(true);
     setTimeout(() => this.confirmingDelete.set(false), 3000);
   }
+  requestReplyDelete(replyId: number): void {
+    if (this.confirmingReplyDelete() === replyId) {
+      this.deletedReply.emit({ commentId: this.comment().id, replyId });
+      this.confirmingReplyDelete.set(undefined);
+      return;
+    }
+    this.confirmingReplyDelete.set(replyId);
+    setTimeout(() => {
+      if (this.confirmingReplyDelete() === replyId)
+        this.confirmingReplyDelete.set(undefined);
+    }, 3000);
+  }
+  isReplyOwner(reply: Comment): boolean {
+    return reply.user.id === this.currentUserId();
+  }
+  isReplyReported(replyId: number): boolean {
+    return this.reportedReplyIds().includes(replyId);
+  }
+  sortedReplies(): Comment[] {
+    return [...(this.comment().replies || [])].sort(
+      (a, b) => b.likes - a.likes || b.id - a.id,
+    );
+  }
   sendReply(): void {
     if (!this.replyText.trim()) return;
     this.replied.emit({
@@ -43,6 +86,5 @@ export class CommentCardComponent {
       text: this.replyText.trim(),
     });
     this.replyText = "";
-    this.replying.set(false);
   }
 }

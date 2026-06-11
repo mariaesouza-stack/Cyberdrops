@@ -5,8 +5,10 @@
       [alt]="'Avatar de ' + comment().user.name"
   /></span>
   <div>
-    <strong>{{ comment().user.name }}</strong
-    ><small>{{ comment().time }}</small>
+    <div class="comment-author-line">
+      <strong>{{ comment().user.name }}</strong>
+      <small>{{ comment().time }}</small>
+    </div>
     <p>{{ comment().text }}</p>
     <div class="comment-actions">
       <button
@@ -17,8 +19,12 @@
       >
         <app-icon name="heart" [size]="16" /> {{ comment().likes }}
       </button>
-      <button (click)="toggleReply()">
-        <app-icon name="reply" [size]="16" />Responder
+      <button
+        class="comment-thread-button"
+        (click)="openThread()"
+        [attr.aria-label]="threadButtonLabel()"
+      >
+        <app-icon name="message-circle" [size]="16" />{{ replyCount() }}
       </button>
       @if (isOwner()) {
         <button
@@ -36,34 +42,148 @@
           [class.reported]="reported()"
           [disabled]="reported()"
           (click)="reportedComment.emit(comment().id)"
+          [attr.aria-label]="
+            reported() ? 'Comentário denunciado' : 'Denunciar comentário'
+          "
+          [attr.title]="
+            reported() ? 'Comentário denunciado' : 'Denunciar comentário'
+          "
         >
-          <app-icon [name]="reported() ? 'check' : 'flag'" [size]="16" />{{
-            reported() ? "Denunciado" : "Denunciar"
-          }}
+          <app-icon [name]="reported() ? 'check' : 'flag'" [size]="16" />
         </button>
       }
     </div>
-    @if (replying()) {
-      <div class="reply-form">
-        <input
-          [(ngModel)]="replyText"
-          placeholder="Escreva uma resposta"
-        /><button (click)="sendReply()" aria-label="Enviar resposta">
-          <app-icon name="send" [size]="16" />
-        </button>
-      </div>
-    }
-    @for (reply of comment().replies ?? []; track reply.id) {
-      <div class="reply">
-        <b
-          ><span class="avatar reply-avatar"
-            ><app-avatar
-              [src]="reply.user.avatar"
-              [alt]="'Avatar de ' + reply.user.name" /></span
-          >{{ reply.user.name }}</b
-        >
-        <p>{{ reply.text }}</p>
-      </div>
-    }
   </div>
 </article>
+
+@if (threadOpen()) {
+  <div class="comment-thread-overlay" (click)="closeThread()">
+    <section
+      class="comment-thread-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="comment-thread-title"
+      (click)="$event.stopPropagation()"
+    >
+      <span class="comment-thread-handle"></span>
+      <header>
+        <span class="comment-thread-icon">
+          <app-icon name="message-circle" [size]="21" />
+        </span>
+        <div>
+          <small>CONVERSA DA COMUNIDADE</small>
+          <h2 id="comment-thread-title">
+            {{ replyCount() }}
+            {{ replyCount() === 1 ? "resposta" : "respostas" }}
+          </h2>
+        </div>
+        <button type="button" aria-label="Fechar respostas" (click)="closeThread()">
+          <app-icon name="x" [size]="18" />
+        </button>
+      </header>
+
+      <div class="comment-thread-content">
+        <article class="comment-thread-original">
+          <span class="avatar mini">
+            <app-avatar
+              [src]="comment().user.avatar"
+              [alt]="'Avatar de ' + comment().user.name"
+            />
+          </span>
+          <div>
+            <div class="comment-author-line">
+              <strong>{{ comment().user.name }}</strong>
+              <small>{{ comment().time }}</small>
+            </div>
+            <p>{{ comment().text }}</p>
+          </div>
+        </article>
+
+        <div class="reply-form">
+          <input
+            [(ngModel)]="replyText"
+            placeholder="Escreva uma resposta"
+            (keyup.enter)="sendReply()"
+          />
+          <button
+            type="button"
+            (click)="sendReply()"
+            aria-label="Enviar resposta"
+            [disabled]="!replyText.trim()"
+          >
+            <app-icon name="send" [size]="16" />
+          </button>
+        </div>
+
+        <div class="comment-thread-replies">
+          @for (reply of sortedReplies(); track reply.id) {
+            <article class="reply">
+              <b>
+                <span class="avatar reply-avatar">
+                  <app-avatar
+                    [src]="reply.user.avatar"
+                    [alt]="'Avatar de ' + reply.user.name"
+                  />
+                </span>
+                {{ reply.user.name }}
+                <small>{{ reply.time }}</small>
+              </b>
+              <p>{{ reply.text }}</p>
+              <div class="reply-actions">
+                <span>
+                  <app-icon name="heart" [size]="13" />{{ reply.likes }}
+                </span>
+                @if (isReplyOwner(reply)) {
+                  <button
+                    class="comment-delete"
+                    [class.confirming]="confirmingReplyDelete() === reply.id"
+                    (click)="requestReplyDelete(reply.id)"
+                  >
+                    <app-icon name="trash" [size]="14" />{{
+                      confirmingReplyDelete() === reply.id
+                        ? "Confirmar"
+                        : "Apagar"
+                    }}
+                  </button>
+                } @else {
+                  <button
+                    class="comment-report"
+                    [class.reported]="isReplyReported(reply.id)"
+                    [disabled]="isReplyReported(reply.id)"
+                    (click)="
+                      reportedReply.emit({
+                        commentId: comment().id,
+                        replyId: reply.id,
+                      })
+                    "
+                    [attr.aria-label]="
+                      isReplyReported(reply.id)
+                        ? 'Resposta denunciada'
+                        : 'Denunciar resposta'
+                    "
+                    [attr.title]="
+                      isReplyReported(reply.id)
+                        ? 'Resposta denunciada'
+                        : 'Denunciar resposta'
+                    "
+                  >
+                    <app-icon
+                      [name]="isReplyReported(reply.id) ? 'check' : 'flag'"
+                      [size]="14"
+                    />
+                  </button>
+                }
+              </div>
+            </article>
+          } @empty {
+            <div class="comment-thread-empty">
+              <app-icon name="message-circle" [size]="28" />
+              <strong>Seja o primeiro a responder</strong>
+              <p>Compartilhe sua opinião e continue a conversa.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+}

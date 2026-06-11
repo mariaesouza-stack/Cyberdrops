@@ -65,11 +65,12 @@ export class ProductPage {
   readonly shared = signal(false);
   readonly commentFeedback = signal("");
   readonly reporting = signal<
-    { offerId: number; commentId: number } | undefined
+    { offerId: number; commentId: number; replyId?: number } | undefined
   >(undefined);
   readonly commentsVisible = signal(10);
   commentText = "";
   private copyFeedbackTimer?: ReturnType<typeof setTimeout>;
+  private commentFeedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     effect(() => {
@@ -85,12 +86,14 @@ export class ProductPage {
     if (!this.commentText.trim()) return;
     this.service.addComment(id, this.commentText.trim(), this.user.user());
     this.commentText = "";
+    this.showCommentFeedback("Comentário publicado com sucesso.");
   }
   likeComment(id: number, commentId: number): void {
     this.service.likeComment(id, commentId);
   }
   reply(id: number, event: { commentId: number; text: string }): void {
     this.service.reply(id, event.commentId, event.text, this.user.user());
+    this.showCommentFeedback("Resposta publicada com sucesso.");
   }
   deleteComment(id: number, commentId: number): void {
     if (this.service.deleteComment(id, commentId, this.user.user().id))
@@ -99,15 +102,54 @@ export class ProductPage {
   openReport(offerId: number, commentId: number): void {
     this.reporting.set({ offerId, commentId });
   }
-  submitReport(id: number, commentId: number, reason: string): void {
+  deleteReply(id: number, event: { commentId: number; replyId: number }): void {
     if (
-      this.service.reportComment(id, commentId, this.user.user().id, reason)
+      this.service.deleteReply(
+        id,
+        event.commentId,
+        event.replyId,
+        this.user.user().id,
+      )
     ) {
+      this.showCommentFeedback("Resposta apagada com sucesso.");
+    }
+  }
+  openReplyReport(
+    offerId: number,
+    event: { commentId: number; replyId: number },
+  ): void {
+    this.reporting.set({ offerId, ...event });
+  }
+  submitReport(
+    id: number,
+    commentId: number,
+    reason: string,
+    replyId?: number,
+  ): void {
+    const reported = replyId
+      ? this.service.reportReply(
+          id,
+          commentId,
+          replyId,
+          this.user.user().id,
+          reason,
+        )
+      : this.service.reportComment(id, commentId, this.user.user().id, reason);
+    if (reported) {
       this.reporting.set(undefined);
       this.showCommentFeedback(
-        "Denúncia enviada. O comentário será analisado pela nossa equipe.",
+        replyId
+          ? "Denúncia enviada. A resposta será analisada pela nossa equipe."
+          : "Denúncia enviada. O comentário será analisado pela nossa equipe.",
       );
     }
+  }
+  reportedReplyIds(id: number, comment: Offer["comments"][number]): number[] {
+    return (comment.replies || [])
+      .filter((reply) =>
+        this.service.isReplyReported(id, reply.id, this.user.user().id),
+      )
+      .map((reply) => reply.id);
   }
   visibleComments(item: Offer) {
     return this.sortedComments(item).slice(0, this.commentsVisible());
@@ -210,22 +252,13 @@ export class ProductPage {
   }
   private showCommentFeedback(message: string): void {
     this.commentFeedback.set(message);
-    setTimeout(() => this.commentFeedback.set(""), 2400);
+    clearTimeout(this.commentFeedbackTimer);
+    this.commentFeedbackTimer = setTimeout(
+      () => this.commentFeedback.set(""),
+      3000,
+    );
   }
   private sortedComments(item: Offer) {
-    return [...item.comments].sort(
-      (a, b) =>
-        this.commentEngagement(b) - this.commentEngagement(a) ||
-        b.likes - a.likes ||
-        b.id - a.id,
-    );
-  }
-  private commentEngagement(comment: Offer["comments"][number]): number {
-    const replies = comment.replies || [];
-    return (
-      comment.likes +
-      replies.length * 3 +
-      replies.reduce((total, reply) => total + reply.likes, 0)
-    );
+    return [...item.comments].sort((a, b) => b.likes - a.likes || b.id - a.id);
   }
 }

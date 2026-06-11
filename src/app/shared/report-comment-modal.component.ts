@@ -1,4 +1,4 @@
-import { Component, output, signal } from "@angular/core";
+import { Component, input, output, signal } from "@angular/core";
 import { AppIconComponent } from "./app-icon.component";
 
 @Component({
@@ -8,6 +8,7 @@ import { AppIconComponent } from "./app-icon.component";
   templateUrl: "./report-comment-modal.component.html",
 })
 export class ReportCommentModalComponent {
+  readonly contentType = input<"comentário" | "resposta">("comentário");
   readonly cancelled = output<void>();
   readonly submitted = output<string>();
   readonly selected = signal("");

@@ -37,6 +37,7 @@ interface ApiResponse {
 }
 interface CommentReport {
   commentId: number;
+  replyId?: number;
   userId: number;
   reason: string;
   createdAt: string;
@@ -128,11 +129,19 @@ export class OfferService {
   vote(id: number, kind: "like" | "dislike"): void {
     const bucket =
       kind === "like" ? this.interactions.likes : this.interactions.dislikes;
+    const oppositeBucket =
+      kind === "like" ? this.interactions.dislikes : this.interactions.likes;
     const selected =
       kind === "like"
         ? this.interactions.likedOffers
         : this.interactions.dislikedOffers;
+    const oppositeSelected =
+      kind === "like"
+        ? this.interactions.dislikedOffers
+        : this.interactions.likedOffers;
     const active = selected.includes(id);
+    const oppositeActive = oppositeSelected.includes(id);
+
     if (kind === "like")
       this.interactions.likedOffers = active
         ? selected.filter((item) => item !== id)
@@ -141,6 +150,19 @@ export class OfferService {
       this.interactions.dislikedOffers = active
         ? selected.filter((item) => item !== id)
         : [...selected, id];
+
+    if (!active && oppositeActive) {
+      if (kind === "like")
+        this.interactions.dislikedOffers = oppositeSelected.filter(
+          (item) => item !== id,
+        );
+      else
+        this.interactions.likedOffers = oppositeSelected.filter(
+          (item) => item !== id,
+        );
+      oppositeBucket[id] = (oppositeBucket[id] || 0) - 1;
+    }
+
     bucket[id] = Math.max(0, (bucket[id] || 0) + (active ? -1 : 1));
     this.persist();
     this.offers.update((items) =>
@@ -153,6 +175,14 @@ export class OfferService {
                 item[kind === "like" ? "likes" : "dislikes"] +
                   (active ? -1 : 1),
               ),
+              ...(oppositeActive && !active
+                ? {
+                    [kind === "like" ? "dislikes" : "likes"]: Math.max(
+                      0,
+                      item[kind === "like" ? "dislikes" : "likes"] - 1,
+                    ),
+                  }
+                : {}),
             }
           : item,
       ),
@@ -222,25 +252,59 @@ export class OfferService {
     this.persist();
     this.patchComments(id);
   }
-  deleteComment(id: number, commentId: number, userId: number): boolean {
+  deleteReply(
+    id: number,
+    commentId: number,
+    replyId: number,
+    userId: number,
+  ): boolean {
     const offer = this.offers().find((item) => item.id === id);
     const comment = offer?.comments.find((item) => item.id === commentId);
+    const reply = comment?.replies?.find((item) => item.id === replyId);
+    if (!offer || !comment || !reply || reply.user.id !== userId) return false;
+
+    const remainingComments = offer.comments.map((item) =>
+      item.id === commentId
+        ? {
+            ...item,
+            replies: (item.replies || []).filter(
+              (currentReply) => currentReply.id !== replyId,
+            ),
+          }
+        : item,
+    );
+    this.interactions.comments[id] = remainingComments;
+    this.interactions.reportedComments[id] = (
+      this.interactions.reportedComments[id] || []
+    ).filter((report) => report.replyId !== replyId);
+    this.persist();
+    this.patchComments(id);
+    return true;
+  }
+  deleteComment(id: number, commentId: number, userId: number): boolean {
+    const offer = this.offers().find((item) => item.id === id);
+    if (!offer) return false;
+
+    const comment = offer.comments.find((item) => item.id === commentId);
     if (!comment || comment.user.id !== userId) return false;
-    this.interactions.comments[id] = (
-      this.interactions.comments[id] || []
-    ).filter((item) => item.id !== commentId);
+
+    const remainingComments = offer.comments.filter(
+      (item) => item.id !== commentId,
+    );
+    this.interactions.comments[id] = remainingComments;
     this.interactions.reportedComments[id] = (
       this.interactions.reportedComments[id] || []
     ).filter((report) => report.commentId !== commentId);
+    this.interactions.likedComments[id] = (
+      this.interactions.likedComments[id] || []
+    ).filter((likedCommentId) => likedCommentId !== commentId);
     this.persist();
     this.offers.update((items) =>
       items.map((item) =>
         item.id === id
           ? {
               ...item,
-              comments: item.comments.filter(
-                (current) => current.id !== commentId,
-              ),
+              comments: remainingComments,
             }
           : item,
       ),
@@ -260,7 +324,10 @@ export class OfferService {
     const reported = this.interactions.reportedComments[id] || [];
     if (
       !reported.some(
-        (report) => report.commentId === commentId && report.userId === userId,
+        (report) =>
+          report.commentId === commentId &&
+          report.replyId === undefined &&
+          report.userId === userId,
       )
     ) {
       this.interactions.reportedComments[id] = [
@@ -273,7 +340,48 @@ export class OfferService {
   }
   isCommentReported(id: number, commentId: number, userId: number): boolean {
     return (this.interactions.reportedComments[id] || []).some(
-      (report) => report.commentId === commentId && report.userId === userId,
+      (report) =>
+        report.commentId === commentId &&
+        report.replyId === undefined &&
+        report.userId === userId,
+    );
+  }
+  reportReply(
+    id: number,
+    commentId: number,
+    replyId: number,
+    userId: number,
+    reason: string,
+  ): boolean {
+    const reply = this.offers()
+      .find((item) => item.id === id)
+      ?.comments.find((item) => item.id === commentId)
+      ?.replies?.find((item) => item.id === replyId);
+    if (!reply || reply.user.id === userId) return false;
+
+    const reported = this.interactions.reportedComments[id] || [];
+    if (
+      !reported.some(
+        (report) => report.replyId === replyId && report.userId === userId,
+      )
+    ) {
+      this.interactions.reportedComments[id] = [
+        ...reported,
+        {
+          commentId,
+          replyId,
+          userId,
+          reason,
+          createdAt: new Date().toISOString(),
+        },
+      ];
+      this.persist();
+    }
+    return true;
+  }
+  isReplyReported(id: number, replyId: number, userId: number): boolean {
+    return (this.interactions.reportedComments[id] || []).some(
+      (report) => report.replyId === replyId && report.userId === userId,
     );
   }
   toggleSaved(id: number): void {
@@ -513,14 +621,24 @@ export class OfferService {
           ],
         ),
       );
+      const likedOffers = saved.likedOffers || [];
+      const likedOfferIds = new Set(likedOffers);
+      const dislikedOffers = (saved.dislikedOffers || []).filter((id) => {
+        if (!likedOfferIds.has(id)) return true;
+        saved.dislikes = {
+          ...(saved.dislikes || {}),
+          [id]: (saved.dislikes?.[id] || 0) - 1,
+        };
+        return false;
+      });
       return {
         likes: saved.likes || {},
         dislikes: saved.dislikes || {},
         comments: saved.comments || {},
         saved: saved.saved || [],
         reportedComments,
-        likedOffers: saved.likedOffers || [],
-        dislikedOffers: saved.dislikedOffers || [],
+        likedOffers,
+        dislikedOffers,
         likedComments: saved.likedComments || {},
       };
     } catch {
